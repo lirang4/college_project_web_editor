@@ -1,0 +1,10 @@
+.header-layout {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 0px 0px 10px 2px black;
+}
+
+.header-icon {
+    padding: 0 14px;
+}
