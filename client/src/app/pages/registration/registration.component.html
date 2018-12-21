@@ -2,29 +2,29 @@
   <mat-toolbar-row>הרשמה</mat-toolbar-row>
 </mat-toolbar>
 
-<div class="registration-container">
+<form [formGroup]="registrationForm" class="registration-container" autocomplete="off" (ngSubmit)="onSubmit()">
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס שם משתמש">
+    <input matInput placeholder="הכנס שם משתמש" type="text" formControlName="username" minlength="4" required>
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס סיסמא">
+    <input matInput placeholder="הכנס סיסמא" type="text" formControlName="password" minlength="6" required>
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס מייל">
+    <input matInput placeholder="הכנס מייל" type="text" formControlName="email" minlength="6" required>
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס שם פרטי">
+    <input matInput placeholder="הכנס שם פרטי" type="text" formControlName="firstName" minlength="4" required>
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס שם משפחה">
+    <input matInput placeholder="הכנס שם משפחה" type="text" formControlName="lastName" minlength="4" required>
   </mat-form-field>
 
-  <button mat-raised-button class="registration-button" color="primary" (click)="onRegistration()">
+  <button mat-raised-button class="registration-button" color="primary" type="submit" [disabled]="!registrationForm.valid">
     <span *ngIf="!isLoading">הרשם</span>
     <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
   </button>
-</div>
+</form>

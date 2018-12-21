@@ -2,19 +2,19 @@
   <mat-toolbar-row>התחברות</mat-toolbar-row>
 </mat-toolbar>
 
-<div class="login-container">
+<form [formGroup]="loginForm" class="login-container" autocomplete="off" (ngSubmit)="onSubmit()">
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס שם משתמש">
+    <input matInput placeholder="הכנס שם משתמש" type="text" formControlName="username" minlength="4" required>
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס סיסמא">
+    <input matInput placeholder="הכנס סיסמא" type="text" formControlName="password" minlength="6" required>
   </mat-form-field>
 
   <span class="recover-password clickable">שחזר סיסמא ></span>
 
-  <button mat-raised-button class="login-button" color="primary" (click)="onLogin()">
+  <button mat-raised-button class="login-button" color="primary" type="submit" [disabled]="!loginForm.valid">
     <span *ngIf="!isLoading">התחבר</span>
     <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
   </button>
-</div>
+</form>
