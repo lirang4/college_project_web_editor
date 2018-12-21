@@ -1,0 +1,20 @@
+.registration-container {
+    padding: 80px 550px;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.form-field {
+    text-align: right;
+}
+
+.registration-button {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.spinner {
+    margin: 5px;
+}

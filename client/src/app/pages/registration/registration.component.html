@@ -1,0 +1,30 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>הרשמה</mat-toolbar-row>
+</mat-toolbar>
+
+<div class="registration-container">
+  <mat-form-field class="form-field">
+    <input matInput placeholder="הכנס שם משתמש">
+  </mat-form-field>
+
+  <mat-form-field class="form-field">
+    <input matInput placeholder="הכנס סיסמא">
+  </mat-form-field>
+
+  <mat-form-field class="form-field">
+    <input matInput placeholder="הכנס מייל">
+  </mat-form-field>
+
+  <mat-form-field class="form-field">
+    <input matInput placeholder="הכנס שם פרטי">
+  </mat-form-field>
+
+  <mat-form-field class="form-field">
+    <input matInput placeholder="הכנס שם משפחה">
+  </mat-form-field>
+
+  <button mat-raised-button class="registration-button" color="primary" (click)="onRegistration()">
+    <span *ngIf="!isLoading">הרשם</span>
+    <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
+  </button>
+</div>

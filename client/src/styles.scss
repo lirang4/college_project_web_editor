@@ -1,1 +1,25 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+@import url('https://fonts.googleapis.com/css?family=Arimo');
+
+:root {
+    --background-color: #282a36;
+    --text-color: #f8f8f2;
+    --hover-color: #44475a;
+    --comment-color: #6272a4;
+}
+
+html,
+body {
+    font-family: 'Arimo';
+    background-color: var(--background-color);
+    color: var(--text-color);
+    direction: rtl;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    color: var(--hover-color);
+}
