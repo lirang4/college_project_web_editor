@@ -1,5 +1,8 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>התחברות</mat-toolbar-row>
+  <mat-toolbar-row>
+    <mat-icon class="header-icon">person_pin</mat-icon>
+    <span>התחברות</span>
+  </mat-toolbar-row>
 </mat-toolbar>
 
 <form [formGroup]="loginForm" class="login-container" autocomplete="off" (ngSubmit)="onSubmit()">

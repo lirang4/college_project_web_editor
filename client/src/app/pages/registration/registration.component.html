@@ -1,5 +1,8 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>הרשמה</mat-toolbar-row>
+  <mat-toolbar-row>
+    <mat-icon class="header-icon">edit</mat-icon>
+    <span>הרשמה</span>
+  </mat-toolbar-row>
 </mat-toolbar>
 
 <form [formGroup]="registrationForm" class="registration-container" autocomplete="off" (ngSubmit)="onSubmit()">
