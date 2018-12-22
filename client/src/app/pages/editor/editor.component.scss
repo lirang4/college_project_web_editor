@@ -1,0 +1,25 @@
+.header-icon {
+    margin-right: 10px;
+}
+
+.editor-container {
+    padding: 50px 200px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.editor-field {
+    height: 400px;
+    resize: none;
+}
+
+.submit-button {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.spinner {
+    margin: 5px;
+}

@@ -8,10 +8,12 @@
 <form [formGroup]="loginForm" class="login-container" autocomplete="off" (ngSubmit)="onSubmit()">
   <mat-form-field class="form-field">
     <input matInput placeholder="Enter username" type="text" formControlName="username" minlength="4" required>
+    <mat-error>Username is too short</mat-error>
   </mat-form-field>
 
   <mat-form-field class="form-field">
     <input matInput placeholder="Enter password" type="text" formControlName="password" minlength="6" required>
+    <mat-error>Password is too short</mat-error>
   </mat-form-field>
 
   <span class="recover-password clickable">Recover Password ></span>

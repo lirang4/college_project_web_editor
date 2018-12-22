@@ -7,7 +7,7 @@ import { tap, delay } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  isLoggedIn = false;
+  isLoggedIn = true;
 
   constructor(private router: Router) { }
 
