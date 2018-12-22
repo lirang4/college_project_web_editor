@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { AuthService } from 'src/app/core/auth.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -10,7 +12,9 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isLoading: boolean;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService) { }
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -23,6 +27,10 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     this.isLoading = true;
-    setTimeout(() => this.isLoading = false, 5000);
+
+    setTimeout(() => {
+      this.isLoading = false;
+      this.authService.login();
+    }, 3000);
   }
 }

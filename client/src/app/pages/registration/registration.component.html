@@ -1,33 +1,33 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
     <mat-icon class="header-icon">edit</mat-icon>
-    <span>הרשמה</span>
+    <span>Registration</span>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <form [formGroup]="registrationForm" class="registration-container" autocomplete="off" (ngSubmit)="onSubmit()">
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס שם משתמש" type="text" formControlName="username" minlength="4" required>
+    <input matInput placeholder="Enter username" type="text" formControlName="username" minlength="4" required>
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס סיסמא" type="text" formControlName="password" minlength="6" required>
+    <input matInput placeholder="Enter password" type="text" formControlName="password" minlength="6" required>
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס מייל" type="text" formControlName="email" minlength="6" required>
+    <input matInput placeholder="Enter email" type="text" formControlName="email" minlength="6" required>
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס שם פרטי" type="text" formControlName="firstName" minlength="4" required>
+    <input matInput placeholder="Enter first name" type="text" formControlName="firstName" minlength="4" required>
   </mat-form-field>
 
   <mat-form-field class="form-field">
-    <input matInput placeholder="הכנס שם משפחה" type="text" formControlName="lastName" minlength="4" required>
+    <input matInput placeholder="Enter last name" type="text" formControlName="lastName" minlength="4" required>
   </mat-form-field>
 
   <button mat-raised-button class="registration-button" color="primary" type="submit" [disabled]="!registrationForm.valid">
-    <span *ngIf="!isLoading">הרשם</span>
+    <span *ngIf="!isLoading">Register</span>
     <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
   </button>
 </form>
