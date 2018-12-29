@@ -3,14 +3,19 @@
     <span class="clickable" (click)="navigage('home')">Code Analyzer</span>
 
     <div>
-      <mat-icon class="header-icon clickable" matTooltip="home page" (click)="navigage('home')">home</mat-icon>
+      <mat-icon class="header-icon clickable" matTooltip="home page" [ngClass]="currentPage==='home' ? 'selected-icon' : ''"
+        (click)="navigage('home')">home</mat-icon>
 
-      <mat-icon *ngIf="isLoggedIn()" class="header-icon clickable" matTooltip="editor" (click)="navigage('editor')">code</mat-icon>
-      <mat-icon *ngIf="isLoggedIn()" class="header-icon clickable" matTooltip="profile" (click)="navigage('profile')">person_pin</mat-icon>
+      <mat-icon *ngIf="isLoggedIn()" class="header-icon clickable" matTooltip="editor" [ngClass]="currentPage==='editor' ? 'selected-icon' : ''"
+        (click)="navigage('editor')">code</mat-icon>
+      <mat-icon *ngIf="isLoggedIn()" class="header-icon clickable" matTooltip="profile" [ngClass]="currentPage==='profile' ? 'selected-icon' : ''"
+        (click)="navigage('profile')">person_pin</mat-icon>
       <mat-icon *ngIf="isLoggedIn()" class="header-icon clickable" matTooltip="log out" (click)="onLogout()">power_settings_new</mat-icon>
 
-      <mat-icon *ngIf="!isLoggedIn()" class="header-icon clickable" matTooltip="login" (click)="navigage('login')">exit_to_app</mat-icon>
-      <mat-icon *ngIf="!isLoggedIn()" class="header-icon clickable" matTooltip="registration" (click)="navigage('registration')">edit</mat-icon>
+      <mat-icon *ngIf="!isLoggedIn()" class="header-icon clickable" matTooltip="login" [ngClass]="currentPage==='login' ? 'selected-icon' : ''"
+        (click)="navigage('login')">exit_to_app</mat-icon>
+      <mat-icon *ngIf="!isLoggedIn()" class="header-icon clickable" matTooltip="registration" [ngClass]="currentPage==='registration' ? 'selected-icon' : ''"
+        (click)="navigage('registration')">edit</mat-icon>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>

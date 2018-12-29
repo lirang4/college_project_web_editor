@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 import { AuthService } from 'src/app/core/auth.service';
 
@@ -9,12 +9,19 @@ import { AuthService } from 'src/app/core/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  currentPage: string;
 
   constructor(
     private router: Router,
     private authService: AuthService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.currentPage = event.url.slice(1);
+      }
+    });
+  }
 
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
