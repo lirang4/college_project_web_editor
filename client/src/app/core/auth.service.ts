@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { tap, delay } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -9,15 +7,30 @@ import { tap, delay } from 'rxjs/operators';
 export class AuthService {
   isLoggedIn = false;
 
-  constructor(private router: Router) { }
+  private nextUrl: string;
+
+  constructor(private router: Router) {
+    this.nextUrl = '/home';
+  }
 
   login(): void {
     this.isLoggedIn = true;
-    this.router.navigate(['/home']);
+
+    this.navigateNext();
   }
 
   logout(): void {
     this.isLoggedIn = false;
-    this.router.navigate(['/home']);
+    this.nextUrl = '/home';
+
+    this.navigateNext();
+  }
+
+  saveUrl(url: string): void {
+    this.nextUrl = url;
+  }
+
+  private navigateNext(): void {
+    this.router.navigate([this.nextUrl]);
   }
 }
