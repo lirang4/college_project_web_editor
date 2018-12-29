@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar>
   <mat-toolbar-row>
     <mat-icon class="header-icon">edit</mat-icon>
     <span>Registration</span>
@@ -6,32 +6,32 @@
 </mat-toolbar>
 
 <form [formGroup]="registrationForm" class="registration-container" autocomplete="off" (ngSubmit)="onSubmit()">
-  <mat-form-field class="form-field">
+  <mat-form-field class="form-field" color="accent">
     <input matInput placeholder="Enter username" type="text" formControlName="username" minlength="4" required>
     <mat-error>Username is too short</mat-error>
   </mat-form-field>
 
-  <mat-form-field class="form-field">
+  <mat-form-field class="form-field" color="accent">
     <input matInput placeholder="Enter password" type="text" formControlName="password" minlength="6" required>
     <mat-error>Password is too short</mat-error>
   </mat-form-field>
 
-  <mat-form-field class="form-field">
+  <mat-form-field class="form-field" color="accent">
     <input matInput placeholder="Enter email" type="text" formControlName="email" minlength="6" required>
     <mat-error>Email is too short</mat-error>
   </mat-form-field>
 
-  <mat-form-field class="form-field">
+  <mat-form-field class="form-field" color="accent">
     <input matInput placeholder="Enter first name" type="text" formControlName="firstName" required>
     <mat-error>First name is required</mat-error>
   </mat-form-field>
 
-  <mat-form-field class="form-field">
+  <mat-form-field class="form-field" color="accent">
     <input matInput placeholder="Enter last name" type="text" formControlName="lastName" required>
     <mat-error>Last name is required</mat-error>
   </mat-form-field>
 
-  <button mat-raised-button class="registration-button" color="primary" type="submit" [disabled]="!registrationForm.valid">
+  <button mat-raised-button class="registration-button" type="submit" color="accent" [disabled]="!registrationForm.valid">
     <span *ngIf="!isLoading">Register</span>
     <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
   </button>

@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar>
   <mat-toolbar-row>
     <mat-icon class="header-icon">code</mat-icon>
     <span>Editor</span>
@@ -6,12 +6,12 @@
 </mat-toolbar>
 
 <form [formGroup]="editorForm" class="editor-container" autocomplete="off" (ngSubmit)="onSubmit()">
-  <mat-form-field>
+  <mat-form-field color="accent">
     <textarea class="editor-field" matInput placeholder="Code Editor"></textarea>
   </mat-form-field>
 
-  <button mat-raised-button class="submit-button" color="primary" type="submit">
+  <button mat-raised-button class="submit-button" type="submit" color="accent">
     <span *ngIf="!isLoading">Submit Code</span>
-    <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
+    <mat-spinner *ngIf="isLoading" class="spinner" [diameter]="27"></mat-spinner>
   </button>
 </form>
