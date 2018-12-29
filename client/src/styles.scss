@@ -10,6 +10,7 @@
     --success-color: #50fa7b;
     --warnning-color: #f1fa8c;
     --black-color: black;
+    --disabled-opacity: 0.5;
 }
 
 html,
@@ -29,7 +30,7 @@ button {
 }
 
 button:disabled {
-    opacity: 0.5;
+    opacity: var(--disabled-opacity);
 }
 
 .clickable {
@@ -38,4 +39,9 @@ button:disabled {
 
 .clickable:hover {
     color: var(--hover-color) !important;
+}
+
+.disabled {
+    opacity: var(--disabled-opacity);
+    pointer-events: none;
 }

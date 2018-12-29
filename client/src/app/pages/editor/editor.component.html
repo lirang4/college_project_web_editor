@@ -5,7 +5,7 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="choises-container">
+<div class="choises-container" [ngClass]="isLoading ? 'disabled' : ''">
   <div class="clickable choise" (click)="isEditor=true; isUploader=false" [ngClass]="isEditor ? 'selected-choise' : 'not-selected-choise'">
     <div class="choise">
       <mat-icon class="choise-icon">code</mat-icon>
@@ -29,7 +29,7 @@
 
   <button mat-raised-button class="submit-button" type="submit" [disabled]="!editorForm.valid">
     <span *ngIf="!isLoading">Submit Code</span>
-    <mat-spinner *ngIf="isLoading" class="spinner" [diameter]="27"></mat-spinner>
+    <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
   </button>
 </form>
 
@@ -38,6 +38,6 @@
 
   <button mat-raised-button class="submit-button" type="submit" [disabled]="!uploaderForm.valid">
     <span *ngIf="!isLoading">Submit Code</span>
-    <mat-spinner *ngIf="isLoading" class="spinner" [diameter]="27"></mat-spinner>
+    <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
   </button>
 </form>

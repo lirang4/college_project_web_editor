@@ -31,7 +31,7 @@
     <mat-error>Last name is required</mat-error>
   </mat-form-field>
 
-  <button mat-raised-button class="registration-button" type="submit" color="accent" [disabled]="!registrationForm.valid">
+  <button mat-raised-button class="registration-button" type="submit" [disabled]="!registrationForm.valid">
     <span *ngIf="!isLoading">Register</span>
     <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
   </button>

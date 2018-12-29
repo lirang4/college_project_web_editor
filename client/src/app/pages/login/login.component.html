@@ -18,7 +18,7 @@
 
   <span class="recover-password clickable">Recover Password ></span>
 
-  <button mat-raised-button class="login-button" type="submit" color="accent" [disabled]="!loginForm.valid">
+  <button mat-raised-button class="login-button" type="submit" [disabled]="!loginForm.valid">
     <span *ngIf="!isLoading">Login</span>
     <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
   </button>
