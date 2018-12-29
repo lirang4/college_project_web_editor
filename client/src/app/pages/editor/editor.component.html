@@ -5,12 +5,38 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<form [formGroup]="editorForm" class="editor-container" autocomplete="off" (ngSubmit)="onSubmit()">
+<div class="choises-container">
+  <div class="clickable choise" (click)="isEditor=true; isUploader=false" [ngClass]="isEditor ? 'selected-choise' : 'not-selected-choise'">
+    <div class="choise">
+      <mat-icon class="choise-icon">code</mat-icon>
+      <span>Write Code</span>
+    </div>
+  </div>
+
+  <div class="clickable choise" (click)="isUploader=true; isEditor=false" [ngClass]="isUploader ? 'selected-choise' : 'not-selected-choise'">
+    <div class="choise">
+      <mat-icon class="choise-icon">cloud_upload</mat-icon>
+      <span>Upload File</span>
+    </div>
+  </div>
+</div>
+
+<form *ngIf="isEditor" [formGroup]="editorForm" class="editor-container" autocomplete="off" (ngSubmit)="onSubmitCode()">
   <mat-form-field color="accent">
-    <textarea class="editor-field" matInput placeholder="Code Editor"></textarea>
+    <textarea class="editor-field" matInput formControlName="code" placeholder="Code Editor"></textarea>
+    <mat-error>Please add some code before submitting</mat-error>
   </mat-form-field>
 
-  <button mat-raised-button class="submit-button" type="submit" color="accent">
+  <button mat-raised-button class="submit-button" type="submit" [disabled]="!editorForm.valid">
+    <span *ngIf="!isLoading">Submit Code</span>
+    <mat-spinner *ngIf="isLoading" class="spinner" [diameter]="27"></mat-spinner>
+  </button>
+</form>
+
+<form *ngIf="isUploader" [formGroup]="uploaderForm" class="editor-container" autocomplete="off" (ngSubmit)="onSubmitFile()">
+  <input type="file" ng2FileSelect [uploader]="uploader" />
+
+  <button mat-raised-button class="submit-button" type="submit" [disabled]="!uploaderForm.valid">
     <span *ngIf="!isLoading">Submit Code</span>
     <mat-spinner *ngIf="isLoading" class="spinner" [diameter]="27"></mat-spinner>
   </button>

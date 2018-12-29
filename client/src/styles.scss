@@ -9,6 +9,7 @@
     --error-color: #ff5555;
     --success-color: #50fa7b;
     --warnning-color: #f1fa8c;
+    --black-color: black;
 }
 
 html,
@@ -20,6 +21,15 @@ body {
 
 mat-toolbar {
     background-color: var(--second-background-color) !important;
+}
+
+button {
+    background-color: var(--second-background-color) !important;
+    color: var(--text-color);
+}
+
+button:disabled {
+    opacity: 0.5;
 }
 
 .clickable {

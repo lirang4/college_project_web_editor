@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -33,6 +34,7 @@ import { FooterComponent } from './components/footer/footer.component';
     ReactiveFormsModule,
     AppRoutingModule,
     MaterialModule,
+    FileUploadModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
