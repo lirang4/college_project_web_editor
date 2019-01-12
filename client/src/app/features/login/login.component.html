@@ -12,11 +12,9 @@
   </mat-form-field>
 
   <mat-form-field class="form-field" color="accent">
-    <input matInput placeholder="Enter password" type="text" formControlName="password" minlength="6" required>
+    <input matInput placeholder="Enter password" type="password" formControlName="password" minlength="6" required>
     <mat-error>Password is too short</mat-error>
   </mat-form-field>
-
-  <span class="recover-password clickable">Recover Password ></span>
 
   <button mat-raised-button class="login-button" type="submit" [disabled]="!loginForm.valid">
     <span *ngIf="!isLoading">Login</span>
