@@ -1,0 +1,6 @@
+@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+@import url('https://fonts.googleapis.com/css?family=Arimo');
+
+mat-toolbar {
+    background-color: var(--second-background-color) !important;
+}

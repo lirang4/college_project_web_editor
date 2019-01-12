@@ -1,55 +1,11 @@
-@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
-@import url('https://fonts.googleapis.com/css?family=Arimo');
-
-:root {
-    --background-color: #282a36;
-    --second-background-color: #44475a;
-    --hover-color: #6272a4;
-    --text-color: #f8f8f2;
-    --error-color: #ff5555;
-    --success-color: #50fa7b;
-    --warnning-color: #f1fa8c;
-    --black-color: black;
-    --disabled-opacity: 0.5;
-}
+@import './styles/variables.scss';
+@import './styles/material.scss';
+@import './styles/controls.scss';
+@import './styles/overrides.scss';
 
 html,
 body {
     font-family: 'Arimo';
     background-color: var(--background-color);
     color: var(--text-color);
-}
-
-mat-toolbar {
-    background-color: var(--second-background-color) !important;
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    box-shadow: 0 0 0 30px var(--background-color) inset !important;
-    -webkit-text-fill-color: var(--text-color) !important;
-}
-
-button {
-    background-color: var(--second-background-color) !important;
-    color: var(--text-color);
-}
-
-button:disabled {
-    opacity: var(--disabled-opacity);
-}
-
-.clickable {
-    cursor: pointer;
-}
-
-.clickable:hover {
-    color: var(--hover-color) !important;
-}
-
-.disabled {
-    opacity: var(--disabled-opacity);
-    pointer-events: none;
 }

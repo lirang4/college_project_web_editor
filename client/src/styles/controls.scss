@@ -1,0 +1,21 @@
+button {
+    background-color: var(--second-background-color) !important;
+    color: var(--text-color);
+}
+
+button:disabled {
+    opacity: var(--disabled-opacity);
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    color: var(--hover-color) !important;
+}
+
+.disabled {
+    opacity: var(--disabled-opacity);
+    pointer-events: none;
+}
