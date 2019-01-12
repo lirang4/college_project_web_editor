@@ -21,24 +21,5 @@
   </div>
 </div>
 
-<form *ngIf="isEditor" [formGroup]="editorForm" class="editor-container" (ngSubmit)="onSubmitCode()">
-  <span class="editor-headline">Write your code here</span>
-  <mat-form-field color="accent">
-    <textarea class="editor-field" matInput formControlName="code"></textarea>
-    <mat-error>Please add some code before submitting</mat-error>
-  </mat-form-field>
-
-  <button mat-raised-button class="submit-button" type="submit" [disabled]="!editorForm.valid">
-    <span *ngIf="!isLoading">Submit Code</span>
-    <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
-  </button>
-</form>
-
-<form *ngIf="isUploader" [formGroup]="uploaderForm" class="editor-container" (ngSubmit)="onSubmitFile()">
-  <input type="file" ng2FileSelect [uploader]="uploader" />
-
-  <button mat-raised-button class="submit-button" type="submit" [disabled]="!uploaderForm.valid">
-    <span *ngIf="!isLoading">Submit Code</span>
-    <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
-  </button>
-</form>
+<app-code-editor-form *ngIf="isEditor" [isLoading]="isLoading" (submit)="onSubmit($event)"></app-code-editor-form>
+<app-code-uploader-form *ngIf="isUploader" [isLoading]="isLoading" (submit)="onSubmit($event)"></app-code-uploader-form>
