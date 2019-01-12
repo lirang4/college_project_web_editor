@@ -9,7 +9,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class CodeEditorFormComponent implements OnInit {
     @Input() isLoading: boolean;
-
     @Output() submit = new EventEmitter<string>();
 
     editorForm: FormGroup;

@@ -36,33 +36,3 @@
     background-color: var(--text-color);
     color: var(--hover-color);
 }
-
-.editor-container {
-    padding: 5px 300px;
-    display: flex;
-    flex-direction: column;
-}
-
-.editor-headline {
-    font-size: 24px;
-}
-
-.editor-field {
-    height: 250px;
-    resize: none;
-    background: url(http://i.imgur.com/2cOaJ.png);
-    background-attachment: local;
-    background-repeat: no-repeat;
-    padding-left: 35px;
-    padding-top: 10px;
-}
-
-.submit-button {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-around;
-}
-
-.spinner {
-    margin: 5px;
-}

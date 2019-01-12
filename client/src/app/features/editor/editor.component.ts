@@ -9,7 +9,6 @@ import { FormBuilder } from '@angular/forms';
 export class EditorComponent implements OnInit {
   isEditor: boolean;
   isUploader: boolean;
-
   isLoading: boolean;
 
   constructor(private fb: FormBuilder) { }

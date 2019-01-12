@@ -7,6 +7,7 @@ import { FooterComponent } from '@core/components/footer/footer.component';
 import { AuthService } from '@core/services/auth.service';
 import { HttpService } from '@core/services/http.service';
 import { AuthGuard } from '@core/auth/auth.guard';
+import { UserService } from './services/user.service';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { AuthGuard } from '@core/auth/auth.guard';
     AuthGuard,
     AuthService,
     HttpService,
+    UserService,
   ],
 })
 export class CoreModule {

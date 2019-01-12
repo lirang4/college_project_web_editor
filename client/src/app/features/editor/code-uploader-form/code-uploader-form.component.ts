@@ -12,11 +12,9 @@ const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
 })
 export class CodeUploaderFormComponent implements OnInit {
     @Input() isLoading: boolean;
-
     @Output() submit = new EventEmitter<string>();
 
     uploaderForm: FormGroup;
-
     uploader: FileUploader = new FileUploader({ url: URL });
 
     constructor(private fb: FormBuilder) { }

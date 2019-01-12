@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
@@ -7,11 +8,15 @@ export class AuthService {
 
   private nextUrl: string;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private userService: UserService) {
+
     this.nextUrl = '/home';
   }
 
   login(): void {
+    this.userService.loadUser('', '');
     this.isLoggedIn = true;
 
     this.navigateNext();

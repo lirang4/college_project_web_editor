@@ -26,6 +26,8 @@ export class RegistrationComponent implements OnInit {
 
   onSubmit(): void {
     this.isLoading = true;
+
+    // TODO: Send the info to the server and add it to some DB
     setTimeout(() => this.isLoading = false, 5000);
   }
 
