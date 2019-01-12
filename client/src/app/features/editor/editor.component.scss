@@ -43,9 +43,19 @@
     flex-direction: column;
 }
 
+.editor-headline {
+    font-size: 24px;
+}
+
 .editor-field {
-    height: 300px;
+    height: 250px;
     resize: none;
+    background: url(http://i.imgur.com/2cOaJ.png);
+    background-attachment: local;
+    background-repeat: no-repeat;
+    padding-left: 35px;
+    padding-top: 10px;
+    border-color: #ccc;
 }
 
 .submit-button {

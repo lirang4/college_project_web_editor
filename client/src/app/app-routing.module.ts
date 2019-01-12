@@ -1,26 +1,44 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 
-import { AuthGuard } from './auth/auth.guard';
-import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './pages/login/login.component';
-import { RegistrationComponent } from './pages/registration/registration.component';
-import { EditorComponent } from './pages/editor/editor.component';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'registration', component: RegistrationComponent },
-  { path: 'editor', component: EditorComponent, canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: '**', component: PageNotFoundComponent },
+  {
+    path: 'home',
+    loadChildren: './features/home/home.module#HomeModule'
+  },
+  {
+    path: 'login',
+    loadChildren: './features/login/login.module#LoginModule'
+  },
+  {
+    path: 'registration',
+    loadChildren: './features/registration/registration.module#RegistrationModule'
+  },
+  {
+    path: 'editor',
+    loadChildren: './features/editor/editor.module#EditorModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile',
+    loadChildren: './features/profile/profile.module#ProfileModule',
+    canActivate: [AuthGuard]
+  },
+  {
+    path: '**',
+    loadChildren: './features/page-not-found/page-not-found.module#PageNotFoundModule',
+  },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

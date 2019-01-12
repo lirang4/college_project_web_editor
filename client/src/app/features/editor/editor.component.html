@@ -21,9 +21,10 @@
   </div>
 </div>
 
-<form *ngIf="isEditor" [formGroup]="editorForm" class="editor-container" autocomplete="off" (ngSubmit)="onSubmitCode()">
+<form *ngIf="isEditor" [formGroup]="editorForm" class="editor-container" (ngSubmit)="onSubmitCode()">
+  <span class="editor-headline">Write your code here</span>
   <mat-form-field color="accent">
-    <textarea class="editor-field" matInput formControlName="code" placeholder="Code Editor"></textarea>
+    <textarea class="editor-field" matInput formControlName="code"></textarea>
     <mat-error>Please add some code before submitting</mat-error>
   </mat-form-field>
 
@@ -33,7 +34,7 @@
   </button>
 </form>
 
-<form *ngIf="isUploader" [formGroup]="uploaderForm" class="editor-container" autocomplete="off" (ngSubmit)="onSubmitFile()">
+<form *ngIf="isUploader" [formGroup]="uploaderForm" class="editor-container" (ngSubmit)="onSubmitFile()">
   <input type="file" ng2FileSelect [uploader]="uploader" />
 
   <button mat-raised-button class="submit-button" type="submit" [disabled]="!uploaderForm.valid">

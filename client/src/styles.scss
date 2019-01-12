@@ -24,6 +24,14 @@ mat-toolbar {
     background-color: var(--second-background-color) !important;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    box-shadow: 0 0 0 30px var(--background-color) inset !important;
+    -webkit-text-fill-color: var(--text-color) !important;
+}
+
 button {
     background-color: var(--second-background-color) !important;
     color: var(--text-color);

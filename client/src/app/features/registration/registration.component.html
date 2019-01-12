@@ -5,14 +5,14 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<form [formGroup]="registrationForm" class="registration-container" autocomplete="off" (ngSubmit)="onSubmit()">
+<form [formGroup]="registrationForm" class="registration-container" (ngSubmit)="onSubmit()">
   <mat-form-field class="form-field" color="accent">
     <input matInput placeholder="Enter username" type="text" formControlName="username" minlength="4" required>
     <mat-error>Username is too short</mat-error>
   </mat-form-field>
 
   <mat-form-field class="form-field" color="accent">
-    <input matInput placeholder="Enter password" type="text" formControlName="password" minlength="6" required>
+    <input matInput placeholder="Enter password" type="password" formControlName="password" minlength="6" required>
     <mat-error>Password is too short</mat-error>
   </mat-form-field>
 

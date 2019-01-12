@@ -5,7 +5,7 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<form [formGroup]="loginForm" class="login-container" autocomplete="off" (ngSubmit)="onSubmit()">
+<form [formGroup]="loginForm" class="login-container" (ngSubmit)="onSubmit()">
   <mat-form-field class="form-field" color="accent">
     <input matInput placeholder="Enter username" type="text" formControlName="username" minlength="4" required>
     <mat-error>Username is too short</mat-error>
