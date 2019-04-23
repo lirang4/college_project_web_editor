@@ -15,11 +15,13 @@ export class AuthService {
     this.nextUrl = '/home';
   }
 
-  login(): void {
-    this.userService.loadUser('', '');
-    this.isLoggedIn = true;
-
-    this.navigateNext();
+  login(userName: string, password: string): void {
+    this.userService.loadUser(userName, password).subscribe(res => {
+      if (res) {
+        this.isLoggedIn = true;
+        this.navigateNext();
+      }
+    });
   }
 
   logout(): void {

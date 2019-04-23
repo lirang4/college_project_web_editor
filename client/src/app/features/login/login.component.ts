@@ -26,12 +26,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.isLoading = true;
-
-    // TODO: Validate the info with the info on the server.
-    setTimeout(() => {
-      this.isLoading = false;
-      this.authService.login();
-    }, 3000);
+    // this.isLoading = true;
+    this.authService.login(this.loginForm.value.username, this.loginForm.value.password);
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-registration',
@@ -10,15 +11,15 @@ export class RegistrationComponent implements OnInit {
   registrationForm: FormGroup;
   isLoading: boolean;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private http: HttpClient) { }
 
   ngOnInit() {
     this.registrationForm = this.fb.group({
-      username: ['', Validators.required],
+      userName: ['', Validators.required],
       password: ['', Validators.required],
       email: ['', Validators.required],
       firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      lastName: ['', Validators.required]
     });
 
     this.isLoading = false;
@@ -26,9 +27,7 @@ export class RegistrationComponent implements OnInit {
 
   onSubmit(): void {
     this.isLoading = true;
-
-    // TODO: Send the info to the server and add it to some DB
-    setTimeout(() => this.isLoading = false, 5000);
+    this.http.post('/users', this.registrationForm.value)
+      .subscribe((res) => this.isLoading = false);
   }
-
 }

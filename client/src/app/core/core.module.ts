@@ -5,7 +5,6 @@ import { SharedModule } from '@app/shared/shared.module';
 import { HeaderComponent } from '@core/components/header/header.component';
 import { FooterComponent } from '@core/components/footer/footer.component';
 import { AuthService } from '@core/services/auth.service';
-import { HttpService } from '@core/services/http.service';
 import { AuthGuard } from '@core/auth/auth.guard';
 import { UserService } from './services/user.service';
 
@@ -25,7 +24,6 @@ import { UserService } from './services/user.service';
   providers: [
     AuthGuard,
     AuthService,
-    HttpService,
     UserService,
   ],
 })
