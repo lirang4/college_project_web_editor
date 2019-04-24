@@ -1,6 +1,14 @@
 package api.models;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
+@Document(collection =  "users")
 public class User {
+
+    @Id
+    public String id;
 
     private final String userName;
     private final String email;
@@ -24,15 +32,18 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public String getFirstName() {
         return firstName;
     }
 
     public String getLastName() {
         return lastName;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "User[id=%s, userName='%s', firstName='%s', lastName='%s', email='%s']",
+                id, getUserName(), getFirstName(), getLastName(), getEmail());
     }
 }

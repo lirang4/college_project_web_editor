@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { UserService } from '@app/core/services/user.service';
 
 @Component({
   selector: 'app-editor',
@@ -11,16 +13,19 @@ export class EditorComponent implements OnInit {
   isUploader: boolean;
   isLoading: boolean;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private http: HttpClient, private userService: UserService) { }
 
   ngOnInit() {
     this.isLoading = false;
   }
 
-  onSubmit(code: string): void {
-    this.isLoading = true;
+  onSubmit(code: { code: string }): void {
+    if (!code.code) {
+      return;
+    }
 
-    // TODO: send the code to the server
-    setTimeout(() => this.isLoading = false, 3000);
+    this.isLoading = true;
+    this.http.post('/codes', { userName: this.userService.User.userName, content: code.code })
+      .subscribe((res) => this.isLoading = false);
   }
 }

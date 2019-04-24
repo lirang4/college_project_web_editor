@@ -6,14 +6,22 @@
 </mat-toolbar>
 
 <div class="choises-container" [ngClass]="isLoading ? 'disabled' : ''">
-  <div class="clickable choise" (click)="isEditor=true; isUploader=false" [ngClass]="isEditor ? 'selected-choise' : 'not-selected-choise'">
+  <div
+    class="clickable choise"
+    (click)="isEditor = true; isUploader = false"
+    [ngClass]="isEditor ? 'selected-choise' : 'not-selected-choise'"
+  >
     <div class="choise">
       <mat-icon class="choise-icon">code</mat-icon>
       <span>Write Code</span>
     </div>
   </div>
 
-  <div class="clickable choise" (click)="isUploader=true; isEditor=false" [ngClass]="isUploader ? 'selected-choise' : 'not-selected-choise'">
+  <div
+    class="clickable choise"
+    (click)="isUploader = true; isEditor = false"
+    [ngClass]="isUploader ? 'selected-choise' : 'not-selected-choise'"
+  >
     <div class="choise">
       <mat-icon class="choise-icon">cloud_upload</mat-icon>
       <span>Upload File</span>
@@ -21,5 +29,14 @@
   </div>
 </div>
 
-<app-code-editor-form *ngIf="isEditor" [isLoading]="isLoading" (submit)="onSubmit($event)"></app-code-editor-form>
-<app-code-uploader-form *ngIf="isUploader" [isLoading]="isLoading" (submit)="onSubmit($event)"></app-code-uploader-form>
+<app-code-editor-form
+  *ngIf="isEditor"
+  [isLoading]="isLoading"
+  (submit)="onSubmit($event)"
+></app-code-editor-form>
+
+<app-code-uploader-form
+  *ngIf="isUploader"
+  [isLoading]="isLoading"
+  (submit)="onSubmit($event)"
+></app-code-uploader-form>
