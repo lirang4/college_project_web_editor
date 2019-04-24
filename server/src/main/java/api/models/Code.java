@@ -1,7 +1,11 @@
 package api.models;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.Instant;
 
 
 @Document(collection =  "codes")
@@ -9,6 +13,10 @@ public class Code {
 
     @Id
     public String id;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @LastModifiedDate
+    public Instant date;
 
     private final String userName;
     private final String content;

@@ -22,6 +22,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'analyze',
+    loadChildren: './features/analyze/analyze.module#AnalyzeModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'profile',
     loadChildren: './features/profile/profile.module#ProfileModule',
     canActivate: [AuthGuard]

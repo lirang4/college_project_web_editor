@@ -1,0 +1,49 @@
+.header-icon {
+  margin-right: 10px;
+}
+
+.analyze-container {
+  padding: 50px 50px;
+  display: flex;
+  flex-direction: row;
+  height: 500px;
+}
+
+.code-list {
+  width: 400px;
+  margin-right: 20px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  .single-code {
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border-bottom: 1px solid black;
+  }
+  .selected-code {
+    background-color: var(--second-background-color);
+  }
+}
+
+.code-view {
+  width: 600px;
+  border: 1px solid black;
+  margin-right: 20px;
+  textarea {
+    margin: 10px;
+    resize: none;
+    pointer-events: none;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 14px;
+  }
+}
+
+.analyze-view {
+  width: 600px;
+  border: 1px solid black;
+}
