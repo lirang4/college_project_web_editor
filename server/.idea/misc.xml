@@ -7,6 +7,9 @@
       <item index="2" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.PostMapping" />
       <item index="3" class="java.lang.String" itemvalue="org.springframework.web.bind.annotation.PutMapping" />
     </list>
+    <writeAnnotations>
+      <writeAnnotation name="org.springframework.beans.factory.annotation.Autowired" />
+    </writeAnnotations>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_12" project-jdk-name="12" project-jdk-type="JavaSDK">

@@ -29,3 +29,5 @@ yarn-error.log
 
 # Python cache
 *.pyc
+
+*.gradle/*

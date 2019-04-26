@@ -32,13 +32,13 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: '**',
-    loadChildren: './features/page-not-found/page-not-found.module#PageNotFoundModule',
-  },
-  {
     path: '',
     redirectTo: '/home',
     pathMatch: 'full'
+  },
+  {
+    path: '**',
+    loadChildren: './features/page-not-found/page-not-found.module#PageNotFoundModule',
   },
 ];
 
