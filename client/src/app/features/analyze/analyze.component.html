@@ -9,7 +9,7 @@
   <div class="code-list">
     <span
       class="single-code clickable"
-      *ngFor="let code of codes"
+      *ngFor="let code of (codes | async)?.reverse()"
       [ngClass]="currentCode?.id === code?.id ? 'selected-code' : ''"
       (click)="onCodeSelected(code)"
     >

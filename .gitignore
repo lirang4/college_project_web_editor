@@ -26,6 +26,7 @@ yarn-error.log
 
 # Editor
 .vscode
+.idea
 
 # Python cache
 *.pyc
@@ -33,3 +34,16 @@ yarn-error.log
 ### Gradle ###
 .gradle
 /build/
+*/.gradle
+*/build/
+server/.gradle
+server/.idea
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache

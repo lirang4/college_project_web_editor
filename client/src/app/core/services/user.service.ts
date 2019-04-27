@@ -1,43 +1,47 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
-import { User } from '@app/shared/models/User';
+
+import { User } from '@shared/models/User';
 
 @Injectable()
 export class UserService {
     private user: User;
-    private codes: Array<{ id: string, date: Date, userName: string, content: string }>;
+    private codes: Subject<Array<{ id: string, date: Date, userName: string, content: string }>>;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.codes = new Subject<Array<{ id: string, date: Date, userName: string, content: string }>>();
+    }
 
     get User(): User {
         return this.user;
     }
 
-    get Codes(): Array<{ id: string, date: Date, userName: string, content: string }> {
-        return this.codes;
+    get Codes(): Observable<Array<{ id: string, date: Date, userName: string, content: string }>> {
+        return this.codes.asObservable();
     }
 
-    loadUser(userName: string, password: string): Observable<User> {
-        const subject = new Subject<User>();
+    loadUser(userName: string, password: string): Observable<boolean> {
+        const subject = new Subject<boolean>();
         this.http.get('/users', { params: { userName: userName, password: password } })
             .subscribe(
-                (res: any) => {
-                    this.user = res;
-                    this.loadCodes();
-                },
+                (res: any) => this.user = res,
                 (err) => this.user = undefined,
-                () => subject.next(this.user)
-            );
+            )
+            .add(() => subject.next(this.user !== undefined));
         return subject.asObservable();
     }
 
     loadCodes() {
         this.http.get('/codes', { params: { userName: this.user.userName } })
             .subscribe(
-                (res: any) => this.codes = res,
-                (err) => this.codes = undefined,
-                () => { }
+                (res: any) => this.codes.next(res),
+                (err) => this.codes = undefined
             );
+    }
+
+    logout() {
+        this.user = undefined;
+        this.codes.next(undefined);
     }
 }

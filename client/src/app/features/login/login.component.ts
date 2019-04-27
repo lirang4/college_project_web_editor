@@ -11,6 +11,7 @@ import { AuthService } from '@core/services/auth.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isLoading: boolean;
+  isErrorAccrued: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -23,10 +24,14 @@ export class LoginComponent implements OnInit {
     });
 
     this.isLoading = false;
+    this.isErrorAccrued = false;
   }
 
   onSubmit(): void {
-    // this.isLoading = true;
-    this.authService.login(this.loginForm.value.username, this.loginForm.value.password);
+    this.isLoading = true;
+    this.authService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe(res => {
+      this.isLoading = false;
+      this.isErrorAccrued = !res;
+    });
   }
 }

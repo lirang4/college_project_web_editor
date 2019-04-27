@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
+import { Observable } from 'rxjs';
+import { User } from '@app/shared/models/User';
 
 @Injectable()
 export class AuthService {
@@ -15,18 +17,21 @@ export class AuthService {
     this.nextUrl = '/home';
   }
 
-  login(userName: string, password: string): void {
-    this.userService.loadUser(userName, password).subscribe(res => {
+  login(userName: string, password: string): Observable<boolean> {
+    const result = this.userService.loadUser(userName, password);
+    result.subscribe(res => {
       if (res) {
         this.isLoggedIn = true;
         this.navigateNext();
       }
     });
+    return result;
   }
 
   logout(): void {
     this.isLoggedIn = false;
     this.nextUrl = '/home';
+    this.userService.logout();
 
     this.navigateNext();
   }
