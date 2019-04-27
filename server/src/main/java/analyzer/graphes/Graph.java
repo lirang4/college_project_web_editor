@@ -33,7 +33,7 @@ public class Graph
     public Graph(String code)
     {
         this.code = code;
-        Items = new ArrayList<IGraphItem>();
+        this.Items = new ArrayList<>();
         InitializeGraph();
     }
 
@@ -50,9 +50,6 @@ public class Graph
                 Items.add(new FunctionItem(codeLine, reader, null));
             else
                 return; // throw
-
-
-
         }
 
         /*while ((codeLine = reader.ReadLine())!= null)

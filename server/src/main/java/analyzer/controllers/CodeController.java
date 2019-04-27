@@ -19,7 +19,7 @@ public class CodeController {
 
     @CrossOrigin
     @GetMapping(value = "/codes", params = {"userName"})
-    public ResponseEntity<List<Code>> getUser(@RequestParam(value = "userName") String userName){
+    public ResponseEntity<List<Code>> getCodes(@RequestParam(value = "userName") String userName){
         return Optional
                 .ofNullable(this.repository.findByUserName(userName))
                 .map(codes -> ResponseEntity.ok().body(codes))
@@ -28,7 +28,7 @@ public class CodeController {
 
     @CrossOrigin
     @PostMapping("/codes")
-    public ResponseEntity<Code> createUser(@RequestBody Code newCode) {
+    public ResponseEntity<Code> createCode(@RequestBody Code newCode) {
         this.repository.save(newCode);
 
         // TODO: Initiate thread to create graph

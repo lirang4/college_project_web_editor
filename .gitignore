@@ -30,4 +30,6 @@ yarn-error.log
 # Python cache
 *.pyc
 
-*.gradle/*
+### Gradle ###
+.gradle
+/build/

@@ -14,19 +14,21 @@ public class CodeLine
     private Map<String,LineType> templatesKeysValues ;
 
     public CodeLine(String line, int linePosition) {
-        this.Text = line;
+        this.Text = line.trim();
         this.LinePosition = linePosition;
         InitializeDictionary();
         InitializeLineType();
     }
 
     private void InitializeDictionary() {
-
         templatesKeysValues = new HashMap< String,LineType>() {{
             put(Templates.IfTemplate,LineType.If);
+            put(Templates.IfTemplateWithSpace,LineType.If);
             put(Templates.ElseTemplate,LineType.Else);
             put(Templates.WhileTemplate,LineType.While);
+            put(Templates.WhileTemplateWithSpace,LineType.While);
             put(Templates.ForTemplate,LineType.For);
+            put(Templates.ForTemplateWithSpace,LineType.For);
             put(Templates.DoubleTemplate,LineType.Var);
             put(Templates.IntTemplate,LineType.Var);
             put(Templates.CharTemplate,LineType.Var);

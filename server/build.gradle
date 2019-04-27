@@ -24,6 +24,10 @@ bootJar {
     version =  '0.1.0'
 }
 
+bootRun {
+    systemProperties = System.properties
+}
+
 repositories {
     mavenCentral()
 }
