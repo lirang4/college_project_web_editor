@@ -1,5 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewChild, AfterViewInit } from '@angular/core';
+import * as CodeMirror from 'codemirror';
+import 'codemirror/mode/javascript/javascript';
+
 
 @Component({
     selector: 'app-code-editor-form',
@@ -7,21 +9,24 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
     styleUrls: ['./code-editor-form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CodeEditorFormComponent implements OnInit {
+export class CodeEditorFormComponent implements AfterViewInit {
     @Input() isLoading: boolean;
     @Output() submit = new EventEmitter<string>();
+    @ViewChild('editor') editor: any;
 
-    editorForm: FormGroup;
+    editorCode: any;
 
-    constructor(private fb: FormBuilder) { }
+    constructor() { }
 
-    ngOnInit() {
-        this.editorForm = this.fb.group({
-            code: ['', Validators.required]
+    ngAfterViewInit() {
+        this.editorCode = CodeMirror.fromTextArea(this.editor.nativeElement, {
+            lineNumbers: true,
+            mode: 'javascript',
+            theme: 'darcula'
         });
     }
 
     onSubmitCode(): void {
-        this.submit.emit(this.editorForm.value);
+        this.submit.emit(this.editorCode.getValue());
     }
 }

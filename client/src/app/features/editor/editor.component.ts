@@ -19,13 +19,13 @@ export class EditorComponent implements OnInit {
     this.isLoading = false;
   }
 
-  onSubmit(code: { code: string }): void {
-    if (!code.code) {
+  onSubmit(code: string): void {
+    if (!code) {
       return;
     }
 
     this.isLoading = true;
-    this.http.post('/codes', { userName: this.userService.User.userName, content: code.code })
+    this.http.post('/codes', { userName: this.userService.User.userName, content: code })
       .subscribe((res) => this.isLoading = false);
   }
 }
