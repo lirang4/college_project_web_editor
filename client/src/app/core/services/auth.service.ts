@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from './user.service';
 import { Observable } from 'rxjs';
-import { User } from '@app/shared/models/User';
+
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {

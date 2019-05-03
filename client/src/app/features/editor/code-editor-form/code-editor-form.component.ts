@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ViewChild, AfterViewInit } from '@angular/core';
 import * as CodeMirror from 'codemirror';
-import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/clike/clike';
 
 
 @Component({
@@ -21,7 +21,7 @@ export class CodeEditorFormComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.editorCode = CodeMirror.fromTextArea(this.editor.nativeElement, {
             lineNumbers: true,
-            mode: 'javascript',
+            mode: 'text/x-csrc',
             theme: 'darcula'
         });
     }

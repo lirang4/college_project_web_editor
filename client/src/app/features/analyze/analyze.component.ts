@@ -1,5 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
+
+import * as CodeMirror from 'codemirror';
+import 'codemirror/mode/clike/clike';
 
 import { UserService } from '@core/services/user.service';
 import { User } from '@shared/models/User';
@@ -9,7 +12,9 @@ import { User } from '@shared/models/User';
   templateUrl: './analyze.component.html',
   styleUrls: ['./analyze.component.scss']
 })
-export class AnalyzeComponent implements OnInit, OnDestroy {
+export class AnalyzeComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('editor') editor: any;
+
   private readonly POLLING_INTERVAL = 3000;
 
   user: User;
@@ -17,6 +22,7 @@ export class AnalyzeComponent implements OnInit, OnDestroy {
   currentCode: { id: string, date: Date, userName: string, content: string };
 
   pollingInterval: any;
+  editorCode: any;
 
   constructor(private userService: UserService) { }
 
@@ -27,12 +33,24 @@ export class AnalyzeComponent implements OnInit, OnDestroy {
     this.initiateListPolling();
   }
 
+  ngAfterViewInit() {
+    this.editorCode = CodeMirror.fromTextArea(this.editor.nativeElement, {
+      lineNumbers: true,
+      mode: 'text/x-csrc',
+      theme: 'darcula',
+      readOnly: true
+    });
+
+    this.editorCode.setSize('100%', '100%');
+  }
+
   ngOnDestroy(): void {
     clearInterval(this.pollingInterval);
   }
 
   onCodeSelected(code: { id: string, date: Date, userName: string, content: string }) {
     this.currentCode = code;
+    this.editorCode.setValue(this.currentCode.content);
   }
 
   private initiateListPolling(): void {

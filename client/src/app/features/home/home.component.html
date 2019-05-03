@@ -1,11 +1,16 @@
 <mat-toolbar>
   <mat-toolbar-row class="header">
     <span class="headline">Code Analyzer</span>
+    <span>Write it. Test it. Submit it</span>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <div class="home-container">
-  <button mat-raised-button class="analyze-button" (click)="router.navigate(['/editor'])">
+  <button
+    mat-raised-button
+    class="analyze-button"
+    (click)="router.navigate(['/editor'])"
+  >
     <span>Start Analyzing</span>
   </button>
 </div>
