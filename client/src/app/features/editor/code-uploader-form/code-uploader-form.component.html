@@ -1,8 +1,14 @@
-<form [formGroup]="uploaderForm" class="editor-container" (ngSubmit)="onSubmitFile()">
-    <input type="file" ng2FileSelect [uploader]="uploader" />
+<div class="editor-container">
+  <input class="file-upload" type="file" ng2FileSelect [uploader]="uploader" />
+  <textarea #editor></textarea>
 
-    <button mat-raised-button class="submit-button" type="submit" [disabled]="!uploaderForm.valid">
-        <span *ngIf="!isLoading">Submit Code</span>
-        <mat-spinner *ngIf="isLoading" class="spinner" color="accent" [diameter]="27"></mat-spinner>
-    </button>
-</form>
+  <button mat-raised-button class="submit-button" (click)="onSubmitFile()">
+    <span *ngIf="!isLoading">Submit Code</span>
+    <mat-spinner
+      *ngIf="isLoading"
+      class="spinner"
+      color="accent"
+      [diameter]="27"
+    ></mat-spinner>
+  </button>
+</div>

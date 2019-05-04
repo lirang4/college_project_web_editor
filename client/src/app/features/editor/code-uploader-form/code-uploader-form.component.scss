@@ -1,15 +1,19 @@
 .editor-container {
-    padding: 5px 300px;
-    display: flex;
-    flex-direction: column;
+  padding: 5px 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-upload {
+  margin-bottom: 20px;
 }
 
 .submit-button {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-around;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
 }
 
 .spinner {
-    margin: 5px;
+  margin: 5px;
 }

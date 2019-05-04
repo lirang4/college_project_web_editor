@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Component, Input, EventEmitter, Output, ChangeDetectionStrategy, AfterViewInit, ViewChild } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
-
-const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
+import * as CodeMirror from 'codemirror';
+import 'codemirror/mode/clike/clike';
 
 @Component({
     selector: 'app-code-uploader-form',
@@ -10,20 +9,34 @@ const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
     styleUrls: ['./code-uploader-form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CodeUploaderFormComponent implements OnInit {
+export class CodeUploaderFormComponent implements AfterViewInit {
     @Input() isLoading: boolean;
     @Output() submit = new EventEmitter<string>();
+    @ViewChild('editor') editor: any;
 
-    uploaderForm: FormGroup;
-    uploader: FileUploader = new FileUploader({ url: URL });
+    editorCode: any;
+    uploader: FileUploader;
+    reader: FileReader;
 
-    constructor(private fb: FormBuilder) { }
+    constructor() {
+        this.uploader = new FileUploader({});
+        this.reader = new FileReader();
 
-    ngOnInit() {
-        this.uploaderForm = this.fb.group({});
+        this.uploader.onAfterAddingFile = (fileItem) => this.reader.readAsText(fileItem._file);
+        this.reader.onload = (ev: any) => this.editorCode.setValue(ev.target.result);
+    }
+
+    ngAfterViewInit() {
+        this.editorCode = CodeMirror.fromTextArea(this.editor.nativeElement, {
+            lineNumbers: true,
+            mode: 'text/x-csrc',
+            theme: 'darcula',
+            readOnly: true
+        });
+        this.editorCode.setSize('100%', '100%');
     }
 
     onSubmitFile(): void {
-        this.submit.emit(this.uploaderForm.value);
+        this.submit.emit(this.editorCode.getValue());
     }
 }
