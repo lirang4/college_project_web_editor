@@ -1,6 +1,10 @@
 @import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
-@import url('https://fonts.googleapis.com/css?family=Arimo');
+@import url("https://fonts.googleapis.com/css?family=Arimo");
 
 mat-toolbar {
-    background-color: var(--second-background-color) !important;
+  background-color: var(--second-background-color) !important;
+}
+
+button:hover:enabled {
+  background-color: var(--hover-color) !important;
 }

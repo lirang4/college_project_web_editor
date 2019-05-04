@@ -5,7 +5,7 @@
     <div>
       <mat-icon
         class="header-icon clickable"
-        matTooltip="home page"
+        matTooltip="home"
         [ngClass]="currentPage === 'home' ? 'selected-icon' : ''"
         (click)="navigage('home')"
         >home</mat-icon
@@ -43,7 +43,7 @@
         class="header-icon clickable"
         matTooltip="log out"
         (click)="onLogout()"
-        >power_settings_new</mat-icon
+        >exit_to_app</mat-icon
       >
 
       <mat-icon
@@ -52,7 +52,7 @@
         matTooltip="login"
         [ngClass]="currentPage === 'login' ? 'selected-icon' : ''"
         (click)="navigage('login')"
-        >exit_to_app</mat-icon
+        >person_pin</mat-icon
       >
 
       <mat-icon
