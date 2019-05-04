@@ -21,8 +21,12 @@
   width: 150px;
 }
 
-.background-img {
-  margin-top: 30px;
-  width: 400px;
-  height: 500px;
+.image-container {
+  display: flex;
+  justify-content: center;
+  .background-img {
+    margin-left: 70px;
+    width: 340px;
+    height: 430px;
+  }
 }
