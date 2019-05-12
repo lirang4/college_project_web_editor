@@ -2,7 +2,7 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.Enums;
-
+import analyzer.graphes.ParamterItem;
 import java.util.List;
 
 public final class ConditionExamination

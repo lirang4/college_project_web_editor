@@ -2,6 +2,11 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
+import analyzer.reader.Enums.LineType;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+
+import java.util.ArrayList;
+import java.util.Dictionary;
 
 import java.util.List;
 
@@ -14,19 +19,10 @@ public class WhileItem extends  BaseItem{
 
 
     @Override
-    public int Execute(List<ParamterItem> parameters)
+    public boolean CanExecute(List<ParamterItem> parameters)
     {
-        int sum = 0;
-
-        for (IGraphItem item: Items) {
-            sum += item.Execute(parameters);
-        }
-        return sum;
-    }
-
-    @Override
-    public boolean CanExecute(CodeLine line) {
-        return false;
+        Condition condition = Condition.Create(Line, Vars, parameters);
+        return condition.CanRun();
     }
 }
 

@@ -2,6 +2,7 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Condition
@@ -10,6 +11,7 @@ public class Condition
     private static String whileRegex = "\\s*\\bwhile\\b\\s*";
     private static String forRegex = "\\s*\\bfor\\b\\s*";
 
+    private static String noName = "No name";
     String line;
     ParamterItem parameter1;
     ParamterItem parameter2;
@@ -99,11 +101,11 @@ public class Condition
         else if (condition.contains(">="))
             ConditionOparator = ">=";
         else if (condition.contains("<="))
-            ConditionOparator = ">=";
+            ConditionOparator = "<=";
         else if (condition.contains(">"))
             ConditionOparator = ">";
         else if (condition.contains("<"))
-            ConditionOparator = ">";
+            ConditionOparator = "<";
 
         result[0] = arr[0];
         result[1] = ConditionOparator;
@@ -115,7 +117,7 @@ public class Condition
 
     private static ParamterItem ParseParameter(String parameter, List<VariableItem> variables, List<ParamterItem> params)
     {
-        String name = "No name";
+        String name = noName;
         Object value = parameter;
         analyzer.graphes.Enums.Variables type = ExtractType(parameter);
 
@@ -162,7 +164,7 @@ public class Condition
         {
             return !parameter1.getValue().equals(parameter2.getValue());
         }
-//        if(parameter1.getVarType() == parameter2.getVarType() && parameter1.getVarType() == analyzer.graphes.Enums.Variables.Double)
+//        if(parameter1.getVarType() == parameter2.getVarType() && parameter1.getVarType() == Graphes.Enums.Variables.Double)
         {
             double param1 = Double.parseDouble((String)parameter1.getValue());
             double param2 = Double.parseDouble((String)parameter2.getValue());
@@ -182,7 +184,14 @@ public class Condition
 
     public void UpdateParameters(List<ParamterItem> parameters, List<VariableItem> variables)
     {
-        parameter1 = ParseParameter(parameter1.getName(), variables, parameters);
-        parameter2 = ParseParameter(parameter2.getName(), variables, parameters);
+        if(parameter1.getName() == noName)
+            parameter1 = ParseParameter(parameter1.getValue().toString(), variables, parameters);
+        else
+            parameter1 = ParseParameter(parameter1.getName(), variables, parameters);
+
+        if(parameter2.getName() == noName)
+            parameter2 = ParseParameter(parameter2.getValue().toString(), variables, parameters);
+        else
+            parameter2 = ParseParameter(parameter2.getName(), variables, parameters);
     }
 }

@@ -17,14 +17,22 @@ public class PutItem extends  BaseItem {
     }
 
     @Override
-    public int Execute(List<ParamterItem> parameters) {
+    public GraphResult Execute(List<ParamterItem> parameters) {
 
+        GraphResult result = new GraphResult();
         // TODO: Change the var item or parameter if needed
-        return 1;
+        if(!executed)
+        {
+            result.setRowsCover(1);
+            executed = true;
+        }
+        result.setRowsCount(1);
+
+        return result;
     }
 
     @Override
-    public boolean CanExecute(CodeLine line) {
+    public boolean CanExecute(List<ParamterItem> parameters) {
         return true;
     }
 }

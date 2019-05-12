@@ -2,7 +2,9 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 
+import java.util.Dictionary;
 import java.util.List;
 
 public class VariableItem extends BaseItem {
@@ -69,9 +71,15 @@ public class VariableItem extends BaseItem {
             return Enums.Variables.String;
     }
 
-    private Object ExtractValue(String line)
+    private Object ExtractValue(String line/*Will be removed*/)
     {
        return line.substring(line.indexOf("=")+1,line.indexOf(";")).replace(" ","");
+    }
+
+    private Object ExtractValueExecuting(List<ParamterItem> parameters)
+    {
+        // TODO: MathFunctionAnalyzer
+        return null;
     }
 
 
@@ -86,13 +94,22 @@ public class VariableItem extends BaseItem {
     }
 
     @Override
-    public int Execute(List<ParamterItem> parameters) {
-        return 1;
+    public GraphResult Execute(List<ParamterItem> parameters) {
+        GraphResult result = new GraphResult();
+// TODO
+//        value = ExtractValue(parameters);
+        if(!executed)
+        {
+            result.setRowsCover(1);
+            executed = true;
+        }
+        result.setRowsCount(1);
+        return result;
     }
 
     @Override
-    public boolean CanExecute(CodeLine line) {
-        return false;
+    public boolean CanExecute(List<ParamterItem> parameters) {
+        return true;
     }
 
     public String getName() {

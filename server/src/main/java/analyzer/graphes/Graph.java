@@ -5,6 +5,7 @@ import analyzer.reader.CodeLine;
 import analyzer.reader.Enums;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 
 public class Graph
@@ -33,7 +34,7 @@ public class Graph
     public Graph(String code)
     {
         this.code = code;
-        this.Items = new ArrayList<>();
+        Items = new ArrayList<IGraphItem>();
         InitializeGraph();
     }
 
@@ -50,6 +51,9 @@ public class Graph
                 Items.add(new FunctionItem(codeLine, reader, null));
             else
                 return; // throw
+
+
+
         }
 
         /*while ((codeLine = reader.ReadLine())!= null)
@@ -59,15 +63,20 @@ public class Graph
         }*/
     }
 
-    public int Execute(List<ParamterItem> parameters)
+    public GraphResult Execute(List<ParamterItem> parameters)
     {
-        int sum = 0;
+        GraphResult result = new GraphResult();
 
         for (IGraphItem item: Items) {
-            sum += item.Execute(parameters);
+            GraphResult internalResult = item.Execute(parameters);
+
+            result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
+            result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
+
+            result.AddInternalResult(internalResult);
         }
 
-        return sum;
+        return result;
     }
 
     @Override

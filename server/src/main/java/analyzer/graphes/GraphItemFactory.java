@@ -1,7 +1,7 @@
 package analyzer.graphes;
+
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
-
 import analyzer.reader.Enums.LineType;
 
 import java.util.List;
