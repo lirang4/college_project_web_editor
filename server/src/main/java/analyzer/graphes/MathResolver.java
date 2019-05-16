@@ -73,8 +73,8 @@ public class MathResolver {
         //switch(line.getType()) {
         //    case Enums.LineType.Var:
         // code block
-        _expression = "double number_1 = a + 5 / (6 + b) ;";
-        _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";")-1).replace(" ","");
+        _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
+                .replace(" ","");
         //     break;
         //   case Enums.LineType.Put:
         // code block
@@ -83,8 +83,6 @@ public class MathResolver {
         // code block
         //  }
 
-
-
         return _expression;
     }
 
@@ -92,7 +90,7 @@ public class MathResolver {
     public double GetValue(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
     {
         String _expression = getExpressionFromLine(line);
-        Expression e=null;
+        Expression e = null;
 
         try {
             ExpressionBuilder calc = new ExpressionBuilder(_expression);

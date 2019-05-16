@@ -165,7 +165,11 @@ public class Condition
             return !parameter1.getValue().equals(parameter2.getValue());
         }
 //        if(parameter1.getVarType() == parameter2.getVarType() && parameter1.getVarType() == Graphes.Enums.Variables.Double)
-        {
+//        {
+        System.out.println(parameter1.getValue());
+        System.out.println((String)parameter1.getValue());
+        System.out.println(parameter2.getValue());
+        System.out.println((String)parameter2.getValue());
             double param1 = Double.parseDouble((String)parameter1.getValue());
             double param2 = Double.parseDouble((String)parameter2.getValue());
 
@@ -177,7 +181,7 @@ public class Condition
                 return param1 > param2;
             if (operator.equals("<"))
                 return param1 < param2;
-        }
+//        }
 
         return false;
     }

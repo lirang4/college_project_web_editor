@@ -46,6 +46,11 @@ public class VariableItem extends BaseItem {
         name = ExtractName(line);
     }
 
+    public void setValue(Object newValue) {
+        // TODO: Create new value and not override the original value at the next run
+        this.value = newValue;
+    }
+
     private String ExtractName(String line)
     {
         String[] splitLine = line.split(" ");

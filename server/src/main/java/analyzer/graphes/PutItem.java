@@ -20,6 +20,12 @@ public class PutItem extends  BaseItem {
     public GraphResult Execute(List<ParamterItem> parameters) {
 
         GraphResult result = new GraphResult();
+        MathResolver resolver = new MathResolver(Line.getText());
+
+        Object newValue = resolver.GetValue(Line, Vars, parameters);
+        VariableItem v = GetVarFromLine();
+        v.setValue(newValue);
+
         // TODO: Change the var item or parameter if needed
         if(!executed)
         {
@@ -29,6 +35,21 @@ public class PutItem extends  BaseItem {
         result.setRowsCount(1);
 
         return result;
+    }
+
+    private VariableItem GetVarFromLine()
+    {
+        String name = Line.getText().substring(0,Line.getText().indexOf("=")).replace(" ","");
+        for ( VariableItem var: Vars) {
+            if (var.getName().equals(name)) {
+                return var;
+            }
+        }
+
+        // TODO: Search in params
+
+        System.out.println("return null at Putitem.getVarFromLine");
+        return null;
     }
 
     @Override
