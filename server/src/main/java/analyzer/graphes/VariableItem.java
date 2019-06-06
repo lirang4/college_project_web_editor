@@ -2,10 +2,10 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 
-import java.util.Dictionary;
 import java.util.List;
+
+//mport com.sun.org.apache.bcel.internal.generic.RETURN;
 
 public class VariableItem extends BaseItem {
 

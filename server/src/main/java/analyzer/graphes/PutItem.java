@@ -23,10 +23,9 @@ public class PutItem extends  BaseItem {
         MathResolver resolver = new MathResolver(Line.getText());
 
         Object newValue = resolver.GetValue(Line, Vars, parameters);
-        VariableItem v = GetVarFromLine();
-        v.setValue(newValue);
 
-        // TODO: Change the var item or parameter if needed
+        UpdateValue(parameters, Vars, newValue); // TODO: Change the var item or parameter if needed
+
         if(!executed)
         {
             result.setRowsCover(1);
@@ -37,7 +36,23 @@ public class PutItem extends  BaseItem {
         return result;
     }
 
-    private VariableItem GetVarFromLine()
+    private void UpdateValue(List<ParamterItem> parameters, List<VariableItem> vars, Object newValue) {
+        String name = Line.getText().substring(0,Line.getText().indexOf("=")).replace(" ","");
+        for ( VariableItem var: vars) {
+            if (var.getName().equals(name)) {
+                var.setValue(newValue);
+            }
+        }
+
+        for (ParamterItem par: parameters) {
+            if (par.getName().equals(name)) {
+                par.setValue(newValue);
+            }
+        }
+
+    }
+
+    private Object GetVarFromLine()
     {
         String name = Line.getText().substring(0,Line.getText().indexOf("=")).replace(" ","");
         for ( VariableItem var: Vars) {
@@ -47,6 +62,8 @@ public class PutItem extends  BaseItem {
         }
 
         // TODO: Search in params
+
+
 
         System.out.println("return null at Putitem.getVarFromLine");
         return null;

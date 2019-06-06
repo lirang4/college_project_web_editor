@@ -2,7 +2,6 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Condition
@@ -126,7 +125,7 @@ public class Condition
             if(params != null)
                 for (ParamterItem item: params)
                 {
-                    if(item.getName() == parameter)
+                    if(item.getName().equals(parameter))
                         return item;
                 }
             if(variables != null)
@@ -166,12 +165,12 @@ public class Condition
         }
 //        if(parameter1.getVarType() == parameter2.getVarType() && parameter1.getVarType() == Graphes.Enums.Variables.Double)
 //        {
-        System.out.println(parameter1.getValue());
-        System.out.println((String)parameter1.getValue());
-        System.out.println(parameter2.getValue());
-        System.out.println((String)parameter2.getValue());
-            double param1 = Double.parseDouble((String)parameter1.getValue());
-            double param2 = Double.parseDouble((String)parameter2.getValue());
+//        System.out.println(parameter1.getValue());
+//        System.out.println((String)parameter1.getValue());
+//        System.out.println(parameter2.getValue());
+//        System.out.println((String)parameter2.getValue());
+            double param1 = Double.parseDouble(parameter1.getValue().toString());
+            double param2 = Double.parseDouble(parameter2.getValue().toString());
 
             if (operator.equals(">="))
                 return param1 >= param2;

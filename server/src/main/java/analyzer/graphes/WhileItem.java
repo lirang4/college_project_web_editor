@@ -2,13 +2,10 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
-import analyzer.reader.Enums.LineType;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
-import java.util.ArrayList;
-import java.util.Dictionary;
 
 import java.util.List;
+
+//import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 public class WhileItem extends  BaseItem{
 
