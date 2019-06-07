@@ -7,7 +7,7 @@ import analyzer.reader.Enums;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
-
+import analyzer.graphes.*;
 public class Graph
 {
 

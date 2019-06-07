@@ -2,13 +2,14 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.Enums.LineType;
+import analyzer.graphes.*;
 import analyzer.reader.CodeReader;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import analyzer.graphes.*;
 public class IfItem extends BaseItem{
 
     public IfItem(CodeLine line , CodeReader reader, List<VariableItem> vars)
@@ -23,7 +24,7 @@ public class IfItem extends BaseItem{
         GraphResult result = new GraphResult();
         Condition condition = Condition.Create(Line, Vars, parameters);
 
-        if (!condition.CanRun()) {
+        if (!condition.CanRun(Vars)) {
             return result;
         }
 
@@ -54,7 +55,7 @@ public class IfItem extends BaseItem{
     public boolean CanExecute(List<ParamterItem> parameters)
     {
         Condition condition = Condition.Create(Line, Vars, parameters);
-        return condition.CanRun();
+        return condition.CanRun(Vars);
     }
 }
 

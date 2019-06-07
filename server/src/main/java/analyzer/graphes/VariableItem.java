@@ -56,6 +56,8 @@ public class VariableItem extends BaseItem {
         String[] splitLine = line.split(" ");
         // splitLine[0] => Type - int, double, etc
         //splitLine[1] => Name
+        if(splitLine[1].contains(";"))
+            splitLine[1]= splitLine[1].substring(0,splitLine[1].length()-1);
 
         return splitLine[1];
     }
@@ -78,7 +80,10 @@ public class VariableItem extends BaseItem {
 
     private Object ExtractValue(String line/*Will be removed*/)
     {
-       return line.substring(line.indexOf("=")+1,line.indexOf(";")).replace(" ","");
+        if(line.contains("="))
+            return line.substring(line.indexOf("=")+1,line.indexOf(";")).replace(" ","");
+        else
+            return null;
     }
 
     private Object ExtractValueExecuting(List<ParamterItem> parameters)

@@ -4,7 +4,7 @@ import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
 
 import java.util.List;
-
+import analyzer.graphes.*;
 public class PutItem extends  BaseItem {
 
     protected PutItem(CodeLine line, CodeReader reader, List<VariableItem> vars) {

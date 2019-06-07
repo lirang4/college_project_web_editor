@@ -1,5 +1,5 @@
 package analyzer.graphes;
-
+import analyzer.graphes.*;
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
 
@@ -19,7 +19,7 @@ public class WhileItem extends  BaseItem{
     public boolean CanExecute(List<ParamterItem> parameters)
     {
         Condition condition = Condition.Create(Line, Vars, parameters);
-        return condition.CanRun();
+        return condition.CanRun(Vars);
     }
 }
 

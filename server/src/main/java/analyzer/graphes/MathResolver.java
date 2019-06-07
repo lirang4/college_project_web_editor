@@ -9,15 +9,18 @@ import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
+import analyzer.reader.Enums;
 
 public class MathResolver {
 
     String line;
+    int ItemMode;
 
-    public MathResolver(String line)
+    public MathResolver(String line, int... optional)
     {
         this.line = line;
-
+        if(optional.length!=0)
+            this.ItemMode = optional[0];
     }
 
     private  String RemoveSpaces(String text)
@@ -31,18 +34,30 @@ public class MathResolver {
         String ConditionOparator="";
         String [] arr =condition.split("( )");
 
-        if (condition.contains("=="))          //check string for measure
+        if (condition.contains("==")) {          //check string for measure
             ConditionOparator = "==";      //split string at those points
-        else if (condition.contains("!="))     //a==2 -> ["a", "2"]
+            arr =condition.split("==");
+        }
+        else if (condition.contains("!=")) {     //a==2 -> ["a", "2"]
             ConditionOparator = "!=";
-        else if (condition.contains(">="))
+            arr =condition.split("!=");
+        }
+        else if (condition.contains(">=")) {
             ConditionOparator = ">=";
-        else if (condition.contains("<="))
+            arr =condition.split(">=");
+        }
+        else if (condition.contains("<=")) {
+            arr =condition.split("<=");
             ConditionOparator = ">=";
-        else if (condition.contains(">"))
+        }
+        else if (condition.contains(">")) {
             ConditionOparator = ">";
-        else if (condition.contains("<"))
-            ConditionOparator = ">";
+            arr =condition.split(">");
+        }
+        else if (condition.contains("<")) {
+            ConditionOparator = "<";
+            arr =condition.split("<");
+        }
 
         result[0] = arr[0];
         result[1] = ConditionOparator;
@@ -56,7 +71,8 @@ public class MathResolver {
     {
         HashMap<String, Double> hashVars = new HashMap<String, Double>();
         for (VariableItem item : variables) {
-            hashVars.put(item.getName(), Double.valueOf(item.getValue().toString()));
+            if(item.getValue()!=null)
+                hashVars.put(item.getName(), Double.valueOf(item.getValue().toString()));
         }
         for (ParamterItem item : params) {
             hashVars.put(item.getName(), Double.valueOf(item.getValue().toString()));
@@ -64,24 +80,61 @@ public class MathResolver {
         return hashVars;
     }
 
-    private String getExpressionFromLine(CodeLine line)
+    public String getExpressionFromLine(CodeLine line)
     {
         String _expression = line.getText();
+        String[] _expressionOfCondition = new String[3];
 
         //TODO : switchCase on the line type (could be if statement /  put / for / while ...)
         // VariableItem :
-        //switch(line.getType()) {
-        //    case Enums.LineType.Var:
-        // code block
-        _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
-                .replace(" ","");
-        //     break;
-        //   case Enums.LineType.Put:
-        // code block
-        //      break;
-        //   default:
-        // code block
-        //  }
+        switch(line.getType()) {
+            case Put:
+                _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
+                        .replace(" ","");
+                     break;
+            case Var:
+                _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
+                        .replace(" ","");
+                break;
+            case For:
+                if(this.ItemMode == 1){ // The case of update the value of the loop variable
+                    _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
+                            .replace(" ","");
+                    // Now we've got the condition statement : i < i + 40 for example
+                    String [] arr =_expression.split("(=)");
+                    _expression = arr[1];
+                    //_expressionOfCondition = SplitConditionParamsAndOperator(_expression);
+                    //_expression = _expressionOfCondition[2];
+                }
+                else {// The case of the condition value
+                    _expression = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")"))
+                            .replace(" ","");
+                    _expression = _expression.substring(0,_expression.indexOf(";"));
+                    // Now we've got the condition statement : i < i + 40 for example
+                    _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
+                    _expression = _expressionOfCondition[2];
+                }
+
+
+                break;
+            case While:
+                // TODO : Check if working on parameter one vs parameter two
+                _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
+                        .replace(" ","");
+                // Now we've got the condition statement x > x + 40 * 2 for example
+                _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
+                if(ItemMode == 1) {// parameter 1
+                    _expression = _expressionOfCondition[0];
+                }
+                else {
+                    _expression = _expressionOfCondition[1];
+                }
+
+                break;
+           default:
+               // TODO : Throw an exception
+               break;
+          }
 
         return _expression;
     }

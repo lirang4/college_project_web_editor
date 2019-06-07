@@ -2,7 +2,7 @@ package analyzer.graphes;
 import analyzer.reader.CodeLine;
 import java.util.Dictionary;
 import java.util.List;
-
+import analyzer.graphes.*;
 public interface IGraphItem {
     public static final CodeLine Line = null;
     CodeLine getLine();

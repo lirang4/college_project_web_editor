@@ -2,7 +2,7 @@ package analyzer.graphes;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import analyzer.graphes.*;
 public class GraphResult {
 
     private int rowsCover;

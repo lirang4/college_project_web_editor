@@ -3,10 +3,11 @@ package analyzer.graphes;
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
 import analyzer.reader.Enums;
-
+import analyzer.graphes.*;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
+import analyzer.graphes.*;
 import java.util.stream.Collectors;
 
 public class BaseItem implements IGraphItem
@@ -89,7 +90,7 @@ public class BaseItem implements IGraphItem
         GraphResult result = new GraphResult();
         Condition condition = Condition.Create(Line, Vars, parameters);
 
-        while (condition.CanRun())
+        while (condition.CanRun(this.Vars))
         {
             if(!executed)
             {

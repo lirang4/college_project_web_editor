@@ -3,7 +3,8 @@ package analyzer.graphes;
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
 import analyzer.reader.Enums.LineType;
-
+import analyzer.graphes.*;
+import analyzer.graphes.*;
 import java.util.List;
 
 // TODO: Implement all objects !!!!!

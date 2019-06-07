@@ -3,6 +3,8 @@ package analyzer.graphes;
 import analyzer.reader.CodeLine;
 
 import java.util.List;
+import analyzer.graphes.*;
+import analyzer.graphes.*;
 
 public class Condition
 {
@@ -15,20 +17,23 @@ public class Condition
     ParamterItem parameter1;
     ParamterItem parameter2;
     String operator;
+    CodeLine codeLine;
+    List<ParamterItem> parameters;
 
-
-    private Condition(String line,ParamterItem parameter1,ParamterItem parameter2,String operator )
+    private Condition( List<ParamterItem> params,CodeLine codeLine, String line,ParamterItem parameter1,ParamterItem parameter2,String operator )
     {
+        this.parameters = params;
+        this.codeLine = codeLine;
         this.line = line;
         this.parameter1 = parameter1;
         this.parameter2 = parameter2;
         this.operator = operator;
     }
 
-    public static Condition Create(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
+    public static Condition Create(CodeLine code_line, List<VariableItem> variables, List<ParamterItem> params)
     {
-        String condition = line.getText();
-        analyzer.reader.Enums.LineType type = line.getType();
+        String condition = code_line.getText();
+        analyzer.reader.Enums.LineType type = code_line.getType();
 
         condition = RemoveSpaces(condition);
         condition = RemoveConditionText(type, condition);
@@ -36,16 +41,24 @@ public class Condition
 
         if(type == analyzer.reader.Enums.LineType.For)
         {
-            // TODO:
-            // RemoveForExtras(condition);
+            // The first time is to decrease the before the condition part and decrease spaces in the line
+            // The second time is to decrease the after the condition part
+            condition = condition.substring(condition.indexOf(";")+1,condition.length()-1)
+                .replace(" ","");
+            condition = condition.substring(0,condition.indexOf(";"));
         }
+//        else if(type == analyzer.reader.Enums.LineType.While)
+//        {
+//            condition = condition.substring(condition.indexOf("(")+1,condition.indexOf(")"))
+//                    .replace(" ","");
+//        }
 
         String[] results = SplitConditionParamsAndOperator(condition);
         ParamterItem p1 = ParseParameter(results[0], variables, params);
         String operator = results[1];
         ParamterItem p2 = ParseParameter(results[2], variables, params);
 
-        return new Condition(condition, p1, p2, operator);
+        return new Condition(params,code_line,condition, p1, p2, operator);
     }
 
     private static String RemoveSpaces(String text)
@@ -153,7 +166,7 @@ public class Condition
     }
 
 
-    public boolean CanRun()
+    public boolean CanRun(List<VariableItem> Vars)
     {
         if (operator.equals("=="))
         {
@@ -165,12 +178,15 @@ public class Condition
         }
 //        if(parameter1.getVarType() == parameter2.getVarType() && parameter1.getVarType() == Graphes.Enums.Variables.Double)
 //        {
-//        System.out.println(parameter1.getValue());
-//        System.out.println((String)parameter1.getValue());
-//        System.out.println(parameter2.getValue());
-//        System.out.println((String)parameter2.getValue());
-            double param1 = Double.parseDouble(parameter1.getValue().toString());
-            double param2 = Double.parseDouble(parameter2.getValue().toString());
+
+
+        MathResolver resolver = new MathResolver(this.line,1);
+        MathResolver resolver2 = new MathResolver(this.line,2);
+        Object newValue = resolver.GetValue(codeLine, Vars, parameters);
+        Object newValue2 = resolver.GetValue(codeLine, Vars, parameters);
+            double param1 = Double.parseDouble(newValue.toString());
+            double param2 = Double.parseDouble(newValue2.toString());
+
 
             if (operator.equals(">="))
                 return param1 >= param2;
