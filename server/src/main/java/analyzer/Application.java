@@ -35,6 +35,12 @@ public class Application {
 //        System.out.println(MFA.GetValue(line5,variables1,params1));
         String code = "Func(double x, double t)\n" +
                 "{\n" +
+                "while(x>3)\n" +
+                "{\n" +
+                "x=x- 1;\n" +
+                "}\n" +
+
+
 //                "int x = 3;\n" +
                 "if(x>=3)\n" +
                 "{\n" +

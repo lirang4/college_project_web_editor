@@ -212,7 +212,7 @@ public class Condition
 //            double param2 = Double.parseDouble(newValue2.toString());
         double param1 = params[0];
         double param2 = params[1];
-        if(param1!=-1 && param2 != -1) { // If, For, While
+        if(param1!=Double.MAX_VALUE && param2 !=Double.MAX_VALUE) { // If, For, While
             if (operator.equals(">="))
                 return param1 >= param2;
             if (operator.equals("<="))

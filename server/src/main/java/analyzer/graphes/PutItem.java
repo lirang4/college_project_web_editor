@@ -22,7 +22,8 @@ public class PutItem extends  BaseItem {
         GraphResult result = new GraphResult();
         MathResolver resolver = new MathResolver(Line.getText());
 
-        Object newValue = resolver.GetValue(Line, Vars, parameters);
+        double[] resultArray = resolver.GetValue(Line, Vars, parameters);
+        double newValue = resultArray[0];
 
         UpdateValue(parameters, Vars, newValue); // TODO: Change the var item or parameter if needed
 

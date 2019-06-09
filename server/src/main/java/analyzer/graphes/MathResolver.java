@@ -157,8 +157,8 @@ public class MathResolver {
     public double[] GetValue(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
     {
         double [] resValues = new double[2];
-        resValues[0] = -1;
-        resValues[1] = -1;
+        resValues[0] = Double.MAX_VALUE;
+        resValues[1] = Double.MAX_VALUE;
         String[] _expression = getExpressionFromLine(line);
         Expression exp= null;
         Expression exp2= null;

@@ -46,9 +46,15 @@ public class ForItem extends BaseItem
                 String _value=this.getLine().getText();
                 _value= _value.substring(_value.indexOf("(")+1,_value.indexOf(";")).replace(" ","");
                 _value= _value.substring(_value.indexOf("=")+1,_value.length());
-                MathResolver resolver = new MathResolver(this.getLine().getText(),1);
-                Object newValue = resolver.GetValue(Line, Vars, parameters);
-                item.setValue(Double.parseDouble(newValue.toString()));
+
+
+
+                MathResolver resolver = new MathResolver(this.getLine().getText());
+
+                double[] resultArray = resolver.GetValue(Line, Vars, parameters);
+                double newValue = resultArray[0];
+                //Object newValue = resolver.GetValue(Line, Vars, parameters);
+                item.setValue(newValue);
             }
         }
 
