@@ -2,11 +2,10 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
-
 import java.util.List;
-import analyzer.graphes.*;
-public class PutItem extends  BaseItem {
 
+public class PutItem extends  BaseItem
+{
     protected PutItem(CodeLine line, CodeReader reader, List<VariableItem> vars) {
         super(line, reader, vars);
     }
@@ -25,11 +24,12 @@ public class PutItem extends  BaseItem {
         double[] resultArray = resolver.GetValue(Line, Vars, parameters);
         double newValue = resultArray[0];
 
-        UpdateValue(parameters, Vars, newValue); // TODO: Change the var item or parameter if needed
+        UpdateValue(parameters, Vars, newValue);
 
         if(!executed)
         {
             result.setRowsCover(1);
+            result.AddInternalCodeLine(this.Line);
             executed = true;
         }
         result.setRowsCount(1);
@@ -50,7 +50,6 @@ public class PutItem extends  BaseItem {
                 par.setValue(newValue);
             }
         }
-
     }
 
     private Object GetVarFromLine()
@@ -63,7 +62,6 @@ public class PutItem extends  BaseItem {
         }
 
         // TODO: Search in params
-
 
 
         System.out.println("return null at Putitem.getVarFromLine");

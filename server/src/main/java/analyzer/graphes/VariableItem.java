@@ -2,17 +2,13 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
-
 import java.util.List;
 
-//mport com.sun.org.apache.bcel.internal.generic.RETURN;
-
-public class VariableItem extends BaseItem {
-
+public class VariableItem extends BaseItem
+{
     private Enums.Variables type;
     private Object value;
     private String name;
-
 
     private String doubleRegex = "(?s).*\\bdouble\\b.*";
     private String intRegex = "(?s).*\\bint\\b.*";
@@ -20,7 +16,6 @@ public class VariableItem extends BaseItem {
     private String boolRegex = "(?s).*\\bbool\\b.*";
     private String floatRegex = "(?s).*\\bfloat\\b.*";
     private String stringRegex = "(?s).*\\bstring\\b.*";
-
 
     public CodeLine getLine() {
         return Line;
@@ -30,12 +25,9 @@ public class VariableItem extends BaseItem {
         Line = line;
     }
 
-    private CodeLine Line;
-
     public VariableItem(CodeLine line, CodeReader reader, List<VariableItem> vars)
     {
         super(line, reader, vars);
-
         Initialize(line.getText());
     }
 
@@ -106,11 +98,12 @@ public class VariableItem extends BaseItem {
     @Override
     public GraphResult Execute(List<ParamterItem> parameters) {
         GraphResult result = new GraphResult();
-// TODO
+//       TODO
 //        value = ExtractValue(parameters);
         if(!executed)
         {
             result.setRowsCover(1);
+            result.AddInternalCodeLine(this.Line);
             executed = true;
         }
         result.setRowsCount(1);

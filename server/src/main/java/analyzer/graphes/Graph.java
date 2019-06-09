@@ -6,7 +6,7 @@ import analyzer.reader.Enums;
 
 import java.util.ArrayList;
 import java.util.List;
-import analyzer.graphes.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +15,8 @@ public class Graph
 
     private String code;
     private int paramertersCount = 0;
+    private List<String> parameterNames;
+
 
     public String getCode() {
         return code;
@@ -38,6 +40,7 @@ public class Graph
     {
         this.code = code;
         Items = new ArrayList<IGraphItem>();
+        parameterNames = new ArrayList<>();
         InitializeGraph();
     }
 
@@ -84,6 +87,42 @@ public class Graph
         return result;
     }
 
+
+    public GraphResult Execute2(List<Double> params)
+    {
+        List<ParamterItem> parameters = CreateParameterItems(params);
+        GraphResult result = new GraphResult();
+
+        for (IGraphItem item: Items) {
+            GraphResult internalResult = item.Execute(parameters);
+
+            result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
+            result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
+
+            result.AddInternalResult(internalResult);
+        }
+
+        return result;
+    }
+
+    private List<ParamterItem> CreateParameterItems(List<Double> parameterValues) {
+
+        List<ParamterItem> paramentsResult = new ArrayList<>();
+
+        if(parameterValues.size() != parameterNames.size())
+            System.out.println("Graph.CreateParameterItems() -> parameterNames != parameterValues");
+
+        AtomicInteger index = new AtomicInteger();
+        parameterValues.forEach((parm)->
+        {
+            paramentsResult.add(new ParamterItem(parameterNames.get(index.get()) , analyzer.graphes.Enums.Variables.Double, parm));
+            index.getAndIncrement();
+        });
+
+        return paramentsResult;
+    }
+
+
     private void InitializeParametersNumber(CodeLine line)
     {
         Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(line.getText());
@@ -93,7 +132,8 @@ public class Graph
         for (String s: paramsString)
         {
             String parameterName = GetParameterName(s);
-            params.add(new ParamterItem(parameterName, analyzer.graphes.Enums.Variables.Double, 0));
+            parameterNames.add(parameterName);
+//            params.add(new ParamterItem(parameterName, analyzer.graphes.Enums.Variables.Double, 0));
         }
     }
 
@@ -108,5 +148,21 @@ public class Graph
         return    "Graph{\n"
                 +"Items=" + Items +"\n"
                 +'}'+"\n";
+    }
+
+    public int getTotalRowCount()
+    {
+        int count = 0;
+        for (IGraphItem item: Items) {
+            count ++;
+            count += ((BaseItem)item).getTotalRowCount();
+        }
+
+        return count - 1;        // -1 Function line
+    }
+
+    public int getParamertersCount()
+    {
+        return parameterNames.size();
     }
 }

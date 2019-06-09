@@ -1,16 +1,11 @@
 package analyzer.graphes;
 
-
 import analyzer.reader.CodeLine;
+import analyzer.reader.Enums;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-
-import java.util.Collections;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
-import analyzer.reader.Enums;
-import org.jgap.gp.function.Loop;
 
 public class MathResolver {
 
@@ -112,6 +107,7 @@ public class MathResolver {
                 }
                 _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
                         .replace(" ","");*/
+
                 break;
             case Put:
                 _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
@@ -248,4 +244,3 @@ public class MathResolver {
     }
 
 }
-

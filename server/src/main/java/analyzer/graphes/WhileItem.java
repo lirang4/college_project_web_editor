@@ -1,13 +1,9 @@
 package analyzer.graphes;
-import analyzer.graphes.*;
+
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
-
-//import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 public class WhileItem extends  BaseItem {
 
@@ -15,9 +11,9 @@ public class WhileItem extends  BaseItem {
         super(line, reader, vars);
     }
 
-
     @Override
     public boolean CanExecute(List<ParamterItem> parameters) {
+
         Condition condition = Condition.Create(Line, Vars, parameters);
         return condition.CanRun(Vars);
     }

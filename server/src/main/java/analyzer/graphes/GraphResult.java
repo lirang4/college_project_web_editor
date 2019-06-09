@@ -1,10 +1,12 @@
 package analyzer.graphes;
 
+import analyzer.reader.CodeLine;
 import java.util.ArrayList;
 import java.util.List;
-import analyzer.graphes.*;
-public class GraphResult {
 
+public class GraphResult
+{
+    private List<CodeLine> codeLines ;
     private int rowsCover;
     private int rowsCount;
     private List<GraphResult> internalResults;
@@ -14,6 +16,7 @@ public class GraphResult {
         this.rowsCover = 0;
         this.rowsCount = 0;
         this.internalResults = new ArrayList<>();
+        this.codeLines = new ArrayList<>();
     }
 
     public int getRowsCover() {
@@ -34,6 +37,16 @@ public class GraphResult {
 
     public void AddInternalResult(GraphResult result)
     {
+        this.codeLines.addAll(result.codeLines);
         internalResults.add(result);
+    }
+
+    public  void AddInternalCodeLine(CodeLine line)
+    {
+        this.codeLines.add(line);
+    }
+
+    public List<CodeLine> getCodeLines() {
+        return codeLines;
     }
 }

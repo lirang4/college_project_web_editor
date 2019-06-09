@@ -3,20 +3,17 @@ package analyzer.graphes;
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
 import analyzer.reader.Enums;
-import analyzer.graphes.*;
+
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
-import analyzer.graphes.*;
-import java.util.stream.Collectors;
 
 public class BaseItem implements IGraphItem
 {
-
     protected List<IGraphItem> Items;
     protected List<VariableItem> Vars;
     protected CodeLine Line;
     protected CodeReader reader;
+    protected boolean executed = false;
 
     protected BaseItem(CodeLine line , CodeReader reader, List<VariableItem> vars)
     {
@@ -31,7 +28,8 @@ public class BaseItem implements IGraphItem
         CreateInternalItems();
     }
 
-    protected void CreateInternalItems() {
+    protected void CreateInternalItems()
+    {
         CodeLine codeLine;
 
         while ((codeLine = reader.ReadLine()).getType() != Enums.LineType.EndLoop)       // While(End of 'if state')     '}'
@@ -56,63 +54,16 @@ public class BaseItem implements IGraphItem
                 Items.add(newItem);
             }
         }
-        //InsertVariablesToInternalItems();
     }
 
-    protected void InsertVariablesToInternalItems()
-    {
-        List<VariableItem> varsItems = Items.stream().filter(x -> x instanceof VariableItem)
-                .map(n -> (VariableItem) n)
-                .collect(Collectors.toList());
-
-        if(varsItems.size() == 0 )
-            return;
-
-        List<IGraphItem> notVars = Items.stream().filter(x -> !(x instanceof VariableItem)).collect(Collectors.toList());
-        for (IGraphItem graphItem: notVars)
-        {
-            graphItem.getItems().addAll(varsItems);
-        }
+    @Override
+    public GraphResult Execute(List<ParamterItem> parameters) {
+        return null;
     }
-
 
     @Override
     public List<IGraphItem> getItems() {
         return null;
-    }
-
-
-    protected boolean executed = false;
-
-    @Override
-    public GraphResult Execute(List<ParamterItem> parameters)
-    {
-        GraphResult result = new GraphResult();
-        Condition condition = Condition.Create(Line, Vars, parameters);
-
-        while (condition.CanRun(this.Vars))
-        {
-            if(!executed)
-            {
-                result.setRowsCover(result.getRowsCover() + 1 );
-                executed = true;
-            }
-            result.setRowsCount(result.getRowsCount() + 1);
-
-            for (IGraphItem item: Items)
-            {
-                GraphResult internalResult = item.Execute(parameters);
-
-                result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
-                result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
-
-                result.AddInternalResult(internalResult);
-            }
-
-            condition.UpdateParameters(parameters, Vars);
-        }
-
-        return result;
     }
 
     @Override
@@ -143,5 +94,16 @@ public class BaseItem implements IGraphItem
         }
 
         return str;
+    }
+
+    public int getTotalRowCount()
+    {
+        int count = 0;
+        for (IGraphItem item: Items) {
+            count ++;
+            count += ((BaseItem)item).getTotalRowCount();
+        }
+
+        return count;
     }
 }

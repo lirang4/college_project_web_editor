@@ -1,22 +1,15 @@
 package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
-import analyzer.reader.Enums.LineType;
-import analyzer.graphes.*;
 import analyzer.reader.CodeReader;
-
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.List;
-import java.util.stream.Collectors;
-import analyzer.graphes.*;
-public class IfItem extends BaseItem{
 
+public class IfItem extends BaseItem
+{
     public IfItem(CodeLine line , CodeReader reader, List<VariableItem> vars)
     {
         super(line, reader, vars);
     }
-
 
     @Override
     public GraphResult Execute(List<ParamterItem> parameters) {
@@ -31,6 +24,7 @@ public class IfItem extends BaseItem{
         if(!executed)
         {
             result.setRowsCover(result.getRowsCover() + 1 );
+            result.AddInternalCodeLine(this.Line);
             executed = true;
         }
         result.setRowsCount(result.getRowsCount() + 1);
@@ -46,8 +40,6 @@ public class IfItem extends BaseItem{
         }
 
         condition.UpdateParameters(parameters, Vars);
-
-
         return result;
     }
 

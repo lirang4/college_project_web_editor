@@ -3,8 +3,6 @@ package analyzer.graphes;
 import analyzer.reader.CodeLine;
 
 import java.util.List;
-import analyzer.graphes.*;
-import analyzer.graphes.*;
 
 public class Condition
 {

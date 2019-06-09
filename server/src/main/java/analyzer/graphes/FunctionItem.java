@@ -2,10 +2,8 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
-
-import java.util.Dictionary;
 import java.util.List;
-import analyzer.graphes.*;
+
 public class FunctionItem extends BaseItem {
 
     protected FunctionItem(CodeLine line, CodeReader reader, List<VariableItem> vars) {
@@ -28,5 +26,4 @@ public class FunctionItem extends BaseItem {
 
         return result;
     }
-
 }

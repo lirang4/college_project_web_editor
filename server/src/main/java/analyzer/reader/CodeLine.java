@@ -1,9 +1,8 @@
 package analyzer.reader;
-import analyzer.reader.Enums.LineType;
 
+import analyzer.reader.Enums.LineType;
 import java.util.HashMap;
 import java.util.Map;
-
 
 public class CodeLine
 {
@@ -69,14 +68,14 @@ public class CodeLine
             if(this.Text.startsWith(key))
             {
                 Type = templatesKeysValues.get(key);
-                System.out.println("Line is recognized by key : " + key + ", With the following line :" + this.Text);
+                //System.out.println("Line is recognized by key : " + key + ", With the following line :" + this.Text);
                 return;
             }
         }
 
         // TODO : Check if the line is contains declered variables and correct math functions.
         Type = LineType.Put;
-        System.out.println("Line is recognized by key : Placement , With the following line :" + this.Text);
+        //System.out.println("Line is recognized by key : Placement , With the following line :" + this.Text);
     }
 
 }
