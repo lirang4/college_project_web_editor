@@ -35,6 +35,12 @@ public class Application {
 //        System.out.println(MFA.GetValue(line5,variables1,params1));
         String code = "Func(double x, double t)\n" +
                 "{\n" +
+                "int i;\n" +
+                "int ben;\n" +
+                "for(i=0;i<20;i=i+1)\n" +
+                "{\n" +
+                "ben=ben+ 1;\n" +
+                "}\n" +
                 "while(x>3)\n" +
                 "{\n" +
                 "x=x- 1;\n" +
@@ -108,12 +114,12 @@ public class Application {
         List<VariableItem> vars = new ArrayList<VariableItem>();
         //vars.add(new VariableItem(new CodeLine("int x = 4;",1),null,null ));
         List<ParamterItem > params1 = new ArrayList<ParamterItem>();
-        params1.add(new ParamterItem("x", Enums.Variables.Double,88 ));
+        params1.add(new ParamterItem("x", Enums.Variables.Double,11 ));
         params1.add(new ParamterItem("t", Enums.Variables.Double,77 ));
         GraphResult result = g.Execute(params1);
 
         System.out.println(g.toString());
-
+        System.out.println("---------------------------------FINISHED--------------------");
 
         SpringApplication app = new SpringApplication(Application.class);
         app.setDefaultProperties(Collections.singletonMap("server.port", "3000"));

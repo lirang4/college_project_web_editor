@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 
 import java.util.List;
+import java.util.concurrent.*;
+
 import analyzer.graphes.*;
 public class ForItem extends BaseItem
 {
@@ -34,55 +36,76 @@ public class ForItem extends BaseItem
         GraphResult result = new GraphResult();
 
         Condition condition = Condition.Create(Line, Vars, parameters);
+        MathResolver resolver = new MathResolver(this.getLine().getText());
+        String[] LoopVarValue = resolver.getDeclareVarOfForItem(this.Line,Vars,parameters);
 
         for (ParamterItem item: parameters) {
-            if(item.getName() == condition.parameter1.getName())
-                item.setValue(condition.parameter1.getValue());
+            if(item.getName() == LoopVarValue[0]){
+                item.setValue(LoopVarValue[1]);
+            }
         }
 
         for (VariableItem item: Vars) {
-            if(item.getName() == condition.parameter1.getName())
-            {
-                String _value=this.getLine().getText();
-                _value= _value.substring(_value.indexOf("(")+1,_value.indexOf(";")).replace(" ","");
-                _value= _value.substring(_value.indexOf("=")+1,_value.length());
-
-
-
-                MathResolver resolver = new MathResolver(this.getLine().getText());
-
-                double[] resultArray = resolver.GetValue(Line, Vars, parameters);
-                double newValue = resultArray[0];
-                //Object newValue = resolver.GetValue(Line, Vars, parameters);
-                item.setValue(newValue);
+            if(item.getName() == LoopVarValue[0]) {
+                item.setValue(LoopVarValue[1]);
             }
         }
 
         condition.UpdateParameters(parameters,Vars);
 
-        while (condition.CanRun(Vars))
-        {
-            if(!executed)
-            {
-                result.setRowsCover(result.getRowsCover() + 1 );
-                executed = true;
-            }
-            result.setRowsCount(result.getRowsCount() + 1);
+        ExecutorService service = Executors.newSingleThreadExecutor();
 
-            for (IGraphItem item: Items)
-            {
-                GraphResult internalResult = item.Execute(parameters);
+        try {
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    while (condition.CanRun(Vars))
+                    {
+                        if(!executed)
+                        {
+                            result.setRowsCover(result.getRowsCover() + 1 );
+                            executed = true;
+                        }
+                        result.setRowsCount(result.getRowsCount() + 1);
 
-                result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
-                result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
+                        for (IGraphItem item: Items)
+                        {
+                            GraphResult internalResult = item.Execute(parameters);
 
-                result.AddInternalResult(internalResult);
-            }
+                            result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
+                            result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
 
-            condition.UpdateParameters(parameters, Vars);
+                            result.AddInternalResult(internalResult);
+                        }
+
+                        condition.UpdateParameters(parameters, Vars);
+                    }
+
+
+                }
+            };
+
+            Future<?> f = service.submit(r);
+
+            f.get(10, TimeUnit.SECONDS);     // attempt the task for two minutes
+        }
+        catch (final InterruptedException e) {
+            // The thread was interrupted during sleep, wait or join
+        }
+        catch (final TimeoutException e) {
+            // TODO : Throw exception of timeout exception -- Infinity loop.
+            System.out.println("exception of timeout exception -- Infinity loop.");
+        }
+        catch (final ExecutionException e) {
+            // An exception from within the Runnable task
+        }
+        finally {
+            service.shutdown();
+            return result;
+
         }
 
-        return result;
+
     }
 
 

@@ -10,6 +10,7 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 import analyzer.reader.Enums;
+import org.jgap.gp.function.Loop;
 
 public class MathResolver {
 
@@ -89,7 +90,7 @@ public class MathResolver {
         return hashVars;
     }
 
-    public String[] getExpressionFromLine(CodeLine line)
+    public String[] getExpressionFromLine(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
     {
         String _expression = line.getText();
         String[] _expressionOfCondition = new String[3];
@@ -127,17 +128,23 @@ public class MathResolver {
                 _expressionOfCondition[2] = null;
                 break;
             case For:
-                String param1,param2;
-                param1 = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
-                        .replace(" ","");
-                String [] arr1 =_expression.split("(=)");
-                _expressionOfCondition[0] = arr1[1];
+                String conditionOfFor;
+                String[] LoopVar = new String[2];
+                LoopVar = getDeclareVarOfForItem(line,variables,params);
+                String DemeCodeLine = "int ";
+                DemeCodeLine += LoopVar[0];
+                DemeCodeLine += " = ";
+                DemeCodeLine += LoopVar[1];
+                DemeCodeLine += " ;";
+                variables.add(new VariableItem(new CodeLine(DemeCodeLine,line.getLinePosition()),null,variables));
 
-                param2 = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")"))
+                conditionOfFor = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")"))
                         .replace(" ","");
-                param2 = _expression.substring(0,_expression.indexOf(";"));
+
+                conditionOfFor = conditionOfFor.substring(0,conditionOfFor.indexOf(";"))
+                        .replace(" ","");
                 // Now we've got the condition statement : i < i + 40 for example
-                _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
+                _expressionOfCondition = SplitConditionParamsAndOperator(conditionOfFor);
                 break;
             case While:
                 _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
@@ -153,13 +160,44 @@ public class MathResolver {
         return _expressionOfCondition;
     }
 
+    public String[] getDeclareVarOfForItem(CodeLine line, List<VariableItem> variables, List<ParamterItem> params) {
+        String[] varAndValue = new String[2];
+        String param1,param2;
+        String _expression = line.getText();
+        param1 = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
+                .replace(" ","");
+        String [] arr1 = param1.split("(=)");
+        param1 = arr1[0]; // The destination of the value
+        varAndValue[0] = param1;
+        param2 = arr1[1];
+        Expression exp= null;
+        HashMap<String, Double> hashVars = new HashMap<String, Double>();
+        Expression e = null;
+        ExpressionBuilder calc = new ExpressionBuilder(param2);
+        hashVars = getExpressionVars(line, variables, params);
+        exp = new ExpressionBuilder(param2).variables(hashVars.keySet()).build();
+        for (String key : hashVars.keySet()) {
+            exp.setVariable(key, hashVars.get(key));
+        }
+
+        double val = exp.evaluate();
+        varAndValue[1] = String.valueOf(val);
+        for ( VariableItem var: variables) {
+            if (var.getName().equals(param1)) {
+                var.setValue(val);
+            }
+        }
+
+        return varAndValue;
+    }
+
     // GetValue using Shunting-yard algorithm
     public double[] GetValue(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
     {
         double [] resValues = new double[2];
         resValues[0] = Double.MAX_VALUE;
         resValues[1] = Double.MAX_VALUE;
-        String[] _expression = getExpressionFromLine(line);
+        String[] _expression = getExpressionFromLine(line,variables,params);
         Expression exp= null;
         Expression exp2= null;
         HashMap<String, Double> hashVars = new HashMap<String, Double>();;
@@ -171,7 +209,14 @@ public class MathResolver {
         try {
             if (!Character.isDigit(_expression[0].charAt(0)) ) { // Check if the paramater is non numeric - variable
                 ExpressionBuilder calc = new ExpressionBuilder(_expression[0]);
+//                if(line.getType() == Enums.LineType.For){
+//                    String[] VarAndValue = getDeclareVarOfForItem(line,variables,params);
+//                }
+
                 hashVars = getExpressionVars(line, variables, params);
+//                String conditionOfFor = _expression[0].substring(_expression[0].indexOf(";")+1,_expression[0].indexOf(")"))
+//                        .replace(" ","");
+//                conditionOfFor = _expression[0].substring(0,_expression[0].indexOf(";"));
                 exp = new ExpressionBuilder(_expression[0]).variables(hashVars.keySet()).build();
                 for (String key : hashVars.keySet()) {
                     exp.setVariable(key, hashVars.get(key));

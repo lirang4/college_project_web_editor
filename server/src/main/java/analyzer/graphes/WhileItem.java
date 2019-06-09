@@ -21,7 +21,7 @@ public class WhileItem extends  BaseItem {
         Condition condition = Condition.Create(Line, Vars, parameters);
         return condition.CanRun(Vars);
     }
-/*
+
     @Override
     public GraphResult Execute(List<ParamterItem> parameters) {
 
@@ -63,14 +63,16 @@ public class WhileItem extends  BaseItem {
             // The thread was interrupted during sleep, wait or join
         } catch (final TimeoutException e) {
             // TODO : Throw exception of timeout exception -- Infinity loop.
+            System.out.println("exception of timeout exception -- Infinity loop.");
         } catch (final ExecutionException e) {
             // An exception from within the Runnable task
         } finally {
+            service.shutdown();
             return result;
-            //service.shutdown();
+
         }
 
-    }*/
+    }
 }
 
 
