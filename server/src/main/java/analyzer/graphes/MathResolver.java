@@ -14,6 +14,8 @@ import analyzer.reader.Enums;
 public class MathResolver {
 
     String line;
+    String param1;
+    String param2;
     int ItemMode;
 
     public MathResolver(String line, int... optional)
@@ -21,6 +23,13 @@ public class MathResolver {
         this.line = line;
         if(optional.length!=0)
             this.ItemMode = optional[0];
+    }
+
+    public MathResolver(String param1,String param2)
+    {
+        this.line = line;
+        this.param1 = param1;
+        this.param2 = param2;
     }
 
     private  String RemoveSpaces(String text)
@@ -80,7 +89,7 @@ public class MathResolver {
         return hashVars;
     }
 
-    public String getExpressionFromLine(CodeLine line)
+    public String[] getExpressionFromLine(CodeLine line)
     {
         String _expression = line.getText();
         String[] _expressionOfCondition = new String[3];
@@ -88,81 +97,109 @@ public class MathResolver {
         //TODO : switchCase on the line type (could be if statement /  put / for / while ...)
         // VariableItem :
         switch(line.getType()) {
-            case Put:
-                _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
-                        .replace(" ","");
-                     break;
-            case Var:
-                _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
-                        .replace(" ","");
-                break;
-            case For:
-                if(this.ItemMode == 1){ // The case of update the value of the loop variable
-                    _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
-                            .replace(" ","");
-                    // Now we've got the condition statement : i < i + 40 for example
-                    String [] arr =_expression.split("(=)");
-                    _expression = arr[1];
-                    //_expressionOfCondition = SplitConditionParamsAndOperator(_expression);
-                    //_expression = _expressionOfCondition[2];
-                }
-                else {// The case of the condition value
-                    _expression = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")"))
-                            .replace(" ","");
-                    _expression = _expression.substring(0,_expression.indexOf(";"));
-                    // Now we've got the condition statement : i < i + 40 for example
-                    _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
-                    _expression = _expressionOfCondition[2];
-                }
-
-
-                break;
-            case While:
+            case If:
                 // TODO : Check if working on parameter one vs parameter two
                 _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
                         .replace(" ","");
                 // Now we've got the condition statement x > x + 40 * 2 for example
                 _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
-                if(ItemMode == 1) {// parameter 1
+                /*if(ItemMode == 1) {// parameter 1
                     _expression = _expressionOfCondition[0];
                 }
                 else {
                     _expression = _expressionOfCondition[1];
                 }
+                _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
+                        .replace(" ","");*/
+                break;
+            case Put:
+                _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
+                        .replace(" ","");
+                _expressionOfCondition[0] = _expression;
+                _expressionOfCondition[1] = null;
+                _expressionOfCondition[2] = null;
+                break;
+            case Var:
+                _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
+                        .replace(" ","");
+                _expressionOfCondition[0] = _expression;
+                _expressionOfCondition[1] = null;
+                _expressionOfCondition[2] = null;
+                break;
+            case For:
+                String param1,param2;
+                param1 = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
+                        .replace(" ","");
+                String [] arr1 =_expression.split("(=)");
+                _expressionOfCondition[0] = arr1[1];
 
+                param2 = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")"))
+                        .replace(" ","");
+                param2 = _expression.substring(0,_expression.indexOf(";"));
+                // Now we've got the condition statement : i < i + 40 for example
+                _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
+                break;
+            case While:
+                _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
+                        .replace(" ","");
+                // Now we've got the condition statement x > x + 40 * 2 for example
+                _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
                 break;
            default:
                // TODO : Throw an exception
                break;
           }
 
-        return _expression;
+        return _expressionOfCondition;
     }
 
     // GetValue using Shunting-yard algorithm
-    public double GetValue(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
+    public double[] GetValue(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
     {
-        String _expression = getExpressionFromLine(line);
+        double [] resValues = new double[2];
+        resValues[0] = -1;
+        resValues[1] = -1;
+        String[] _expression = getExpressionFromLine(line);
+        Expression exp= null;
+        Expression exp2= null;
+        HashMap<String, Double> hashVars = new HashMap<String, Double>();;
+        boolean twoParams = true;
+        if(line.getType() == Enums.LineType.Put || line.getType() == Enums.LineType.Var)
+            twoParams = false;
         Expression e = null;
 
         try {
-            ExpressionBuilder calc = new ExpressionBuilder(_expression);
+            if (!Character.isDigit(_expression[0].charAt(0)) ) { // Check if the paramater is non numeric - variable
+                ExpressionBuilder calc = new ExpressionBuilder(_expression[0]);
+                hashVars = getExpressionVars(line, variables, params);
+                exp = new ExpressionBuilder(_expression[0]).variables(hashVars.keySet()).build();
+                for (String key : hashVars.keySet()) {
+                    exp.setVariable(key, hashVars.get(key));
+                }
 
-            HashMap<String, Double> hashVars = getExpressionVars(line,variables,params);
-            Expression exp = new ExpressionBuilder(_expression).variables(hashVars.keySet()).build();
-            for ( String key : hashVars.keySet() ) {
-                exp.setVariable(key,hashVars.get(key));
+                resValues[0] = exp.evaluate();
             }
+            if(twoParams) {
+                if (!Character.isDigit(_expression[2].charAt(0)) ) { // Check if the paramater is non numeric - variable
+                    ExpressionBuilder calc2 = new ExpressionBuilder(_expression[2]);
+                    exp2 = new ExpressionBuilder(_expression[2]).variables(hashVars.keySet()).build();
+                    for (String key : hashVars.keySet()) {
+                        exp2.setVariable(key, hashVars.get(key));
+                    }
 
-            double result = exp.evaluate();
-            return result;
+                    resValues[1] = exp.evaluate();
+                }
+                else{
+                    resValues[1] = Double.parseDouble(_expression[2]);;
+                }
+            }
         }
 
         catch (ArithmeticException ex) {
             System.out.println("Exception caught:Division by zero");
         }
 
-        return -1;
+        return resValues;
     }
 
 }

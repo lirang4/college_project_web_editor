@@ -19,6 +19,7 @@ public class Condition
     String operator;
     CodeLine codeLine;
     List<ParamterItem> parameters;
+    analyzer.reader.Enums.LineType codeLineType;
 
     private Condition( List<ParamterItem> params,CodeLine codeLine, String line,ParamterItem parameter1,ParamterItem parameter2,String operator )
     {
@@ -28,6 +29,7 @@ public class Condition
         this.parameter1 = parameter1;
         this.parameter2 = parameter2;
         this.operator = operator;
+        this.codeLineType = codeLine.getType();
     }
 
     public static Condition Create(CodeLine code_line, List<VariableItem> variables, List<ParamterItem> params)
@@ -152,6 +154,21 @@ public class Condition
         return new ParamterItem(name, type, value);
     }
 
+
+    private String[] getParamsFromExpression(String line){
+        String[] retParams = new String[2];
+        if(codeLineType == analyzer.reader.Enums.LineType.If){
+
+
+        }else if(codeLineType == analyzer.reader.Enums.LineType.For){
+
+        }else if(codeLineType == analyzer.reader.Enums.LineType.While){
+
+        }
+
+        return retParams;
+    }
+
     private static analyzer.graphes.Enums.Variables ExtractType(String parameter)
     {
         if(parameter.startsWith("\"")||(parameter.startsWith("'")))    // "a" == "b"
@@ -179,15 +196,23 @@ public class Condition
 //        if(parameter1.getVarType() == parameter2.getVarType() && parameter1.getVarType() == Graphes.Enums.Variables.Double)
 //        {
 
-
-        MathResolver resolver = new MathResolver(this.line,1);
-        MathResolver resolver2 = new MathResolver(this.line,2);
-        Object newValue = resolver.GetValue(codeLine, Vars, parameters);
-        Object newValue2 = resolver.GetValue(codeLine, Vars, parameters);
-            double param1 = Double.parseDouble(newValue.toString());
-            double param2 = Double.parseDouble(newValue2.toString());
+       // MathResolver resolver = new MathResolver(this.line,1);
 
 
+        MathResolver mathRes = new MathResolver(this.line);
+        double[] params = new double[2];
+        params = mathRes.GetValue(codeLine,Vars,parameters);
+
+//        //params = mathRes.GetValue()
+//        MathResolver resolver = new MathResolver(this.line,1);
+//        MathResolver resolver2 = new MathResolver(this.line,2);
+//        Object newValue = resolver.GetValue(codeLine, Vars, parameters);
+//        Object newValue2 = resolver.GetValue(codeLine, Vars, parameters);
+//            double param1 = Double.parseDouble(newValue.toString());
+//            double param2 = Double.parseDouble(newValue2.toString());
+        double param1 = params[0];
+        double param2 = params[1];
+        if(param1!=-1 && param2 != -1) { // If, For, While
             if (operator.equals(">="))
                 return param1 >= param2;
             if (operator.equals("<="))
@@ -196,7 +221,10 @@ public class Condition
                 return param1 > param2;
             if (operator.equals("<"))
                 return param1 < param2;
-//        }
+        }
+        else { // The case of put and var that should calculate the value after the declaration
+            return true;
+        }
 
         return false;
     }
