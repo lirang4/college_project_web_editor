@@ -32,8 +32,6 @@ public class CodeController {
     @CrossOrigin
     @PostMapping("/codes")
     public ResponseEntity<Code> createCode(@RequestBody Code newCode) {
-        this.repository.save(newCode);
-
         // TODO: Initiate thread to create graph
 //        Graph g = new Graph(newCode.getContent());
 //        System.out.println(g.toString());
@@ -50,8 +48,8 @@ public class CodeController {
         GeneticResultToWebResult convertor = new GeneticResultToWebResult();
         List<WebReportResult> webReport =  convertor.Convert(bestFitness, worseFitness, newCode.getContent());
 
-        //TODO: Implement
-        // return ResponseEntity.ok().body(webReport.ToJson());
+        newCode.setReport(webReport);
+        this.repository.save(newCode);
 
         return ResponseEntity.ok().body(newCode);
     }
