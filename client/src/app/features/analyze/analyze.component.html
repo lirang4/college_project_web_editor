@@ -21,5 +21,17 @@
     <textarea #editor></textarea>
   </div>
 
-  <div class="analyze-view"></div>
+  <div class="analyze-view">
+    <div class="report-wrapper" *ngIf="currentCode && currentCode.report">
+      <span class="report" *ngFor="let report of currentCode.report">
+        <span>parameters: {{ report.parameterValue }} </span>
+        <span>Line Coverage: {{ report.lineCoveragePresentage }}% </span>
+        <span>
+          Lines Cover: {{ report.rowCover }} Lines Number:
+          {{ report.lineNumber }}</span
+        >
+        <span>Line Count: {{ report.rowCount }} </span>
+      </span>
+    </div>
+  </div>
 </div>

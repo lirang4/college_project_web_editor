@@ -7,17 +7,17 @@ import { User } from '@shared/models/User';
 @Injectable()
 export class UserService {
     private user: User;
-    private codes: Subject<Array<{ id: string, date: Date, userName: string, content: string }>>;
+    private codes: Subject<Array<{ id: string, date: Date, userName: string, content: string, report: Array<any> }>>;
 
     constructor(private http: HttpClient) {
-        this.codes = new Subject<Array<{ id: string, date: Date, userName: string, content: string }>>();
+        this.codes = new Subject<Array<{ id: string, date: Date, userName: string, content: string, report: Array<any> }>>();
     }
 
     get User(): User {
         return this.user;
     }
 
-    get Codes(): Observable<Array<{ id: string, date: Date, userName: string, content: string }>> {
+    get Codes(): Observable<Array<{ id: string, date: Date, userName: string, content: string, report: Array<any> }>> {
         return this.codes.asObservable();
     }
 

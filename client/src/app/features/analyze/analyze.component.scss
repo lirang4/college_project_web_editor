@@ -38,4 +38,17 @@
   width: 600px;
   height: 500px;
   border: 1px solid black;
+  overflow: auto;
+  .report-wrapper {
+    display: flex;
+    flex-direction: column;
+    .report {
+      margin-top: 5px;
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid black;
+      text-align: center;
+      height: 75px;
+    }
+  }
 }

@@ -18,7 +18,7 @@ export class AnalyzeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly POLLING_INTERVAL = 3000;
 
   user: User;
-  codes: Observable<Array<{ id: string, date: Date, userName: string, content: string }>>;
+  codes: Observable<Array<{ id: string, date: Date, userName: string, content: string, report: Array<any> }>>;
   currentCode: { id: string, date: Date, userName: string, content: string };
 
   pollingInterval: any;
