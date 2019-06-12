@@ -125,14 +125,14 @@ public class MathResolver {
                 break;
             case For:
                 String conditionOfFor;
-                String[] LoopVar = new String[2];
-                LoopVar = getDeclareVarOfForItem(line,variables,params);
-                String DemeCodeLine = "int ";
-                DemeCodeLine += LoopVar[0];
-                DemeCodeLine += " = ";
-                DemeCodeLine += LoopVar[1];
-                DemeCodeLine += " ;";
-                variables.add(new VariableItem(new CodeLine(DemeCodeLine,line.getLinePosition()),null,variables));
+//                String[] LoopVar = new String[2];
+//                LoopVar = getDeclareVarOfForItem(line,variables,params);
+//                String DemeCodeLine = "int ";
+//                DemeCodeLine += LoopVar[0];
+//                DemeCodeLine += " = ";
+//                DemeCodeLine += LoopVar[1];
+//                DemeCodeLine += " ;";
+//                variables.add(new VariableItem(new CodeLine(DemeCodeLine,line.getLinePosition()),null,variables));
 
                 conditionOfFor = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")"))
                         .replace(" ","");

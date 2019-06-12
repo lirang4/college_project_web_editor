@@ -1,5 +1,6 @@
 package analyzer.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,7 +17,9 @@ public class User {
     private final String firstName;
     private final String lastName;
 
-    public User(String userName, String email, String password, String firstName, String lastName) {
+    public User(@JsonProperty("userName")String userName, @JsonProperty("email")String email,
+                @JsonProperty("password")String password, @JsonProperty("firstName")String firstName,
+                @JsonProperty("lastName")String lastName) {
         this.userName = userName;
         this.email = email;
         this.password = password;

@@ -2,14 +2,16 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
+
 import java.util.List;
-import java.util.concurrent.*;
 
 public class ForItem extends BaseItem
 {
     public ForItem(CodeLine line, CodeReader reader, List<VariableItem> vars)
     {
         super(line, reader, vars);
+        // TODO: get from the for the index function (i++ / i=i+1 / etc') and convert him to PutItem named 'index'
+        //  every loop: index.Execute(params); => will update the index parameter in the for loop and in 'Vars' array
     }
 
     // TODO : get the part of the increse way (like ;i = i+1)
@@ -29,22 +31,23 @@ public class ForItem extends BaseItem
 
         Condition condition = Condition.Create(Line, Vars, parameters);
         MathResolver resolver = new MathResolver(this.getLine().getText());
-        String[] LoopVarValue = resolver.getDeclareVarOfForItem(this.Line, Vars, parameters);
+        String[] LoopVarValue = resolver.getDeclareVarOfForItem(this.Line, Vars, parameters);       // TODO: Remove
 
         for (ParamterItem item : parameters) {
-            if (item.getName() == LoopVarValue[0]) {
+            if (item.getName().equals(LoopVarValue[0])) {
                 item.setValue(LoopVarValue[1]);
+                break;
             }
         }
 
         for (VariableItem item : Vars) {
-            if (item.getName() == LoopVarValue[0]) {
+            if (item.getName().equals(LoopVarValue[0])) {
                 item.setValue(LoopVarValue[1]);
+                break;
             }
         }
 
         condition.UpdateParameters(parameters, Vars);
-        ExecutorService service = Executors.newSingleThreadExecutor();
 
         while (condition.CanRun(Vars)) {
             if (!executed) {
@@ -54,46 +57,16 @@ public class ForItem extends BaseItem
             }
             result.setRowsCount(result.getRowsCount() + 1);
 
-            try {
-                Runnable r = new Runnable() {
-                    @Override
-                    public void run() {
-                        while (condition.CanRun(Vars)) {
-                            if (!executed) {
-                                result.setRowsCover(result.getRowsCover() + 1);
-                                executed = true;
-                            }
-                            result.setRowsCount(result.getRowsCount() + 1);
+            for (IGraphItem item : Items) {
+                GraphResult internalResult = item.Execute(parameters);
 
-                            for (IGraphItem item : Items) {
-                                GraphResult internalResult = item.Execute(parameters);
+                result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
+                result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
 
-                                result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
-                                result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
-
-                                result.AddInternalResult(internalResult);
-                            }
-
-                            condition.UpdateParameters(parameters, Vars);
-                        }
-                    }
-                };
-
-                Future<?> f = service.submit(r);
-
-                f.get(10, TimeUnit.SECONDS);     // attempt the task for two minutes
-            } catch (final InterruptedException e) {
-                // The thread was interrupted during sleep, wait or join
-            } catch (final TimeoutException e) {
-                // TODO : Throw exception of timeout exception -- Infinity loop.
-                System.out.println("exception of timeout exception -- Infinity loop.");
-            } catch (final ExecutionException e) {
-                // An exception from within the Runnable task
-            } finally {
-                service.shutdown();
-                return result;
-
+                result.AddInternalResult(internalResult);
             }
+            // TODO: Update vars and params. before!!! updating condition
+            condition.UpdateParameters(parameters, Vars);
         }
         return result;
     }

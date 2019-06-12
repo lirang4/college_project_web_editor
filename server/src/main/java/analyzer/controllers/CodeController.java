@@ -1,18 +1,16 @@
-package analyzer.controllers;
+0package analyzer.controllers;
 
-import analyzer.Convertors.GeneticResultToWebResult;
-import analyzer.genetic.GeneticAlgo;
-import analyzer.genetic.GeneticResult;
-import analyzer.models.Code;
-import analyzer.repositories.CodesRepository;
-import analyzer.webDataStractures.WebReportResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.http.ResponseEntity;
+import analyzer.Convertors.GeneticResultToWebResult;
+import analyzer.webDataStractures.WebReportResult;
+import analyzer.repositories.CodesRepository;
+import analyzer.genetic.GeneticResult;
+import analyzer.genetic.GeneticAlgo;
+import analyzer.models.Code;
 import java.util.Optional;
-
+import java.util.List;
 
 @RestController
 public class CodeController {
@@ -32,11 +30,13 @@ public class CodeController {
     @CrossOrigin
     @PostMapping("/codes")
     public ResponseEntity<Code> createCode(@RequestBody Code newCode) {
+        this.repository.save(newCode);
         // TODO: Initiate thread to create graph
 //        Graph g = new Graph(newCode.getContent());
 //        System.out.println(g.toString());
 //        ArrayList<ParamterItem> l = new ArrayList<>();
-//        ParamterItem po = new ParamterItem("a", Enums.Variables.Double, 5);
+//        ParamterItem po = new ParamterItem("a", Enums.Variables.Double, 5)
+//        ;
 //        l.add(po);
 //        g.Execute(l);
 

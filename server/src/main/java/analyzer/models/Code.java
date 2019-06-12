@@ -1,5 +1,6 @@
 package analyzer.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,12 +21,14 @@ public class Code {
     @LastModifiedDate
     public Instant date;
 
+
     private final String userName;
+
     private final String content;
 
     private List<WebReportResult> report;
 
-    public Code(String userName, String content) {
+    public Code(@JsonProperty("userName") String userName, @JsonProperty("content") String content) {
         this.userName = userName;
         this.content = content;
     }
