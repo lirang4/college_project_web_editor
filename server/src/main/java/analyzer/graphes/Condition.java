@@ -47,11 +47,6 @@ public class Condition
                 .replace(" ","");
             condition = condition.substring(0,condition.indexOf(";"));
         }
-//        else if(type == analyzer.reader.Enums.LineType.While)
-//        {
-//            condition = condition.substring(condition.indexOf("(")+1,condition.indexOf(")"))
-//                    .replace(" ","");
-//        }
 
         String[] results = SplitConditionParamsAndOperator(condition);
         ParamterItem p1 = ParseParameter(results[0], variables, params);
@@ -191,38 +186,21 @@ public class Condition
         {
             return !parameter1.getValue().equals(parameter2.getValue());
         }
-//        if(parameter1.getVarType() == parameter2.getVarType() && parameter1.getVarType() == Graphes.Enums.Variables.Double)
-//        {
-
-       // MathResolver resolver = new MathResolver(this.line,1);
-
 
         MathResolver mathRes = new MathResolver(this.line);
-        double[] params = new double[2];
-        params = mathRes.GetValue(codeLine,Vars,parameters);
+        String[] SplittedCondition = SplitConditionParamsAndOperator(this.line);
 
-//        //params = mathRes.GetValue()
-//        MathResolver resolver = new MathResolver(this.line,1);
-//        MathResolver resolver2 = new MathResolver(this.line,2);
-//        Object newValue = resolver.GetValue(codeLine, Vars, parameters);
-//        Object newValue2 = resolver.GetValue(codeLine, Vars, parameters);
-//            double param1 = Double.parseDouble(newValue.toString());
-//            double param2 = Double.parseDouble(newValue2.toString());
-        double param1 = params[0];
-        double param2 = params[1];
-        if(param1!=Double.MAX_VALUE && param2 !=Double.MAX_VALUE) { // If, For, While
-            if (operator.equals(">="))
-                return param1 >= param2;
-            if (operator.equals("<="))
-                return param1 <= param2;
-            if (operator.equals(">"))
-                return param1 > param2;
-            if (operator.equals("<"))
-                return param1 < param2;
-        }
-        else { // The case of put and var that should calculate the value after the declaration
-            return true;
-        }
+        double param1 = mathRes.GetValueOfExpression(SplittedCondition[0],Vars,parameters);//getParameterValue(SplittedCondition[0]);
+        double Param2CalculatedValue = mathRes.GetValueOfExpression(SplittedCondition[2],Vars,parameters);
+
+        if (operator.equals(">="))
+            return param1 >= Param2CalculatedValue;
+        if (operator.equals("<="))
+            return param1 <= Param2CalculatedValue;
+        if (operator.equals(">"))
+            return param1 > Param2CalculatedValue;
+        if (operator.equals("<"))
+            return param1 < Param2CalculatedValue;
 
         return false;
     }

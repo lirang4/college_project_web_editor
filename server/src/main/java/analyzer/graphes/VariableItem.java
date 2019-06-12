@@ -4,7 +4,7 @@ import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
 import java.util.List;
 
-public class VariableItem extends BaseItem
+public class VariableItem extends BaseItem implements INameValue
 {
     private Enums.Variables type;
     private Object value;

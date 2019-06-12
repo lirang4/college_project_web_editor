@@ -1,9 +1,9 @@
 package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
-import analyzer.reader.Enums;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class MathResolver {
 
     }
 
-    private  HashMap<String,Double> getExpressionVars(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
+    private  HashMap<String,Double> getExpressionVars(List<VariableItem> variables, List<ParamterItem> params)
     {
         HashMap<String, Double> hashVars = new HashMap<String, Double>();
         for (VariableItem item : variables) {
@@ -90,23 +90,14 @@ public class MathResolver {
         String _expression = line.getText();
         String[] _expressionOfCondition = new String[3];
 
-        //TODO : switchCase on the line type (could be if statement /  put / for / while ...)
-        // VariableItem :
         switch(line.getType()) {
             case If:
                 // TODO : Check if working on parameter one vs parameter two
                 _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
                         .replace(" ","");
+
                 // Now we've got the condition statement x > x + 40 * 2 for example
                 _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
-                /*if(ItemMode == 1) {// parameter 1
-                    _expression = _expressionOfCondition[0];
-                }
-                else {
-                    _expression = _expressionOfCondition[1];
-                }
-                _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
-                        .replace(" ","");*/
 
                 break;
             case Put:
@@ -170,7 +161,7 @@ public class MathResolver {
         HashMap<String, Double> hashVars = new HashMap<String, Double>();
         Expression e = null;
         ExpressionBuilder calc = new ExpressionBuilder(param2);
-        hashVars = getExpressionVars(line, variables, params);
+        hashVars = getExpressionVars(variables, params);
         exp = new ExpressionBuilder(param2).variables(hashVars.keySet()).build();
         for (String key : hashVars.keySet()) {
             exp.setVariable(key, hashVars.get(key));
@@ -187,8 +178,24 @@ public class MathResolver {
         return varAndValue;
     }
 
+    public double GetValueOfExpression(String expression, List<VariableItem> variables, List<ParamterItem> params){
+        Expression exp= null;
+        double result = Double.MAX_VALUE;
+        HashMap<String, Double> hashVars = new HashMap<String, Double>();;
+        ExpressionBuilder calc = new ExpressionBuilder(expression);
+        hashVars = getExpressionVars(variables, params);
+        exp = new ExpressionBuilder(expression).variables(hashVars.keySet()).build();
+        for (String key : hashVars.keySet()) {
+            exp.setVariable(key, hashVars.get(key));
+        }
+
+        result = exp.evaluate();
+
+        return result;
+    }
+
     // GetValue using Shunting-yard algorithm
-    public double[] GetValue(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
+    /*public double[] GetValue(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
     {
         double [] resValues = new double[2];
         resValues[0] = Double.MAX_VALUE;
@@ -241,6 +248,6 @@ public class MathResolver {
         }
 
         return resValues;
-    }
+    }*/
 
 }

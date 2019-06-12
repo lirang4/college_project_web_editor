@@ -15,15 +15,24 @@ public class PutItem extends  BaseItem
         return;
     }
 
+    private String getExpressionFromLine()
+    {
+        // Split the string "i=i+1" to 2 parts by the condition sign '=' :
+        // Part 1 - i
+        // Part 2 - i+1
+
+        String [] SplittedStringCondition = Line.getText().split("(=)");
+        SplittedStringCondition[1] = SplittedStringCondition[1].substring(0,SplittedStringCondition[1].length()-1);
+        return SplittedStringCondition[1];
+    }
+
     @Override
     public GraphResult Execute(List<ParamterItem> parameters) {
 
         GraphResult result = new GraphResult();
         MathResolver resolver = new MathResolver(Line.getText());
-
-        double[] resultArray = resolver.GetValue(Line, Vars, parameters);
-        double newValue = resultArray[0];
-
+        String expression = getExpressionFromLine();
+        double newValue = resolver.GetValueOfExpression(expression, Vars, parameters);
         UpdateValue(parameters, Vars, newValue);
 
         if(!executed)
@@ -37,8 +46,15 @@ public class PutItem extends  BaseItem
         return result;
     }
 
+    private String ExtractName(){
+        String line = Line.getText();
+        line = line.substring(0,Line.getText().indexOf("=")).replace(" ","");
+        return line;
+    }
+
     private void UpdateValue(List<ParamterItem> parameters, List<VariableItem> vars, Object newValue) {
-        String name = Line.getText().substring(0,Line.getText().indexOf("=")).replace(" ","");
+
+        String name = ExtractName();
         for ( VariableItem var: vars) {
             if (var.getName().equals(name)) {
                 var.setValue(newValue);
@@ -62,7 +78,6 @@ public class PutItem extends  BaseItem
         }
 
         // TODO: Search in params
-
 
         System.out.println("return null at Putitem.getVarFromLine");
         return null;

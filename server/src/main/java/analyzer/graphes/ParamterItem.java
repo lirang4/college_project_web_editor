@@ -1,6 +1,6 @@
 package analyzer.graphes;
 import analyzer.graphes.*;
-public class ParamterItem {
+public class ParamterItem implements INameValue{
 
     private String Name;
     private Enums.Variables varType;
@@ -16,7 +16,7 @@ public class ParamterItem {
         return Name;
     }
 
-    public Enums.Variables getVarType() {
+    public Enums.Variables getType() {
         return varType;
     }
 

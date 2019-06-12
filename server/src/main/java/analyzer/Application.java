@@ -1,10 +1,15 @@
 package analyzer;
 
+import analyzer.Convertors.GeneticResultToWebResult;
+import analyzer.genetic.GeneticAlgo;
+import analyzer.genetic.GeneticResult;
+import analyzer.webDataStractures.WebReportResult;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
 import java.util.Collections;
+import java.util.List;
 
 @SpringBootApplication
 @EnableMongoAuditing
@@ -16,37 +21,38 @@ public class Application {
     public static void main(String[] args) {
          String code = "Func(double x, double t)\n" +
                 "{\n" +
-                "int i;\n" +
+                "int i = 99;\n" +
                 "int ben = 1;\n" +
-                "for(i=0;i<20;i=i+1)\n" +
+                "for(i=100;i>20;i=i-1)\n" +
                 "{\n" +
-                    "ben=ben+ 1;\n" +
+//                    "ben = ben + 1;\n" +
+//                    "x = x -2;\n" +
                 "}\n" +
-                "while(t>3)\n" +
-                "{\n" +
-                    "t=t- 1;\n" +
-                "}\n" +
-
-
-//                "int x = 3;\n" +
-                "if(x<=90)\n" +
-                "{\n" +
-                    //"x=x+5;\n" +
-                    "int y = 6;\n" +
-                    "while(x>=60)\n" +
-                    "{\n" +
-                        "if(x<=80)\n" +
-                        "{\n" +
-                             "x=x+10;\n" +
-                        "}\n" +
-                         "x=x-20;\n" +
-                    "}\n" +
-                "}\n" +
-                "else\n" +
-                "{\n" +
-                    "int y = 6;\n" +
-                    "x=x-5;\n" +
-                "}\n" +
+//                "while(t>3)\n" +
+//                "{\n" +
+//                    "t=t- 1;\n" +
+//                "}\n" +
+//
+//
+////                "int x = 3;\n" +
+//                "if(x<=90)\n" +
+//                "{\n" +
+//                    //"x=x+5;\n" +
+//                    "int y = 6;\n" +
+//                    "while(x>=60)\n" +
+//                    "{\n" +
+//                        "if(x<=80)\n" +
+//                        "{\n" +
+//                             "x=x+10;\n" +
+//                        "}\n" +
+//                         "x=x-20;\n" +
+//                    "}\n" +
+//                "}\n" +
+//                "else\n" +
+//                "{\n" +
+//                    "int y = 6;\n" +
+//                    "x=x-5;\n" +
+//                "}\n" +
 //                "if(t<=50)\n" +
 //                "{\n" +
 //                //"x=x+5;\n" +
@@ -65,16 +71,17 @@ public class Application {
 //                        "z = z -1;\n"+
 //                    "}\n" +
 //                "}\n" +
+                 "x = ben + x;\n" +
                 "return x;\n"+
                 "}";
 
          //Test code!
-//        GeneticAlgo ga = new GeneticAlgo(code);
-//        ga.Run();
-//        List<GeneticResult> bestFitness = ga.BestFitness();
-//        List<GeneticResult> worseFitness = ga.WorstFitness();
-//        GeneticResultToWebResult convertor = new GeneticResultToWebResult();
-//        List<WebReportResult> webReport =  convertor.Convert(bestFitness, worseFitness, code);
+        GeneticAlgo ga = new GeneticAlgo(code);
+        ga.Run();
+        List<GeneticResult> bestFitness = ga.BestFitness();
+        List<GeneticResult> worseFitness = ga.WorstFitness();
+        GeneticResultToWebResult convertor = new GeneticResultToWebResult();
+        List<WebReportResult> webReport =  convertor.Convert(bestFitness, worseFitness, code);
 
         SpringApplication app = new SpringApplication(Application.class);
         app.setDefaultProperties(Collections.singletonMap("server.port", "3000"));
