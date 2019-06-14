@@ -48,10 +48,18 @@ public class VariableItem extends BaseItem implements INameValue
         String[] splitLine = line.split(" ");
         // splitLine[0] => Type - int, double, etc
         //splitLine[1] => Name
-        if(splitLine[1].contains(";"))
-            splitLine[1]= splitLine[1].substring(0,splitLine[1].length()-1);
+        String lineWithoutType = "";
+        for(int i=1; i<splitLine.length;i++)
+            lineWithoutType += splitLine[i];
 
-        return splitLine[1];
+        lineWithoutType = lineWithoutType.replaceAll(" ", "");
+
+        splitLine = lineWithoutType.split("=");
+
+       // if(splitLine[1].contains(";"))
+       //     splitLine[1]= splitLine[1].substring(0,splitLine[1].length()-1);
+
+        return splitLine[0];
     }
 
     private Enums.Variables ExtractType(String line)
@@ -73,7 +81,7 @@ public class VariableItem extends BaseItem implements INameValue
     private Object ExtractValue(String line/*Will be removed*/)
     {
         if(line.contains("="))
-            return line.substring(line.indexOf("=")+1,line.indexOf(";")).replace(" ","");
+            return line.substring(line.indexOf("=")+1,line.indexOf(";")).replaceAll(" ","");
         else
             return null;
     }

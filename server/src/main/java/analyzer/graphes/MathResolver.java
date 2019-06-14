@@ -92,9 +92,8 @@ public class MathResolver {
 
         switch(line.getType()) {
             case If:
-                // TODO : Check if working on parameter one vs parameter two
                 _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
-                        .replace(" ","");
+                        .replaceAll(" ","");
 
                 // Now we've got the condition statement x > x + 40 * 2 for example
                 _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
@@ -102,14 +101,14 @@ public class MathResolver {
                 break;
             case Put:
                 _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
-                        .replace(" ","");
+                        .replaceAll(" ","");
                 _expressionOfCondition[0] = _expression;
                 _expressionOfCondition[1] = null;
                 _expressionOfCondition[2] = null;
                 break;
             case Var:
                 _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
-                        .replace(" ","");
+                        .replaceAll(" ","");
                 _expressionOfCondition[0] = _expression;
                 _expressionOfCondition[1] = null;
                 _expressionOfCondition[2] = null;
@@ -126,16 +125,16 @@ public class MathResolver {
 //                variables.add(new VariableItem(new CodeLine(DemeCodeLine,line.getLinePosition()),null,variables));
 
                 conditionOfFor = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")"))
-                        .replace(" ","");
+                        .replaceAll(" ","");
 
                 conditionOfFor = conditionOfFor.substring(0,conditionOfFor.indexOf(";"))
-                        .replace(" ","");
+                        .replaceAll(" ","");
                 // Now we've got the condition statement : i < i + 40 for example
                 _expressionOfCondition = SplitConditionParamsAndOperator(conditionOfFor);
                 break;
             case While:
                 _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
-                        .replace(" ","");
+                        .replaceAll(" ","");
                 // Now we've got the condition statement x > x + 40 * 2 for example
                 _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
                 break;
@@ -152,7 +151,7 @@ public class MathResolver {
         String param1,param2;
         String _expression = line.getText();
         param1 = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
-                .replace(" ","");
+                .replaceAll(" ","");
         String [] arr1 = param1.split("(=)");
         param1 = arr1[0]; // The destination of the value
         varAndValue[0] = param1;
@@ -178,7 +177,14 @@ public class MathResolver {
         return varAndValue;
     }
 
+
+
     public double GetValueOfExpression(String expression, List<VariableItem> variables, List<ParamterItem> params){
+
+        boolean expressionIsNumber = isNumeric(expression);
+        if(expressionIsNumber)
+            return Double.parseDouble(expression);
+
         Expression exp= null;
         double result = Double.MAX_VALUE;
         HashMap<String, Double> hashVars = new HashMap<String, Double>();;
@@ -194,7 +200,16 @@ public class MathResolver {
         return result;
     }
 
-    // GetValue using Shunting-yard algorithm
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+        // GetValue using Shunting-yard algorithm
     /*public double[] GetValue(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
     {
         double [] resValues = new double[2];
@@ -218,7 +233,7 @@ public class MathResolver {
 
                 hashVars = getExpressionVars(line, variables, params);
 //                String conditionOfFor = _expression[0].substring(_expression[0].indexOf(";")+1,_expression[0].indexOf(")"))
-//                        .replace(" ","");
+//                        .replaceAll(" ","");
 //                conditionOfFor = _expression[0].substring(0,_expression[0].indexOf(";"));
                 exp = new ExpressionBuilder(_expression[0]).variables(hashVars.keySet()).build();
                 for (String key : hashVars.keySet()) {

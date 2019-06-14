@@ -6,8 +6,22 @@ import java.util.List;
 
 public class PutItem extends  BaseItem
 {
+    boolean CMPLXItem = false;
+    String nameOfItem = "";
+
     protected PutItem(CodeLine line, CodeReader reader, List<VariableItem> vars) {
         super(line, reader, vars);
+
+        if((line.getText().contains("++"))
+                || (line.getText().contains("--"))
+                || (line.getText().contains("+="))
+                || (line.getText().contains("-="))
+                || (line.getText().contains("*="))
+                || (line.getText().contains("/="))) { // The line is X++;
+            CMPLXItem = true;
+            line.getText().replaceAll(" ", "");
+            nameOfItem = getNameFromComplexExpression();
+        }
     }
 
     @Override
@@ -15,11 +29,42 @@ public class PutItem extends  BaseItem
         return;
     }
 
+    private String getNameFromComplexExpression() {
+        String[] splittedCMPLXExpression = this.getLine().getText().split("\\++|\\--|\\*=|\\/=|\\+=|\\-=");
+
+        return splittedCMPLXExpression[0];
+    }
+
     private String getExpressionFromLine()
     {
         // Split the string "i=i+1" to 2 parts by the condition sign '=' :
         // Part 1 - i
         // Part 2 - i+1
+        String ComplexExpressionFromLine="";
+        if(CMPLXItem) {
+            if (getLine().getText().contains("++"))
+                ComplexExpressionFromLine = nameOfItem + "+" + "1";
+            else if(getLine().getText().contains("--")){
+                ComplexExpressionFromLine = nameOfItem + "-" + "1";
+            }
+            else {
+                String[] splittedCMPLXExpression = getLine().getText().split("\\*=|\\/=|\\+=|\\-=");
+                splittedCMPLXExpression[1] = splittedCMPLXExpression[1].substring(0,splittedCMPLXExpression[1].length()-1);
+                //return splittedCMPLXExpression[1];
+
+                if(getLine().getText().contains("+="))
+                    ComplexExpressionFromLine = nameOfItem + "+" + splittedCMPLXExpression[1];
+                else if(getLine().getText().contains("-="))
+                    ComplexExpressionFromLine = nameOfItem + "-" + splittedCMPLXExpression[1];
+                else if(getLine().getText().contains("*="))
+                    ComplexExpressionFromLine = nameOfItem + "*" + splittedCMPLXExpression[1];
+                else
+                    ComplexExpressionFromLine = nameOfItem + "/" + splittedCMPLXExpression[1];
+            }
+
+            return ComplexExpressionFromLine;
+        }
+
 
         String [] SplittedStringCondition = Line.getText().split("(=)");
         SplittedStringCondition[1] = SplittedStringCondition[1].substring(0,SplittedStringCondition[1].length()-1);
@@ -48,13 +93,17 @@ public class PutItem extends  BaseItem
 
     private String ExtractName(){
         String line = Line.getText();
-        line = line.substring(0,Line.getText().indexOf("=")).replace(" ","");
+        line = line.substring(0,Line.getText().indexOf("=")).replaceAll(" ","");
         return line;
     }
 
     private void UpdateValue(List<ParamterItem> parameters, List<VariableItem> vars, Object newValue) {
 
-        String name = ExtractName();
+        String name = "";
+        if(CMPLXItem)
+            name = getNameFromComplexExpression();
+        else
+            name = ExtractName();
         for ( VariableItem var: vars) {
             if (var.getName().equals(name)) {
                 var.setValue(newValue);
@@ -70,7 +119,7 @@ public class PutItem extends  BaseItem
 
     private Object GetVarFromLine()
     {
-        String name = Line.getText().substring(0,Line.getText().indexOf("=")).replace(" ","");
+        String name = Line.getText().substring(0,Line.getText().indexOf("=")).replaceAll(" ","");
         for ( VariableItem var: Vars) {
             if (var.getName().equals(name)) {
                 return var;

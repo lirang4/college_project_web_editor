@@ -21,17 +21,21 @@ public class Application {
     public static void main(String[] args) {
          String code = "Func(double x, double t)\n" +
                 "{\n" +
-                "int i = 99;\n" +
-                "int ben = 1;\n" +
-                "for(i=100;i>20;i=i-1)\n" +
+                 "int i = 99 ;\n" +
+                "i++;\n" +
+                 "i+=3;\n" +
+                 "i*=3;\n" +
+                 "i/=2;\n" +
+                "int ben= 1;\n" +
+                "for( i= 100;i >20 ; i =i- 1)\n" +
                 "{\n" +
 //                    "ben = ben + 1;\n" +
 //                    "x = x -2;\n" +
                 "}\n" +
-//                "while(t>3)\n" +
-//                "{\n" +
-//                    "t=t- 1;\n" +
-//                "}\n" +
+                "while(t>3)\n" +
+                "{\n" +
+                    "t= t- 1;\n" +
+                "}\n" +
 //
 //
 ////                "int x = 3;\n" +

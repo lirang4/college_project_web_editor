@@ -22,7 +22,7 @@ public class ForItem extends BaseItem
         String _expression = line.getText();
 
         condition = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")"))
-                .replace(" ","");
+                .replaceAll(" ","");
 
         condition = condition.substring(0,condition.indexOf(";"));
 
@@ -34,7 +34,7 @@ public class ForItem extends BaseItem
         String _expression = line.getText();
 
         increasePart = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")")+1)
-                .replace(" ","");
+                .replaceAll(" ","");
 
         increasePart = increasePart.substring(increasePart.indexOf(";")+1,increasePart.indexOf(";"));
 
@@ -45,7 +45,7 @@ public class ForItem extends BaseItem
         String parameterName;
         String _expression = line.getText();
         _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
-                .replace(" ","");
+                .replaceAll(" ","");
         String [] arr1 = _expression.split("(=)");
         parameterName = arr1[0];                       // The destination of the value
 
@@ -81,7 +81,7 @@ public class ForItem extends BaseItem
     {
         String _expression = line.getText();
         String increasePart = _expression.substring(_expression.indexOf(";")+1,_expression.length()-1)
-                .replace(" ","");
+                .replaceAll(" ","");
         increasePart = increasePart.substring(increasePart.indexOf(";")+1,increasePart.length());
 
 //        String [] arr1 = increasePart.split("(=)");
@@ -94,7 +94,7 @@ public class ForItem extends BaseItem
         String parameterValue;
         String _expression = line.getText();
         _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
-                .replace(" ","");
+                .replaceAll(" ","");
         String [] arr1 = _expression.split("(=)");
         parameterValue = arr1[1];                       // The destination of the value
 
@@ -126,7 +126,7 @@ public class ForItem extends BaseItem
     private String GetDeclerationPart(){
         String DeclarationPart = Line.getText();
         DeclarationPart = DeclarationPart.substring(DeclarationPart.indexOf("(")+1,DeclarationPart.indexOf(";"))
-                .replace(" ","");
+                .replaceAll(" ","");
         return DeclarationPart;
     }
 

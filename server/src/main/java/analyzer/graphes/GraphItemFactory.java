@@ -3,11 +3,9 @@ package analyzer.graphes;
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
 import analyzer.reader.Enums.LineType;
-import analyzer.graphes.*;
-import analyzer.graphes.*;
+
 import java.util.List;
 
-// TODO: Implement all objects !!!!!
 
 public class GraphItemFactory {
     public static IGraphItem Create(CodeLine codeLine, CodeReader reader, List<VariableItem> vars)

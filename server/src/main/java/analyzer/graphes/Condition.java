@@ -44,7 +44,7 @@ public class Condition
             // The first time is to decrease the before the condition part and decrease spaces in the line
             // The second time is to decrease the after the condition part
             condition = condition.substring(condition.indexOf(";")+1,condition.length()-1)
-                .replace(" ","");
+                .replaceAll(" ","");
             condition = condition.substring(0,condition.indexOf(";"));
         }
 
