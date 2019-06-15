@@ -104,8 +104,8 @@ public class VariableItem extends BaseItem implements INameValue
     }
 
     @Override
-    public GraphResult Execute(List<ParamterItem> parameters) {
-        GraphResult result = new GraphResult();
+    public IGraphResult Execute(List<ParamterItem> parameters) {
+        IGraphResult result = new GraphResult();
 //       TODO
 //        value = ExtractValue(parameters);
         if(!executed)

@@ -71,30 +71,32 @@ public class Graph
         }*/
     }
 
-    public GraphResult Execute(List<ParamterItem> parameters)
-    {
-        GraphResult result = new GraphResult();
+//    public GraphResult Execute(List<ParamterItem> parameters)
+//    {
+//        GraphResult result = new GraphResult();
+//
+//        for (IGraphItem item: Items) {
+//            GraphResult internalResult = item.Execute(parameters);
+//
+//            result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
+//            result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
+//
+//            result.AddInternalResult(internalResult);
+//        }
+//
+//        return result;
+//    }
 
-        for (IGraphItem item: Items) {
-            GraphResult internalResult = item.Execute(parameters);
 
-            result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
-            result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
-
-            result.AddInternalResult(internalResult);
-        }
-
-        return result;
-    }
-
-
-    public GraphResult Execute2(List<Double> params)
+    public IGraphResult Execute(List<Double> params)
     {
         List<ParamterItem> parameters = CreateParameterItems(params);
         GraphResult result = new GraphResult();
 
         for (IGraphItem item: Items) {
-            GraphResult internalResult = item.Execute(parameters);
+            IGraphResult internalResult = item.Execute(parameters);
+            if(CheckInfinityResult(internalResult))
+                return internalResult;
 
             result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
             result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
@@ -164,5 +166,10 @@ public class Graph
     public int getParamertersCount()
     {
         return parameterNames.size();
+    }
+
+    protected Boolean CheckInfinityResult(IGraphResult result)
+    {
+        return result instanceof InfinityLoopGraphResult;
     }
 }

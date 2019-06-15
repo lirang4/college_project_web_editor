@@ -2,11 +2,13 @@ package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
+
 import java.util.List;
 import java.util.concurrent.*;
 
 public class WhileItem extends  BaseItem {
 
+    private int TIME_OUT_SEC = 5;
     public WhileItem(CodeLine line, CodeReader reader, List<VariableItem> vars) {
         super(line, reader, vars);
     }
@@ -18,57 +20,66 @@ public class WhileItem extends  BaseItem {
         return condition.CanRun(Vars);
     }
 
+    public IGraphResult ExecuteInternal(List<ParamterItem> parameters) {
+        IGraphResult result = new GraphResult();
+
+        Condition condition = Condition.Create(Line, Vars, parameters);
+
+        while (condition.CanRun(Vars)) {
+            if (!executed) {
+                result.setRowsCover(result.getRowsCover() + 1);
+                executed = true;
+            }
+            result.setRowsCount(result.getRowsCount() + 1);
+            for (IGraphItem item : Items) {
+                IGraphResult internalResult = item.Execute(parameters);
+
+                if(CheckInfinityResult(internalResult))
+                    return internalResult;
+
+                result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
+                result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
+
+                result.AddInternalResult(internalResult);
+            }
+            condition.UpdateParameters(parameters, Vars);
+        }
+        return result;
+    }
+
     @Override
-    public GraphResult Execute(List<ParamterItem> parameters) {
+    public IGraphResult Execute(List<ParamterItem> parameters) {
+        final IGraphResult[] result = {new GraphResult()};
+        final Runnable stuffToDo = new Thread() {
+            @Override
+            public void run() {
+                result[0] = ExecuteInternal(parameters);
+            }
+        };
 
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        GraphResult result = new GraphResult();
+        final ExecutorService executor = Executors.newSingleThreadExecutor();
+        final Future future = executor.submit(stuffToDo);
+        executor.shutdown(); // This does not cancel the already-scheduled task.
+
         try {
-            Runnable r = new Runnable() {
-                @Override
-                public void run() {
+            future.get(TIME_OUT_SEC, TimeUnit.SECONDS);
+        }
+        catch (TimeoutException ee) {
+            return new InfinityLoopGraphResult();
+        }
+        catch (Exception te) {}
+        finally
+        {
+            if (!executor.isTerminated())
+                executor.shutdownNow(); // If you want to stop the code that hasn't finished.
 
-                    Condition condition = Condition.Create(Line, Vars, parameters);
-
-                    while (condition.CanRun(Vars)) {
-                        if (!executed) {
-                            result.setRowsCover(result.getRowsCover() + 1);
-                            executed = true;
-                        }
-                        result.setRowsCount(result.getRowsCount() + 1);
-
-                        for (IGraphItem item : Items) {
-                            GraphResult internalResult = item.Execute(parameters);
-
-                            result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
-                            result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());
-
-                            result.AddInternalResult(internalResult);
-                        }
-
-                        condition.UpdateParameters(parameters, Vars);
-                    }
-                }
-            };
-
-            Future<?> f = service.submit(r);
-
-            // TODO : Set the timeout in the configuration file
-            f.get(10, TimeUnit.MINUTES);     // attempt the task for two minutes
-        } catch (final InterruptedException e) {
-            // The thread was interrupted during sleep, wait or join
-        } catch (final TimeoutException e) {
-            // TODO : Throw exception of timeout exception -- Infinity loop.
-            System.out.println("exception of timeout exception -- Infinity loop.");
-        } catch (final ExecutionException e) {
-            // An exception from within the Runnable task
-        } finally {
-            service.shutdown();
-            return result;
-
+            future.cancel(true);
         }
 
+        return result[0];
     }
+
+
 }
 
 

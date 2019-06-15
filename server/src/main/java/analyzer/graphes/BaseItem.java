@@ -57,7 +57,7 @@ public class BaseItem implements IGraphItem
     }
 
     @Override
-    public GraphResult Execute(List<ParamterItem> parameters) {
+    public IGraphResult Execute(List<ParamterItem> parameters) {
         return null;
     }
 
@@ -105,5 +105,10 @@ public class BaseItem implements IGraphItem
         }
 
         return count;
+    }
+
+    protected Boolean CheckInfinityResult(IGraphResult result)
+    {
+        return result instanceof InfinityLoopGraphResult;
     }
 }

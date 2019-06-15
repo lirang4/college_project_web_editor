@@ -12,9 +12,9 @@ public class IfItem extends BaseItem
     }
 
     @Override
-    public GraphResult Execute(List<ParamterItem> parameters) {
+    public IGraphResult Execute(List<ParamterItem> parameters) {
 
-        GraphResult result = new GraphResult();
+        IGraphResult result = new GraphResult();
         Condition condition = Condition.Create(Line, Vars, parameters);
 
         if (!condition.CanRun(Vars)) {
@@ -31,7 +31,10 @@ public class IfItem extends BaseItem
 
         for (IGraphItem item: Items)
         {
-            GraphResult internalResult = item.Execute(parameters);
+            IGraphResult internalResult = item.Execute(parameters);
+
+            if(CheckInfinityResult(internalResult))
+                return internalResult;
 
             result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
             result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());

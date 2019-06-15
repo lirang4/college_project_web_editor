@@ -1,16 +1,20 @@
 package analyzer.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
+import analyzer.Compile.ProgramCompiler;
 import analyzer.Convertors.GeneticResultToWebResult;
-import analyzer.webDataStractures.WebReportResult;
-import analyzer.repositories.CodesRepository;
-import analyzer.genetic.GeneticResult;
 import analyzer.genetic.GeneticAlgo;
+import analyzer.genetic.GeneticResult;
 import analyzer.models.Code;
-import java.util.Optional;
+import analyzer.repositories.CodesRepository;
+import analyzer.webDataStractures.WebReportResult;
+import org.apache.commons.lang.mutable.MutableBoolean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class CodeController {
@@ -41,16 +45,26 @@ public class CodeController {
 //        g.Execute(l);
 
         //TODO: check
-        GeneticAlgo ga = new GeneticAlgo(newCode.getContent());
-        ga.Run();
-        List<GeneticResult> bestFitness = ga.BestFitness();
-        List<GeneticResult> worseFitness = ga.WorstFitness();
-        GeneticResultToWebResult convertor = new GeneticResultToWebResult();
-        List<WebReportResult> webReport =  convertor.Convert(bestFitness, worseFitness, newCode.getContent());
 
-        newCode.setReport(webReport);
-        this.repository.save(newCode);
+        File file = new File("C:\\itay\\program.c");
+        ProgramCompiler compiler = new ProgramCompiler();
+        compiler.createCFile(newCode.getContent(), file);
+        MutableBoolean isFailed = new MutableBoolean(false);
+        //message for compilation
+        String compileMessage = compiler.compile(file, isFailed);
 
+        if(isFailed.getValue().equals(false)) {
+            GeneticAlgo ga = new GeneticAlgo(newCode.getContent());
+            ga.Run();
+            List<GeneticResult> bestFitness = ga.BestFitness();
+            List<GeneticResult> worseFitness = ga.WorstFitness();
+            GeneticResultToWebResult convertor = new GeneticResultToWebResult();
+            List<WebReportResult> webReport = convertor.Convert(bestFitness, worseFitness, newCode.getContent());
+
+            newCode.setReport(webReport);
+            this.repository.save(newCode);
+            return ResponseEntity.ok().body(newCode);
+        }
         return ResponseEntity.ok().body(newCode);
     }
 }

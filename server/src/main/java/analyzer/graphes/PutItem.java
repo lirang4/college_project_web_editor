@@ -72,9 +72,9 @@ public class PutItem extends  BaseItem
     }
 
     @Override
-    public GraphResult Execute(List<ParamterItem> parameters) {
+    public IGraphResult Execute(List<ParamterItem> parameters) {
 
-        GraphResult result = new GraphResult();
+        IGraphResult result = new GraphResult();
         MathResolver resolver = new MathResolver(Line.getText());
         String expression = getExpressionFromLine();
         double newValue = resolver.GetValueOfExpression(expression, Vars, parameters);

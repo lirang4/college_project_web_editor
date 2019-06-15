@@ -45,11 +45,11 @@ public class GeneticResultToWebResult
     {
         Graph g = new Graph(code);
 
-        GraphResult graphResult = g.Execute2(data.getParameterValue());
+        IGraphResult graphResult = g.Execute(data.getParameterValue());
         return ConvertGeneticToWebResult(data.getParameterValue(), graphResult, g.getTotalRowCount());
     }
 
-    private WebReportResult ConvertGeneticToWebResult(List<Double> parameters, GraphResult graphResult, int codeLength) {
+    private WebReportResult ConvertGeneticToWebResult(List<Double> parameters, IGraphResult graphResult, int codeLength) {
         WebReportResult webReport = new WebReportResult();
 
         webReport.setLineNumber(ConvertCodwLineToLineNumber(graphResult.getCodeLines()));

@@ -14,7 +14,7 @@ public class ElseItem extends BaseItem
     }
 
     @Override
-    public GraphResult Execute(List<ParamterItem> parameters) {
+    public IGraphResult Execute(List<ParamterItem> parameters) {
         GraphResult result = new GraphResult();
 
         if (ifItem.executed)
@@ -32,7 +32,10 @@ public class ElseItem extends BaseItem
 
         for (IGraphItem item: Items)
         {
-            GraphResult internalResult = item.Execute(parameters);
+            IGraphResult internalResult = item.Execute(parameters);
+
+            if(CheckInfinityResult(internalResult))
+                return internalResult;
 
             result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
             result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());

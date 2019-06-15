@@ -29,17 +29,6 @@ public class ForItem extends BaseItem
         return condition;
     }
 
-    private String getIncreasePart(CodeLine line) {
-        String increasePart;
-        String _expression = line.getText();
-
-        increasePart = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")")+1)
-                .replaceAll(" ","");
-
-        increasePart = increasePart.substring(increasePart.indexOf(";")+1,increasePart.indexOf(";"));
-
-        return increasePart;
-    }
 
     private INameValue getLoopVariable(CodeLine line, List<VariableItem> Vars, List<ParamterItem> parameters) {
         String parameterName;
@@ -84,44 +73,19 @@ public class ForItem extends BaseItem
                 .replaceAll(" ","");
         increasePart = increasePart.substring(increasePart.indexOf(";")+1,increasePart.length());
 
-//        String [] arr1 = increasePart.split("(=)");
-//        String expression = arr1[1];
-
         return increasePart;
     }
 
-    private void DeclareLoopVarValue(INameValue loopVariable, CodeLine line,List<ParamterItem> parameters){
+
+    private void DeclareLoopVarValue(INameValue loopVariable, CodeLine line,List<ParamterItem> parameters) {
         String parameterValue;
         String _expression = line.getText();
-        _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
-                .replaceAll(" ","");
-        String [] arr1 = _expression.split("(=)");
+        _expression = _expression.substring(_expression.indexOf("(") + 1, _expression.indexOf(";"))
+                .replaceAll(" ", "");
+        String[] arr1 = _expression.split("(=)");
         parameterValue = arr1[1];                       // The destination of the value
-
-        Expression exp= null;
-        HashMap<String, Double> hashVars = new HashMap<String, Double>();
-        Expression e = null;
-        ExpressionBuilder calc = new ExpressionBuilder(parameterValue);
-        hashVars = getExpressionVars(line, Vars, parameters);
-        exp = new ExpressionBuilder(parameterValue).variables(hashVars.keySet()).build();
-        for (String key : hashVars.keySet()) {
-            exp.setVariable(key, hashVars.get(key));
-        }
-
-        double val = exp.evaluate();
-
-        for (ParamterItem item : parameters) {
-            if (item.getName().equals(loopVariable.getName())) {
-                loopVariable.setValue(val);
-            }
-        }
-
-        for (VariableItem item : Vars) {
-            if (item.getName().equals(loopVariable.getName())) {
-                loopVariable.setValue(val);
-            }
-        }
     }
+
 
     private String GetDeclerationPart(){
         String DeclarationPart = Line.getText();
@@ -132,19 +96,20 @@ public class ForItem extends BaseItem
 
 
     @Override
-    public GraphResult Execute(List<ParamterItem> parameters) {
-        GraphResult result = new GraphResult();
+    public IGraphResult Execute(List<ParamterItem> parameters) {
+        IGraphResult result = new GraphResult();
 
+        // TODO; remove all to new function
         // The part of the Declration in the for
         String declaration = GetDeclerationPart();
-        declaration = declaration + ";";
+        declaration = declaration + ";";            // TODO: fix
         CodeLine fakeLine = new CodeLine(declaration,this.reader.getPosition());
         PutItem declarationPutItem = new PutItem(fakeLine,reader,Vars);
         declarationPutItem.Execute(parameters);
 
         // The part of the increase in the for
         String increase = GetIncreasePart(Line);
-        increase = increase + ";";
+        increase = increase + ";";               // TODO: fix2
         fakeLine = new CodeLine(increase,this.reader.getPosition());
         PutItem increasePutItem = new PutItem(fakeLine,reader,Vars);
 
@@ -160,7 +125,10 @@ public class ForItem extends BaseItem
             result.setRowsCount(result.getRowsCount() + 1);
 
             for (IGraphItem item : Items) {
-                GraphResult internalResult = item.Execute(parameters);
+                IGraphResult internalResult = item.Execute(parameters);
+
+                if(CheckInfinityResult(internalResult))
+                    return internalResult;
 
                 result.setRowsCount(result.getRowsCount() + internalResult.getRowsCount());
                 result.setRowsCover(result.getRowsCover() + internalResult.getRowsCover());

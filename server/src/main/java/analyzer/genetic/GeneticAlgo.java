@@ -1,7 +1,7 @@
 package analyzer.genetic;
 
 import analyzer.graphes.Graph;
-import analyzer.graphes.GraphResult;
+import analyzer.graphes.IGraphResult;
 import io.jenetics.DoubleChromosome;
 import io.jenetics.DoubleGene;
 import io.jenetics.Genotype;
@@ -9,6 +9,7 @@ import io.jenetics.Phenotype;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;
 import io.jenetics.util.Factory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class GeneticAlgo {
                 params.add(chromosome.getGene().doubleValue());
             });
 
-            GraphResult result = g.Execute2(params);
+            IGraphResult result = g.Execute(params);
 
             double finalResult = result.getRowsCount()*0.8 + result.getRowsCover()*0.2;
             System.out.println("Result: " + finalResult);
