@@ -33,8 +33,7 @@ public class CodeController {
 
     @CrossOrigin
     @PostMapping("/codes")
-    public ResponseEntity<Code> createCode(@RequestBody Code newCode) {
-        this.repository.save(newCode);
+    public ResponseEntity<String > createCode(@RequestBody Code newCode) {
         // TODO: Initiate thread to create graph
 //        Graph g = new Graph(newCode.getContent());
 //        System.out.println(g.toString());
@@ -50,21 +49,23 @@ public class CodeController {
         ProgramCompiler compiler = new ProgramCompiler();
         compiler.createCFile(newCode.getContent(), file);
         MutableBoolean isFailed = new MutableBoolean(false);
-        //message for compilation
         String compileMessage = compiler.compile(file, isFailed);
 
-        if(isFailed.getValue().equals(false)) {
-            GeneticAlgo ga = new GeneticAlgo(newCode.getContent());
-            ga.Run();
-            List<GeneticResult> bestFitness = ga.BestFitness();
-            List<GeneticResult> worseFitness = ga.WorstFitness();
-            GeneticResultToWebResult convertor = new GeneticResultToWebResult();
-            List<WebReportResult> webReport = convertor.Convert(bestFitness, worseFitness, newCode.getContent());
-
-            newCode.setReport(webReport);
-            this.repository.save(newCode);
-            return ResponseEntity.ok().body(newCode);
+        if(isFailed.getValue().equals(true)) {
+            return ResponseEntity.badRequest().body(compileMessage);
         }
-        return ResponseEntity.ok().body(newCode);
+
+        GeneticAlgo ga = new GeneticAlgo(newCode.getContent());
+        ga.Run();
+
+        List<GeneticResult> bestFitness = ga.BestFitness();
+        List<GeneticResult> worseFitness = ga.WorstFitness();
+        GeneticResultToWebResult convertor = new GeneticResultToWebResult();
+        List<WebReportResult> webReport = convertor.Convert(bestFitness, worseFitness, newCode.getContent());
+
+        newCode.setReport(webReport);
+        this.repository.save(newCode);
+
+        return ResponseEntity.ok().body("OK");
     }
 }
