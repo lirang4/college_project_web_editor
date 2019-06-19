@@ -27,21 +27,16 @@ public class Application {
                  "i*=3;\n" +
                  "i/=2;\n" +
                 "int ben= 1;\n" +
-                "for( i= 30;i >20 ; i =i- 1)\n" +
-                "{\n" +
+//                "for( i= 1;i >t ; i++)\n" +
+ //               "{\n" +
 //                    "ben = ben + 1;\n" +
 //                    "x = x -2;\n" +
-                "}\n" +
-                "while(t>3)\n" +
+//                "}\n" +
+                "while(t+950<1000)\n" +
                 "{\n" +
-                    "t= t- 1;\n" +
-                    "int i;\n" +
+                    "t= t - 1;\n" +
+                    "ben++;\n" +
                  "}\n" +
-                    "int ben = 1;\n" +
-                "while(t>3)\n" +
-                "{\n" +
-                    "t=t+ 10;\n" +
-                "}\n" +
                  "x = ben + x;\n" +
                 "return x;\n"+
                 "}";

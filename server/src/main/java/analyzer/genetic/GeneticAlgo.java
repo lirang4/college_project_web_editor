@@ -37,7 +37,7 @@ public class GeneticAlgo {
             IGraphResult result = g.Execute(params);
 
             double finalResult = result.getRowsCount()*0.8 + result.getRowsCover()*0.2;
-            System.out.println("Result: " + finalResult);
+//            System.out.println("Result: " + finalResult);
             return finalResult;
         }
 
@@ -49,11 +49,12 @@ public class GeneticAlgo {
             // 3.) Create the execution environment.
             Engine<DoubleGene, Double> engine = Engine
                     .builder(this::FitnessFunction, gtf)
+                    //.executor(Executors.newFixedThreadPool(16))
                     .build();
 
             // 4.) Start the execution (evolution) and collect the result.
             Phenotype<DoubleGene,Double> result = engine.stream()
-                    .limit(200)
+                    .limit(100)
                      .peek(r -> GenerationResult(r))
                     .collect(EvolutionResult.toBestPhenotype());
 

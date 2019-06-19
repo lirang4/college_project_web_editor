@@ -34,7 +34,8 @@ public class GeneticResultToWebResult
     {
         List<WebReportResult> list = new ArrayList<>();
         data.forEach((item)->{
-            list.add(ExecuteGraphOnGeneticResults(item));
+           if(item.getFitnessResult() != -1)
+               list.add(ExecuteGraphOnGeneticResults(item));
         });
 
         return list;

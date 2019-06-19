@@ -17,11 +17,13 @@ public class Condition
     String operator;
     CodeLine codeLine;
     List<ParamterItem> parameters;
+    List<VariableItem> vars;
     analyzer.reader.Enums.LineType codeLineType;
 
-    private Condition( List<ParamterItem> params,CodeLine codeLine, String line,ParamterItem parameter1,ParamterItem parameter2,String operator )
+    private Condition( List<ParamterItem> params, List<VariableItem> vars, CodeLine codeLine, String line,ParamterItem parameter1,ParamterItem parameter2,String operator )
     {
         this.parameters = params;
+        this.vars = vars;
         this.codeLine = codeLine;
         this.line = line;
         this.parameter1 = parameter1;
@@ -53,7 +55,7 @@ public class Condition
         String operator = results[1];
         ParamterItem p2 = ParseParameter(results[2], variables, params);
 
-        return new Condition(params,code_line,condition, p1, p2, operator);
+        return new Condition(params, variables, code_line, condition, p1, p2, operator);
     }
 
     private static String RemoveSpaces(String text)
@@ -187,22 +189,33 @@ public class Condition
             return !parameter1.getValue().equals(parameter2.getValue());
         }
 
+        this.vars = Vars;
+        double[] calculatedParams = GetCalculatedParameters();
+        double param1 =calculatedParams[0];
+        double param2 =calculatedParams[1];
+
+        if (operator.equals(">="))
+            return param1 >= param2 ;
+        if (operator.equals("<="))
+            return param1 <= param2 ;
+        if (operator.equals(">"))
+            return param1 > param2 ;
+        if (operator.equals("<"))
+            return param1 < param2 ;
+
+        return false;
+    }
+
+
+    public double[] GetCalculatedParameters()
+    {
         MathResolver mathRes = new MathResolver(this.line);
         String[] SplittedCondition = SplitConditionParamsAndOperator(this.line);
 
-        double param1 = mathRes.GetValueOfExpression(SplittedCondition[0],Vars,parameters);//getParameterValue(SplittedCondition[0]);
-        double Param2CalculatedValue = mathRes.GetValueOfExpression(SplittedCondition[2],Vars,parameters);
+        double param1 = mathRes.GetValueOfExpression(SplittedCondition[0], vars, parameters);//getParameterValue(SplittedCondition[0]);
+        double param2 = mathRes.GetValueOfExpression(SplittedCondition[2], vars, parameters);
 
-        if (operator.equals(">="))
-            return param1 >= Param2CalculatedValue;
-        if (operator.equals("<="))
-            return param1 <= Param2CalculatedValue;
-        if (operator.equals(">"))
-            return param1 > Param2CalculatedValue;
-        if (operator.equals("<"))
-            return param1 < Param2CalculatedValue;
-
-        return false;
+        return new double[]{param1, param2};
     }
 
     public void UpdateParameters(List<ParamterItem> parameters, List<VariableItem> variables)

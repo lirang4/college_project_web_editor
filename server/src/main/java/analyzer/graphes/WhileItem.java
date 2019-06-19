@@ -3,12 +3,17 @@ package analyzer.graphes;
 import analyzer.reader.CodeLine;
 import analyzer.reader.CodeReader;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.*;
 
 public class WhileItem extends  BaseItem {
 
-    private int TIME_OUT_SEC = 5;
+    private final int MAX_ITARATIONS = 1000000;
+    private final  int COUNT_LINIT_PUNISHMENT = 20;
+    private int ROW_COUNT_INFINITY_LIMIT = 5000;
+
+    private int internalCounter = 0 ;
+
     public WhileItem(CodeLine line, CodeReader reader, List<VariableItem> vars) {
         super(line, reader, vars);
     }
@@ -20,16 +25,19 @@ public class WhileItem extends  BaseItem {
         return condition.CanRun(Vars);
     }
 
-    public IGraphResult ExecuteInternal(List<ParamterItem> parameters) {
+    @Override
+    public IGraphResult Execute(List<ParamterItem> parameters) {
         IGraphResult result = new GraphResult();
 
         Condition condition = Condition.Create(Line, Vars, parameters);
+        ROW_COUNT_INFINITY_LIMIT = Math.min((int)(Math.pow(GetMaxFromCondition(condition),2.0)), MAX_ITARATIONS);
 
         while (condition.CanRun(Vars)) {
             if (!executed) {
                 result.setRowsCover(result.getRowsCover() + 1);
                 executed = true;
             }
+
             result.setRowsCount(result.getRowsCount() + 1);
             for (IGraphItem item : Items) {
                 IGraphResult internalResult = item.Execute(parameters);
@@ -42,44 +50,34 @@ public class WhileItem extends  BaseItem {
 
                 result.AddInternalResult(internalResult);
             }
+
+            if(CheckResultInfinityCount()) {
+                return new InfinityLoopGraphResult();
+            }
+            internalCounter++;
+
             condition.UpdateParameters(parameters, Vars);
         }
         return result;
     }
 
-    @Override
-    public IGraphResult Execute(List<ParamterItem> parameters) {
-        final IGraphResult[] result = {new GraphResult()};
-        final Runnable stuffToDo = new Thread() {
-            @Override
-            public void run() {
-                result[0] = ExecuteInternal(parameters);
-            }
-        };
+    private double GetMaxFromCondition(Condition condition)
+    {
+        double[] parmas = condition.GetCalculatedParameters();
 
-        final ExecutorService executor = Executors.newSingleThreadExecutor();
-        final Future future = executor.submit(stuffToDo);
-        executor.shutdown(); // This does not cancel the already-scheduled task.
-
-        try {
-            future.get(TIME_OUT_SEC, TimeUnit.SECONDS);
-        }
-        catch (TimeoutException ee) {
-            return new InfinityLoopGraphResult();
-        }
-        catch (Exception te) {}
-        finally
-        {
-            if (!executor.isTerminated())
-                executor.shutdownNow(); // If you want to stop the code that hasn't finished.
-
-            future.cancel(true);
-        }
-
-        return result[0];
+        return Arrays.stream(parmas)
+        .max().getAsDouble();
     }
 
+    private boolean CheckResultInfinityCount()
+    {
+        ROW_COUNT_INFINITY_LIMIT = ROW_COUNT_INFINITY_LIMIT - (internalCounter / COUNT_LINIT_PUNISHMENT);
+
+        if(internalCounter > ROW_COUNT_INFINITY_LIMIT)
+            return true;
+
+        return false;
+    }
 
 }
-
 
