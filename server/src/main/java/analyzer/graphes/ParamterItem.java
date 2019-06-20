@@ -1,5 +1,4 @@
 package analyzer.graphes;
-import analyzer.graphes.*;
 public class ParamterItem implements INameValue{
 
     private String Name;
@@ -18,6 +17,11 @@ public class ParamterItem implements INameValue{
 
     public Enums.Variables getType() {
         return varType;
+    }
+
+    @Override
+    public boolean IsValueNull() {
+        return value == null;
     }
 
     public Object getValue() {

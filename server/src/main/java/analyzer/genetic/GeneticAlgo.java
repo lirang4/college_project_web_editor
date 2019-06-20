@@ -2,6 +2,7 @@ package analyzer.genetic;
 
 import analyzer.graphes.Graph;
 import analyzer.graphes.IGraphResult;
+import analyzer.graphes.VariableItem;
 import io.jenetics.DoubleChromosome;
 import io.jenetics.DoubleGene;
 import io.jenetics.Genotype;
@@ -35,6 +36,9 @@ public class GeneticAlgo {
             });
 
             IGraphResult result = g.Execute(params);
+
+
+            List<VariableItem> list = g.GetUnUsedVariables();
 
             double finalResult = result.getRowsCount()*0.8 + result.getRowsCover()*0.2;
 //            System.out.println("Result: " + finalResult);

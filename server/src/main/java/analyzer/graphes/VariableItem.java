@@ -10,6 +10,10 @@ public class VariableItem extends BaseItem implements INameValue
     private Object value;
     private String name;
 
+
+
+    private boolean isUsed = false;
+
     private String doubleRegex = "(?s).*\\bdouble\\b.*";
     private String intRegex = "(?s).*\\bint\\b.*";
     private String charRegex = "(?s).*\\bchar\\b.*";
@@ -39,7 +43,6 @@ public class VariableItem extends BaseItem implements INameValue
     }
 
     public void setValue(Object newValue) {
-        // TODO: Create new value and not override the original value at the next run
         this.value = newValue;
     }
 
@@ -55,9 +58,6 @@ public class VariableItem extends BaseItem implements INameValue
         lineWithoutType = lineWithoutType.replaceAll(" ", "");
 
         splitLine = lineWithoutType.split("=");
-
-       // if(splitLine[1].contains(";"))
-       //     splitLine[1]= splitLine[1].substring(0,splitLine[1].length()-1);
 
         return splitLine[0];
     }
@@ -84,12 +84,6 @@ public class VariableItem extends BaseItem implements INameValue
             return line.substring(line.indexOf("=")+1,line.indexOf(";")).replaceAll(" ","");
         else
             return null;
-    }
-
-    private Object ExtractValueExecuting(List<ParamterItem> parameters)
-    {
-        // TODO: MathFunctionAnalyzer
-        return null;
     }
 
 
@@ -131,7 +125,24 @@ public class VariableItem extends BaseItem implements INameValue
         return type;
     }
 
-    public Object getValue() {
+    @Override
+    public boolean IsValueNull() {
+        return value == null;
+    }
+
+    public Object getValue()
+    {
+        isUsed = true;
         return value;
+    }
+
+    public Object getValueWithoutUnusedFlag()
+    {
+        return value;
+    }
+
+
+    public boolean getIsUsed() {
+        return isUsed;
     }
 }

@@ -5,6 +5,7 @@ import analyzer.reader.CodeReader;
 import analyzer.reader.Enums;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -172,4 +173,16 @@ public class Graph
     {
         return result instanceof InfinityLoopGraphResult;
     }
+
+    public  List<VariableItem> GetUnUsedVariables()
+    {
+        List<VariableItem> list = new ArrayList<>();
+
+        for (IGraphItem item: Items) {
+            list.addAll(new HashSet<>(((BaseItem)item).GetUnUsedVariables()));
+        }
+
+        return list;
+    }
+
 }

@@ -1,206 +1,65 @@
 package analyzer.graphes;
 
-import analyzer.reader.CodeLine;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
-public class MathResolver {
+public  class MathResolver {
 
-    String line;
-    String param1;
-    String param2;
-    int ItemMode;
+    public static double Resolve(String expression, List<VariableItem> variables, List<ParamterItem> params){
 
-    public MathResolver(String line, int... optional)
-    {
-        this.line = line;
-        if(optional.length!=0)
-            this.ItemMode = optional[0];
-    }
-
-    public MathResolver(String param1,String param2)
-    {
-        this.line = line;
-        this.param1 = param1;
-        this.param2 = param2;
-    }
-
-    private  String RemoveSpaces(String text)
-    {
-        return text.replaceAll(" ","");
-    }
-
-    private  String[] SplitConditionParamsAndOperator(String condition)
-    {
-        String[] result = new String[3];
-        String ConditionOparator="";
-        String [] arr =condition.split("( )");
-
-        if (condition.contains("==")) {          //check string for measure
-            ConditionOparator = "==";      //split string at those points
-            arr =condition.split("==");
-        }
-        else if (condition.contains("!=")) {     //a==2 -> ["a", "2"]
-            ConditionOparator = "!=";
-            arr =condition.split("!=");
-        }
-        else if (condition.contains(">=")) {
-            ConditionOparator = ">=";
-            arr =condition.split(">=");
-        }
-        else if (condition.contains("<=")) {
-            arr =condition.split("<=");
-            ConditionOparator = ">=";
-        }
-        else if (condition.contains(">")) {
-            ConditionOparator = ">";
-            arr =condition.split(">");
-        }
-        else if (condition.contains("<")) {
-            ConditionOparator = "<";
-            arr =condition.split("<");
-        }
-
-        result[0] = arr[0];
-        result[1] = ConditionOparator;
-        result[2] = arr[1];
-
-        return result;
-
-    }
-
-    private  HashMap<String,Double> getExpressionVars(List<VariableItem> variables, List<ParamterItem> params)
-    {
-        HashMap<String, Double> hashVars = new HashMap<String, Double>();
-        for (VariableItem item : variables) {
-            if(item.getValue()!=null)
-                hashVars.put(item.getName(), Double.valueOf(item.getValue().toString()));
-        }
-        for (ParamterItem item : params) {
-            hashVars.put(item.getName(), Double.valueOf(item.getValue().toString()));
-        }
-        return hashVars;
-    }
-
-    public String[] getExpressionFromLine(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
-    {
-        String _expression = line.getText();
-        String[] _expressionOfCondition = new String[3];
-
-        switch(line.getType()) {
-            case If:
-                _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
-                        .replaceAll(" ","");
-
-                // Now we've got the condition statement x > x + 40 * 2 for example
-                _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
-
-                break;
-            case Put:
-                _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
-                        .replaceAll(" ","");
-                _expressionOfCondition[0] = _expression;
-                _expressionOfCondition[1] = null;
-                _expressionOfCondition[2] = null;
-                break;
-            case Var:
-                _expression = _expression.substring(_expression.indexOf("=")+1,_expression.indexOf(";"))
-                        .replaceAll(" ","");
-                _expressionOfCondition[0] = _expression;
-                _expressionOfCondition[1] = null;
-                _expressionOfCondition[2] = null;
-                break;
-            case For:
-                String conditionOfFor;
-//                String[] LoopVar = new String[2];
-//                LoopVar = getDeclareVarOfForItem(line,variables,params);
-//                String DemeCodeLine = "int ";
-//                DemeCodeLine += LoopVar[0];
-//                DemeCodeLine += " = ";
-//                DemeCodeLine += LoopVar[1];
-//                DemeCodeLine += " ;";
-//                variables.add(new VariableItem(new CodeLine(DemeCodeLine,line.getLinePosition()),null,variables));
-
-                conditionOfFor = _expression.substring(_expression.indexOf(";")+1,_expression.indexOf(")"))
-                        .replaceAll(" ","");
-
-                conditionOfFor = conditionOfFor.substring(0,conditionOfFor.indexOf(";"))
-                        .replaceAll(" ","");
-                // Now we've got the condition statement : i < i + 40 for example
-                _expressionOfCondition = SplitConditionParamsAndOperator(conditionOfFor);
-                break;
-            case While:
-                _expression = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(")"))
-                        .replaceAll(" ","");
-                // Now we've got the condition statement x > x + 40 * 2 for example
-                _expressionOfCondition = SplitConditionParamsAndOperator(_expression);
-                break;
-           default:
-               // TODO : Throw an exception
-               break;
-          }
-
-        return _expressionOfCondition;
-    }
-
-    public String[] getDeclareVarOfForItem(CodeLine line, List<VariableItem> variables, List<ParamterItem> params) {
-        String[] varAndValue = new String[2];
-        String param1,param2;
-        String _expression = line.getText();
-        param1 = _expression.substring(_expression.indexOf("(")+1,_expression.indexOf(";"))
-                .replaceAll(" ","");
-        String [] arr1 = param1.split("(=)");
-        param1 = arr1[0]; // The destination of the value
-        varAndValue[0] = param1;
-        param2 = arr1[1];
-        Expression exp= null;
-        HashMap<String, Double> hashVars = new HashMap<String, Double>();
-        Expression e = null;
-        ExpressionBuilder calc = new ExpressionBuilder(param2);
-        hashVars = getExpressionVars(variables, params);
-        exp = new ExpressionBuilder(param2).variables(hashVars.keySet()).build();
-        for (String key : hashVars.keySet()) {
-            exp.setVariable(key, hashVars.get(key));
-        }
-
-        double val = exp.evaluate();
-        varAndValue[1] = String.valueOf(val);
-        for ( VariableItem var: variables) {
-            if (var.getName().equals(param1)) {
-                var.setValue(val);
-            }
-        }
-
-        return varAndValue;
-    }
-
-
-
-    public double GetValueOfExpression(String expression, List<VariableItem> variables, List<ParamterItem> params){
-
-        boolean expressionIsNumber = isNumeric(expression);
-        if(expressionIsNumber)
+        if(isNumeric(expression))
             return Double.parseDouble(expression);
 
-        Expression exp= null;
-        double result = Double.MAX_VALUE;
-        HashMap<String, Double> hashVars = new HashMap<String, Double>();;
-        ExpressionBuilder calc = new ExpressionBuilder(expression);
-        hashVars = getExpressionVars(variables, params);
-        exp = new ExpressionBuilder(expression).variables(hashVars.keySet()).build();
-        for (String key : hashVars.keySet()) {
-            exp.setVariable(key, hashVars.get(key));
-        }
+        expression = RemoveSpaces(expression);
 
-        result = exp.evaluate();
+        List<INameValue> relevant = GetRelevant(variables, params, expression);
 
-        return result;
+        Expression exp = new ExpressionBuilder(expression)
+                .variables(GetVariableNames(relevant))
+                .build();
+
+        relevant.forEach((item)->
+        {
+            exp.setVariable(item.getName(), Double.valueOf(item.getValue().toString()));
+        });
+
+        return exp.evaluate();
     }
 
-    public static boolean isNumeric(String str) {
+    private static Set<String> GetVariableNames(List<INameValue> vars)
+    {
+        HashSet<String> names = new HashSet();
+
+        vars.forEach((item)->
+        {
+            if(!item.IsValueNull())
+                names.add(item.getName());
+        });
+
+        return names;
+    }
+
+    private static List<INameValue> GetRelevant(List<VariableItem> variables, List<ParamterItem> params, String expression)
+    {
+        List<INameValue> paramsAndVars = new ArrayList<>();
+        paramsAndVars.addAll(variables);
+        paramsAndVars.addAll(params);
+
+        List<INameValue> relevants = new ArrayList<>();
+        paramsAndVars.forEach((item)->{
+            String name = item.getName();
+            String regex = ".*\\b("+ name +")\\b.*";
+
+            if(expression.matches(regex))
+                relevants.add(item);
+        });
+
+        return relevants;
+    }
+
+    private static boolean isNumeric(String str) {
         try {
             Double.parseDouble(str);
             return true;
@@ -209,60 +68,9 @@ public class MathResolver {
         }
     }
 
-        // GetValue using Shunting-yard algorithm
-    /*public double[] GetValue(CodeLine line, List<VariableItem> variables, List<ParamterItem> params)
+    private static String RemoveSpaces(String text)
     {
-        double [] resValues = new double[2];
-        resValues[0] = Double.MAX_VALUE;
-        resValues[1] = Double.MAX_VALUE;
-        String[] _expression = getExpressionFromLine(line,variables,params);
-        Expression exp= null;
-        Expression exp2= null;
-        HashMap<String, Double> hashVars = new HashMap<String, Double>();;
-        boolean twoParams = true;
-        if(line.getType() == Enums.LineType.Put || line.getType() == Enums.LineType.Var)
-            twoParams = false;
-        Expression e = null;
-
-        try {
-            if (!Character.isDigit(_expression[0].charAt(0)) ) { // Check if the paramater is non numeric - variable
-                ExpressionBuilder calc = new ExpressionBuilder(_expression[0]);
-//                if(line.getType() == Enums.LineType.For){
-//                    String[] VarAndValue = getDeclareVarOfForItem(line,variables,params);
-//                }
-
-                hashVars = getExpressionVars(line, variables, params);
-//                String conditionOfFor = _expression[0].substring(_expression[0].indexOf(";")+1,_expression[0].indexOf(")"))
-//                        .replaceAll(" ","");
-//                conditionOfFor = _expression[0].substring(0,_expression[0].indexOf(";"));
-                exp = new ExpressionBuilder(_expression[0]).variables(hashVars.keySet()).build();
-                for (String key : hashVars.keySet()) {
-                    exp.setVariable(key, hashVars.get(key));
-                }
-
-                resValues[0] = exp.evaluate();
-            }
-            if(twoParams) {
-                if (!Character.isDigit(_expression[2].charAt(0)) ) { // Check if the paramater is non numeric - variable
-                    ExpressionBuilder calc2 = new ExpressionBuilder(_expression[2]);
-                    exp2 = new ExpressionBuilder(_expression[2]).variables(hashVars.keySet()).build();
-                    for (String key : hashVars.keySet()) {
-                        exp2.setVariable(key, hashVars.get(key));
-                    }
-
-                    resValues[1] = exp.evaluate();
-                }
-                else{
-                    resValues[1] = Double.parseDouble(_expression[2]);;
-                }
-            }
-        }
-
-        catch (ArithmeticException ex) {
-            System.out.println("Exception caught:Division by zero");
-        }
-
-        return resValues;
-    }*/
+        return text.replaceAll(" ","");
+    }
 
 }

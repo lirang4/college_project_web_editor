@@ -75,9 +75,9 @@ public class PutItem extends  BaseItem
     public IGraphResult Execute(List<ParamterItem> parameters) {
 
         IGraphResult result = new GraphResult();
-        MathResolver resolver = new MathResolver(Line.getText());
+
         String expression = getExpressionFromLine();
-        double newValue = resolver.GetValueOfExpression(expression, Vars, parameters);
+        double newValue = MathResolver.Resolve(expression, Vars, parameters);
         UpdateValue(parameters, Vars, newValue);
 
         if(!executed)

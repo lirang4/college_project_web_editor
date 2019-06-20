@@ -209,11 +209,10 @@ public class Condition
 
     public double[] GetCalculatedParameters()
     {
-        MathResolver mathRes = new MathResolver(this.line);
         String[] SplittedCondition = SplitConditionParamsAndOperator(this.line);
 
-        double param1 = mathRes.GetValueOfExpression(SplittedCondition[0], vars, parameters);//getParameterValue(SplittedCondition[0]);
-        double param2 = mathRes.GetValueOfExpression(SplittedCondition[2], vars, parameters);
+        double param1 = MathResolver.Resolve(SplittedCondition[0], vars, parameters);//getParameterValue(SplittedCondition[0]);
+        double param2 = MathResolver.Resolve(SplittedCondition[2], vars, parameters);
 
         return new double[]{param1, param2};
     }

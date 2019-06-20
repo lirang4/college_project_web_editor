@@ -6,4 +6,6 @@ public interface INameValue{
     Object getValue();
     String getName();
     Enums.Variables getType();
+
+    boolean IsValueNull();
 }

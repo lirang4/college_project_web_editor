@@ -5,12 +5,14 @@ import analyzer.reader.CodeReader;
 import analyzer.reader.Enums;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class BaseItem implements IGraphItem
 {
     protected List<IGraphItem> Items;
     protected List<VariableItem> Vars;
+    protected List<VariableItem> MyVars;
     protected CodeLine Line;
     protected CodeReader reader;
     protected boolean executed = false;
@@ -41,8 +43,10 @@ public class BaseItem implements IGraphItem
 
             if(newItem != null)
             {
-                if(newItem instanceof VariableItem)
-                    Vars.add((VariableItem)newItem);
+                if(newItem instanceof VariableItem) {
+                    Vars.add((VariableItem) newItem);
+                    //MyVars.add((VariableItem) newItem);
+                }
                 else
                 {
                     if (newItem instanceof ElseItem) {
@@ -111,4 +115,20 @@ public class BaseItem implements IGraphItem
     {
         return result instanceof InfinityLoopGraphResult;
     }
+
+    protected  List<VariableItem> GetUnUsedVariables()
+    {
+        List<VariableItem> list = new ArrayList<>();
+        for (VariableItem var: Vars) {
+            if(var.getIsUsed() == false)
+                list.add(var);
+        }
+
+        for (IGraphItem item: Items) {
+            list.addAll(new HashSet<>(((BaseItem)item).GetUnUsedVariables()));
+        }
+
+        return list;
+    }
+
 }
