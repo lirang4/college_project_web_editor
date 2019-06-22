@@ -119,7 +119,7 @@ public class ForItem extends BaseItem
         PutItem increasePutItem = new PutItem(fakeLine,reader,Vars);
 
 
-        Condition condition = Condition.Create(Line, Vars, parameters);
+        ICondition condition = Condition.Create(Line, Vars, parameters);
         ROW_COUNT_INFINITY_LIMIT = Math.min((int)(Math.pow(GetMaxFromCondition(condition),2.0)), MAX_ITARATIONS);
 
         while (condition.CanRun(Vars)) {
@@ -155,11 +155,11 @@ public class ForItem extends BaseItem
     @Override
     public boolean CanExecute(List<ParamterItem> parameters)
     {
-        Condition condition = Condition.Create(Line, Vars, parameters);
+        ICondition condition = Condition.Create(Line, Vars, parameters);
         return condition.CanRun(Vars);
     }
 
-    private double GetMaxFromCondition(Condition condition)
+    private double GetMaxFromCondition(ICondition condition)
     {
         double[] parmas = condition.GetCalculatedParameters();
 

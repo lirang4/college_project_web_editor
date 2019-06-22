@@ -1,10 +1,10 @@
 package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
-
+import java.util.ArrayList;
 import java.util.List;
 
-public class Condition
+public class Condition implements ICondition
 {
     static String ifRegex = "\\s*\\bif\\b\\s*";
     private static String whileRegex = "\\s*\\bwhile\\b\\s*";
@@ -20,7 +20,12 @@ public class Condition
     List<VariableItem> vars;
     analyzer.reader.Enums.LineType codeLineType;
 
-    private Condition( List<ParamterItem> params, List<VariableItem> vars, CodeLine codeLine, String line,ParamterItem parameter1,ParamterItem parameter2,String operator )
+    public String getLine() {
+        return line;
+    }
+
+    private Condition(List<ParamterItem> params, List<VariableItem> vars, CodeLine codeLine, String line,
+                      ParamterItem parameter1, ParamterItem parameter2, String operator )
     {
         this.parameters = params;
         this.vars = vars;
@@ -29,10 +34,11 @@ public class Condition
         this.parameter1 = parameter1;
         this.parameter2 = parameter2;
         this.operator = operator;
-        this.codeLineType = codeLine.getType();
+        if(codeLine != null)
+            this.codeLineType = codeLine.getType();
     }
 
-    public static Condition Create(CodeLine code_line, List<VariableItem> variables, List<ParamterItem> params)
+    public static ICondition Create(CodeLine code_line, List<VariableItem> variables, List<ParamterItem> params)
     {
         String condition = code_line.getText();
         analyzer.reader.Enums.LineType type = code_line.getType();
@@ -46,16 +52,29 @@ public class Condition
             // The first time is to decrease the before the condition part and decrease spaces in the line
             // The second time is to decrease the after the condition part
             condition = condition.substring(condition.indexOf(";")+1,condition.length()-1)
-                .replaceAll(" ","");
+                    .replaceAll(" ","");
             condition = condition.substring(0,condition.indexOf(";"));
         }
 
+        List<Condition> conditionsList = new ArrayList<>();
+        String[] conditions = GetIntenalConditionsString(condition);
+        for (String con : conditions)
+        {
+            Condition c = CreateSingleCondition(con, params, variables);
+            conditionsList.add(c);
+        }
+
+        return new ComplexCondition(params, variables, conditionsList, condition);
+    }
+
+    private static Condition CreateSingleCondition(String condition, List<ParamterItem> params, List<VariableItem> variables)
+    {
         String[] results = SplitConditionParamsAndOperator(condition);
         ParamterItem p1 = ParseParameter(results[0], variables, params);
         String operator = results[1];
         ParamterItem p2 = ParseParameter(results[2], variables, params);
 
-        return new Condition(params, variables, code_line, condition, p1, p2, operator);
+        return new Condition(params, variables, null, condition, p1, p2, operator);
     }
 
     private static String RemoveSpaces(String text)
@@ -149,21 +168,6 @@ public class Condition
         return new ParamterItem(name, type, value);
     }
 
-
-    private String[] getParamsFromExpression(String line){
-        String[] retParams = new String[2];
-        if(codeLineType == analyzer.reader.Enums.LineType.If){
-
-
-        }else if(codeLineType == analyzer.reader.Enums.LineType.For){
-
-        }else if(codeLineType == analyzer.reader.Enums.LineType.While){
-
-        }
-
-        return retParams;
-    }
-
     private static analyzer.graphes.Enums.Variables ExtractType(String parameter)
     {
         if(parameter.startsWith("\"")||(parameter.startsWith("'")))    // "a" == "b"
@@ -177,6 +181,21 @@ public class Condition
         return null;      // as default         x == y      => local var or param
     }
 
+    private static String[] GetIntenalConditionsString(String conditions)
+    {
+        String andRegex ="&&";
+        String orRegex = "\\|\\|";
+
+        conditions  = RemoveSpaces(conditions);
+        conditions = conditions.replaceAll("\\(","");
+        conditions = conditions.replaceAll("\\)","");
+
+        conditions= conditions.replaceAll(orRegex ,"#");
+        conditions= conditions.replaceAll(andRegex ,"#");
+        String[] results = conditions.split("#");
+
+        return results;
+    }
 
     public boolean CanRun(List<VariableItem> Vars)
     {
@@ -228,5 +247,67 @@ public class Condition
             parameter2 = ParseParameter(parameter2.getValue().toString(), variables, parameters);
         else
             parameter2 = ParseParameter(parameter2.getName(), variables, parameters);
+    }
+}
+
+
+
+class ComplexCondition implements ICondition
+{
+    List<Condition> internalConditions;
+    String line;
+    List<ParamterItem> parametes;
+    List<VariableItem> vars;
+
+    public ComplexCondition(List<ParamterItem> params, List<VariableItem> vars, List<Condition> internalConditions, String line) {
+        this.internalConditions = internalConditions;
+        this.line = line;
+        this.parametes = params;
+        this.vars = vars;
+    }
+
+    public boolean CanRun(List<VariableItem> Vars)
+    {
+        String lineCopy = line;
+
+        for (Condition item :internalConditions)
+        {
+            String canRun = item.CanRun(Vars) ? "1" : "0";  //true = 1 and false = 0
+            lineCopy = lineCopy.replace(item.getLine(), canRun);
+        }
+
+        lineCopy = ConvertToMathExpression(lineCopy);
+        double result = MathResolver.Resolve(lineCopy, Vars, parametes);
+        return  result > 0;
+    }
+
+    private String ConvertToMathExpression(String line) {
+        line= line.replaceAll("\\|\\|","+");
+        line= line.replaceAll("&&","*");
+
+        return line;
+    }
+
+    public void UpdateParameters(List<ParamterItem> parameters, List<VariableItem> variables)
+    {
+        internalConditions.forEach((item)->
+        {
+            item.UpdateParameters(parameters, variables);
+        });
+    }
+
+    public double[] GetCalculatedParameters()
+    {
+        List<Double> calculatedParams = new ArrayList<>();
+        internalConditions.forEach((item)->
+        {
+            double[] params = item.GetCalculatedParameters();
+            for (double num: params)
+            {
+                calculatedParams.add(num);
+            }
+        });
+
+        return calculatedParams.stream().mapToDouble(Double::doubleValue).toArray();
     }
 }

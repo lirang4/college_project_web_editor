@@ -15,7 +15,7 @@ public class IfItem extends BaseItem
     public IGraphResult Execute(List<ParamterItem> parameters) {
 
         IGraphResult result = new GraphResult();
-        Condition condition = Condition.Create(Line, Vars, parameters);
+        ICondition condition = Condition.Create(Line, Vars, parameters);
 
         if (!condition.CanRun(Vars)) {
             return result;
@@ -49,7 +49,7 @@ public class IfItem extends BaseItem
     @Override
     public boolean CanExecute(List<ParamterItem> parameters)
     {
-        Condition condition = Condition.Create(Line, Vars, parameters);
+        ICondition condition = Condition.Create(Line, Vars, parameters);
         return condition.CanRun(Vars);
     }
 }

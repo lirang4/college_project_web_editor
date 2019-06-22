@@ -33,11 +33,13 @@ public class Application {
 //                    "ben = ben + 1;\n" +
 //                    "x = x -2;\n" +
 //                "}\n" +
-                "if(i+950<1000)\n" +
+//
+                "while((i+95<1000)|| (x>0 && i<x+1))\n" +
                 "{\n" +
                     "int e= 44;\n" +
                     "t= t - 1;\n" +
                     "ben++;\n" +
+                    "i--;\n" +
                  "}\n" +
                  "x = ben + x;\n" +
                 "return x;\n"+
