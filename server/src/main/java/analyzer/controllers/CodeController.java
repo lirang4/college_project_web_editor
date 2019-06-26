@@ -6,7 +6,7 @@ import analyzer.genetic.GeneticAlgo;
 import analyzer.genetic.GeneticResult;
 import analyzer.models.Code;
 import analyzer.repositories.CodesRepository;
-import analyzer.webDataStractures.WebReportResult;
+import analyzer.webDataStractures.WebReport;
 import org.apache.commons.lang.mutable.MutableBoolean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,15 +55,21 @@ public class CodeController {
             return ResponseEntity.badRequest().body(compileMessage);
         }
 
-        GeneticAlgo ga = new GeneticAlgo(newCode.getContent());
+        String code = newCode.getContent();
+
+        long startTime = System.currentTimeMillis();
+        GeneticAlgo ga = new GeneticAlgo(code);
         ga.Run();
+        long stopTime = System.currentTimeMillis();
+        long totalTime = (stopTime - startTime) / 1000;         // in seconds
 
         List<GeneticResult> bestFitness = ga.BestFitness();
         List<GeneticResult> worseFitness = ga.WorstFitness();
-        GeneticResultToWebResult convertor = new GeneticResultToWebResult();
-        List<WebReportResult> webReport = convertor.Convert(bestFitness, worseFitness, newCode.getContent());
 
-        newCode.setReport(webReport);
+        GeneticResultToWebResult convertor = new GeneticResultToWebResult();
+        WebReport webReport =  convertor.Convert(bestFitness, worseFitness, code, String.valueOf(totalTime), ga.GetUnusageVariablesPercent());
+
+//        newCode.setReport(webReport);
         this.repository.save(newCode);
 
         return ResponseEntity.ok().body("OK");

@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
-import analyzer.webDataStractures.WebReportResult;
+import analyzer.webDataStractures.WebReportFromGraphResult;
 import java.util.List;
 
 import java.time.Instant;
@@ -26,7 +26,7 @@ public class Code {
 
     private final String content;
 
-    private List<WebReportResult> report;
+    private List<WebReportFromGraphResult> report;
 
     public Code(@JsonProperty("userName") String userName, @JsonProperty("content") String content) {
         this.userName = userName;
@@ -41,11 +41,11 @@ public class Code {
         return content;
     }
 
-    public List<WebReportResult> getReport() {
+    public List<WebReportFromGraphResult> getReport() {
         return report;
     }
 
-    public void setReport(List<WebReportResult> newReport) {
+    public void setReport(List<WebReportFromGraphResult> newReport) {
         report = newReport;
     }
 

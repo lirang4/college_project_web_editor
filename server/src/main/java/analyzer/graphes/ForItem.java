@@ -144,7 +144,7 @@ public class ForItem extends BaseItem
 
             increasePutItem.Execute(parameters);
             if(CheckResultInfinityCount()) {
-                return new InfinityLoopGraphResult();
+                return new InfinityLoopGraphResult(this.Line);
             }
             internalCounter++;
             condition.UpdateParameters(parameters, Vars);

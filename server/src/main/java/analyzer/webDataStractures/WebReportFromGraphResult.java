@@ -2,13 +2,15 @@ package analyzer.webDataStractures;
 
 import java.util.List;
 
-public class WebReportResult
+public class WebReportFromGraphResult
 {
     List<Double> parameterValue;
+    List<String> UnusedVarsNames;
     int RowCover;
     int RowCount;
     int LineCoveragePresentage;
     List<Integer> LineNumber;
+
 
     public List<Double> getParameterValue() {
         return parameterValue;
@@ -48,5 +50,9 @@ public class WebReportResult
 
     public void setLineNumber(List<Integer> lineNumber) {
         LineNumber = lineNumber;
+    }
+
+    public void setUnusedVars(List<String> unUsedVars) {
+        UnusedVarsNames = unUsedVars;
     }
 }

@@ -1,12 +1,18 @@
 package analyzer.Convertors;
 
 import analyzer.genetic.GeneticResult;
-import analyzer.graphes.*;
+import analyzer.graphes.Graph;
+import analyzer.graphes.GraphResult;
+import analyzer.graphes.IGraphResult;
+import analyzer.graphes.VariableItem;
 import analyzer.reader.CodeLine;
-import analyzer.webDataStractures.WebReportResult;
+import analyzer.webDataStractures.WebReport;
+import analyzer.webDataStractures.WebReportFromGraphResult;
 import io.jenetics.DoubleGene;
 import io.jenetics.Phenotype;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,52 +23,69 @@ public class GeneticResultToWebResult
     Map<Double, List<Phenotype<DoubleGene,Double>>> best;
     String code;
 
-    public List<WebReportResult> Convert(List<GeneticResult> best,
-                                         List<GeneticResult> worst,
-                                         String code)
+    public WebReport Convert(List<GeneticResult> best,
+                             List<GeneticResult> worst,
+                             String code,
+                             String time,
+                             HashMap<String, Integer> UnusedVars)
     {
         best = BuildDataGroups(best);
         worst = BuildDataGroups(worst);
         this.code = code;
-        List<WebReportResult> results = ToWebReportResult(best);
+        List<WebReportFromGraphResult> bestResults = ToWebReportFromGraphResult(best);
+        List<WebReportFromGraphResult> worstResults = ToWebReportFromGraphResult(worst);
 
-        results.addAll(ToWebReportResult(worst));
-        return results;
+        WebReport report = new WebReport(bestResults, worstResults, time, UnusedVars );
+        return report;
     }
 
-    private List<WebReportResult> ToWebReportResult(List<GeneticResult> data)
+    private List<WebReportFromGraphResult> ToWebReportFromGraphResult(List<GeneticResult> data)
     {
-        List<WebReportResult> list = new ArrayList<>();
+        List<WebReportFromGraphResult> list = new ArrayList<>();
         data.forEach((item)->{
-           if(item.getFitnessResult() != -1)
+//           if(item.getFitnessResult() != -1)
                list.add(ExecuteGraphOnGeneticResults(item));
         });
 
         return list;
-
     }
 
-    private WebReportResult ExecuteGraphOnGeneticResults(GeneticResult data)
+    private WebReportFromGraphResult ExecuteGraphOnGeneticResults(GeneticResult data)
     {
         Graph g = new Graph(code);
 
         IGraphResult graphResult = g.Execute(data.getParameterValue());
-        return ConvertGeneticToWebResult(data.getParameterValue(), graphResult, g.getTotalRowCount());
+        return ConvertGeneticToWebResult(data.getParameterValue(), graphResult, g.getTotalRowCount(), g.GetUnUsedVariables());
     }
 
-    private WebReportResult ConvertGeneticToWebResult(List<Double> parameters, IGraphResult graphResult, int codeLength) {
-        WebReportResult webReport = new WebReportResult();
+    private WebReportFromGraphResult ConvertGeneticToWebResult(List<Double> parameters,
+                                                               IGraphResult graphResult,
+                                                               int codeLength,
+                                                               List<VariableItem> unUsedVars) {
+        WebReportFromGraphResult webReport = new WebReportFromGraphResult();
 
-        webReport.setLineNumber(ConvertCodwLineToLineNumber(graphResult.getCodeLines()));
+        webReport.setLineNumber(ConvertCodeLineToLineNumber(graphResult.getCodeLines()));
         webReport.setParameterValue(parameters);
         webReport.setRowCount(graphResult.getRowsCount());
         webReport.setRowCover(graphResult.getRowsCover());
-        webReport.setLineCoveragePresentage((Integer)((graphResult.getRowsCover() * 100) / codeLength) );
 
+        if(graphResult instanceof GraphResult)
+        {
+            webReport.setLineCoveragePresentage((Integer) ((graphResult.getRowsCover() * 100) / codeLength));
+            webReport.setUnusedVars(ConvertToVariablesNames(unUsedVars));
+        }
         return webReport;
     }
 
-    private List<Integer> ConvertCodwLineToLineNumber(List<CodeLine> list) {
+    private List<String> ConvertToVariablesNames(List<VariableItem> unUsedVars) {
+        List<String> lines = new ArrayList<>();
+        unUsedVars.forEach((var) -> {
+            lines.add(var.getName());
+        });
+        return lines;
+    }
+
+    private List<Integer> ConvertCodeLineToLineNumber(List<CodeLine> list) {
         List<Integer> lines = new ArrayList<>();
         list.forEach((linePos) -> {
             lines.add(linePos.getLinePosition());

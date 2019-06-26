@@ -1,6 +1,8 @@
 package analyzer.graphes;
 
 import analyzer.reader.CodeLine;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class InfinityLoopGraphResult implements IGraphResult {
@@ -9,6 +11,13 @@ public class InfinityLoopGraphResult implements IGraphResult {
     private int rowsCover = -1;
     private int rowsCount = -1;
     private List<IGraphResult> internalResults;
+
+    public InfinityLoopGraphResult(CodeLine line)
+    {
+        this.codeLines = new ArrayList<>();
+        codeLines.add(line);
+    }
+
 
     @Override
     public void setRowsCover(int rowsCover) {}
@@ -38,6 +47,6 @@ public class InfinityLoopGraphResult implements IGraphResult {
 
     @Override
     public void AddInternalCodeLine(CodeLine line) {
-        codeLines.add(line);
+        //        codeLines.add(line);
     }
 }

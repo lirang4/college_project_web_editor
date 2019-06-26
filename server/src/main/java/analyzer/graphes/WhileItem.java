@@ -52,7 +52,7 @@ public class WhileItem extends  BaseItem {
             }
 
             if(CheckResultInfinityCount()) {
-                return new InfinityLoopGraphResult();
+                return new InfinityLoopGraphResult(this.Line);
             }
             internalCounter++;
 

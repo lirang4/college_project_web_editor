@@ -1,15 +1,10 @@
 package analyzer;
 
-import analyzer.Convertors.GeneticResultToWebResult;
-import analyzer.genetic.GeneticAlgo;
-import analyzer.genetic.GeneticResult;
-import analyzer.webDataStractures.WebReportResult;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
 import java.util.Collections;
-import java.util.List;
 
 @SpringBootApplication
 @EnableMongoAuditing
@@ -34,25 +29,42 @@ public class Application {
 //                    "x = x -2;\n" +
 //                "}\n" +
 //
-                "while((i+95<1000)|| (x>0 && i<x+1))\n" +
+                 "if(x>60)\n"+
+                 "{\n" +
+                    "int j = 99 ;\n" +
+                    "ben = j+ 999 ;\n" +
+                 "}\n" +
+                 "else\n"+
+                 "{\n" +
+                    "int k = 99 ;\n" +
+                    "ben = k+ 999 ;\n" +
+                 "}\n" +
+                "while((x>0 && i==i))\n" +
                 "{\n" +
                     "int e= 44;\n" +
                     "t= t - 1;\n" +
                     "ben++;\n" +
                     "i--;\n" +
+                    "x--;\n" +
                  "}\n" +
                  "x = ben + x;\n" +
                 "return x;\n"+
                 "}";
 
 //         Test code!
-        GeneticAlgo ga = new GeneticAlgo(code);
-        ga.Run();
-        List<GeneticResult> bestFitness = ga.BestFitness();
-        List<GeneticResult> worseFitness = ga.WorstFitness();
-        GeneticResultToWebResult convertor = new GeneticResultToWebResult();
-        List<WebReportResult> webReport =  convertor.Convert(bestFitness, worseFitness, code);
-
+//        long startTime = System.currentTimeMillis();
+//        GeneticAlgo ga = new GeneticAlgo(code);
+//        ga.Run();
+//        long stopTime = System.currentTimeMillis();
+//        long totalTime = (stopTime - startTime) / 1000;
+//
+//        List<GeneticResult> bestFitness = ga.BestFitness();
+//        List<GeneticResult> worseFitness = ga.WorstFitness();
+////        HashMap<String, Integer> set = ga.GetUnusageVariablesPercent();
+//
+//        GeneticResultToWebResult convertor = new GeneticResultToWebResult();
+//        WebReport webReport =  convertor.Convert(bestFitness, worseFitness, code, String.valueOf(totalTime), ga.GetUnusageVariablesPercent());
+//
 
 
         SpringApplication app = new SpringApplication(Application.class);

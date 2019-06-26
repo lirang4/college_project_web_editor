@@ -12,18 +12,23 @@ import io.jenetics.engine.EvolutionResult;
 import io.jenetics.util.Factory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GeneticAlgo {
      List<Phenotype<DoubleGene,Double>> bests;
      List<Phenotype<DoubleGene,Double>> worst;
      String code;
+     HashMap<String, Integer> varsUsageCounter;
+     int fitnessCounter;
 
-     public GeneticAlgo(String code)
+    public GeneticAlgo(String code)
      {
          bests = new ArrayList<>();
          worst = new ArrayList<>();
          this.code = code;
+         varsUsageCounter = getAllVariables();
+         fitnessCounter = 0;
      }
 
         // 2.) Definition of the fitness function.
@@ -37,10 +42,12 @@ public class GeneticAlgo {
 
             IGraphResult result = g.Execute(params);
 
-
             List<VariableItem> list = g.GetUnUsedVariables();
 
+            handleUnusageVars(g.GetUnUsedVariables());
+
             double finalResult = result.getRowsCount()*0.8 + result.getRowsCover()*0.2;
+            fitnessCounter++;
 //            System.out.println("Result: " + finalResult);
             return finalResult;
         }
@@ -108,9 +115,46 @@ public class GeneticAlgo {
         return results;
     }
 
+    public HashMap<String, Integer> GetUnusageVariablesPercent()
+    {
+        varsUsageCounter.forEach((key,value)->
+        {
+            varsUsageCounter.put(key, (value.intValue() * 100 / fitnessCounter) );
+        });
+
+        return varsUsageCounter;
+    }
+
     private void GenerationResult(EvolutionResult<DoubleGene,Double> r)
     {
         bests.add(r.getBestPhenotype());
         worst.add(r.getWorstPhenotype());
     }
+
+    private HashMap<String,Integer> getAllVariables()
+    {
+        HashMap<String,Integer> map = new HashMap<>();
+
+        Graph g = new Graph(code);
+        List<VariableItem> vars = g.GetUnUsedVariables();
+        vars.forEach((item)->
+        {
+            map.put(item.getName(),0);
+        });
+        return map;
+    }
+
+    private void handleUnusageVars(List<VariableItem> list)
+    {
+        list.forEach((item)->{
+            String key = item.getName();
+            if(varsUsageCounter.containsKey(key))
+            {
+                int value = varsUsageCounter.get(key).intValue() + 1;
+                varsUsageCounter.put(key,value);
+            }
+
+        });
+    }
+
 }
