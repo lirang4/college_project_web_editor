@@ -23,15 +23,57 @@
 
   <div class="analyze-view">
     <div class="report-wrapper" *ngIf="currentCode && currentCode.report">
-      <span class="report" *ngFor="let report of currentCode.report">
-        <span>parameters: {{ report.parameterValue }} </span>
-        <span>Line Coverage: {{ report.lineCoveragePresentage }}% </span>
-        <span>
-          Lines Cover: {{ report.rowCover }} Lines Number:
-          {{ report.lineNumber }}</span
-        >
-        <span>Line Count: {{ report.rowCount }} </span>
+      <span class="report-title">Best Coverage</span>
+      <span class="report">{{ currentCode.report.bestAverageCodeCover }}%</span>
+
+      <div class="divider"></div>
+
+      <span class="report-title">Worst Coverage</span>
+      <span class="report">
+        {{ currentCode.report.worstAverageCodeCover }}%
       </span>
+
+      <div class="divider"></div>
+
+      <span class="report-title">Infinte Loops</span>
+      <img
+        [ngClass]="isInfinteLoop ? 'report-icon' : 'report-icon-disabled'"
+        src="assets/infinte.png"
+        (click)="isInfinteLoop && (showInfinteLoop = !showInfinteLoop)"
+      />
+      <div *ngIf="showInfinteLoop">
+        <div *ngFor="let run of currentCode.report.worstResults">
+          <div class="report-infinity" *ngIf="run.rowCover === -1">
+            For the param: {{ run.parameterValue }} there is an infinte loop on
+            line {{ run.lineNumber[0] + 1 }}
+          </div>
+        </div>
+        <div *ngFor="let run of currentCode.report.bestResults">
+          <div class="report-infinity" *ngIf="run.rowCover === -1">
+            For the param: {{ run.parameterValue }} there is an infinte loop on
+            line {{ run.lineNumber[0] + 1 }}
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <span class="report-title">Unused Params</span>
+      <img
+        [ngClass]="isUnusedParams ? 'report-icon' : 'report-icon-disabled'"
+        src="assets/unused.png"
+        (click)="isUnusedParams && (showUnusedParams = !showUnusedParams)"
+      />
+      <div *ngIf="showUnusedParams">
+        <div *ngFor="let run of currentCode.report.toatlUnusedVars | keyvalue">
+          <span class="report-infinity">{{ run.key }} : {{ run.value }}%</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <span class="report-title">Line Coverage</span>
+      <canvas id="lineCoverageGraph" width="50" height="50"></canvas>
     </div>
   </div>
 </div>

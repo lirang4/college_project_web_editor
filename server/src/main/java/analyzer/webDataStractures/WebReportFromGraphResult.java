@@ -4,12 +4,12 @@ import java.util.List;
 
 public class WebReportFromGraphResult
 {
-    List<Double> parameterValue;
-    List<String> UnusedVarsNames;
-    int RowCover;
-    int RowCount;
-    int LineCoveragePresentage;
-    List<Integer> LineNumber;
+    public List<Double> parameterValue;
+    public List<String> UnusedVarsNames;
+    public int RowCover;
+    public int RowCount;
+    public int LineCoveragePresentage;
+    public List<Integer> LineNumber;
 
 
     public List<Double> getParameterValue() {

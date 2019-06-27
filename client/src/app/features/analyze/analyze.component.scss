@@ -42,13 +42,55 @@
   .report-wrapper {
     display: flex;
     flex-direction: column;
-    .report {
-      margin-top: 5px;
+    .report-title {
+      margin: 10px 0 5px 0;
+      align-self: center;
+      font-size: 24px;
+    }
+    .report-icon {
+      margin: 5px 0 10px 0;
+      align-self: center;
+      font-size: 24px;
+      width: 52px;
+      height: 52px;
+      background-color: white;
+      border-radius: 40px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .report-icon:hover {
+      background-color: var(--hover-color);
+    }
+    .report-icon-disabled {
+      margin: 5px 0 10px 0;
+      align-self: center;
+      font-size: 24px;
+      width: 52px;
+      height: 52px;
+      background-color: gray;
+      border-radius: 40px;
+      margin-top: 10px;
+      opacity: 0.2;
+    }
+    .report-infinity {
+      margin-top: 10px;
       display: flex;
       flex-direction: column;
       border-bottom: 1px solid black;
       text-align: center;
-      height: 75px;
+      height: 30px;
+      font-size: 14px;
+    }
+    .report {
+      margin-top: 5px;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      height: 30px;
+      font-size: 14px;
+    }
+    .divider {
+      border-bottom: 1px solid black;
     }
   }
 }

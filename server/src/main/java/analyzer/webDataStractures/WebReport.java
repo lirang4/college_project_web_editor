@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class WebReport {
-    List<WebReportFromGraphResult> bestResults;
-    List<WebReportFromGraphResult> worstResults;
+    public List<WebReportFromGraphResult> bestResults;
+    public List<WebReportFromGraphResult> worstResults;
 
-    String time;
-    HashMap<String, Integer> toatlUnusedVars;
-    int bestAverageCodeCover;
-    int worstAverageCodeCover;
+    public String time;
+    public HashMap<String, Integer> toatlUnusedVars;
+    public int bestAverageCodeCover;
+    public int worstAverageCodeCover;
 
     public WebReport (List<WebReportFromGraphResult> bestResults,
                       List<WebReportFromGraphResult> worstResults,

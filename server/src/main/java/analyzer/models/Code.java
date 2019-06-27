@@ -1,5 +1,7 @@
 package analyzer.models;
 
+import analyzer.webDataStractures.WebReport;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,7 +13,7 @@ import java.util.List;
 import java.time.Instant;
 
 
-@Document(collection =  "codes")
+@Document(collection =  "codes7")
 public class Code {
 
     @Id
@@ -21,12 +23,10 @@ public class Code {
     @LastModifiedDate
     public Instant date;
 
+    public final String userName;
+    public final String content;
 
-    private final String userName;
-
-    private final String content;
-
-    private List<WebReportFromGraphResult> report;
+    public WebReport report;
 
     public Code(@JsonProperty("userName") String userName, @JsonProperty("content") String content) {
         this.userName = userName;
@@ -41,11 +41,11 @@ public class Code {
         return content;
     }
 
-    public List<WebReportFromGraphResult> getReport() {
+    public WebReport getReport() {
         return report;
     }
 
-    public void setReport(List<WebReportFromGraphResult> newReport) {
+    public void setReport(WebReport newReport) {
         report = newReport;
     }
 

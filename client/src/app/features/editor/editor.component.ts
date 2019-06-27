@@ -25,7 +25,11 @@ export class EditorComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.http.post('/codes', { userName: this.userService.User.userName, content: code })
+    this.http.post(
+      '/codes',
+      { userName: this.userService.User.userName, content: code },
+      { responseType: 'text' }
+    )
       .subscribe((res) => this.isLoading = false);
   }
 }

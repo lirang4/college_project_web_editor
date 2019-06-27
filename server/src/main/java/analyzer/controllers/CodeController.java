@@ -69,7 +69,7 @@ public class CodeController {
         GeneticResultToWebResult convertor = new GeneticResultToWebResult();
         WebReport webReport =  convertor.Convert(bestFitness, worseFitness, code, String.valueOf(totalTime), ga.GetUnusageVariablesPercent());
 
-//        newCode.setReport(webReport);
+        newCode.setReport(webReport);
         this.repository.save(newCode);
 
         return ResponseEntity.ok().body("OK");
