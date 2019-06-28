@@ -2,6 +2,8 @@
   <input class="file-upload" type="file" ng2FileSelect [uploader]="uploader" />
   <textarea #editor></textarea>
 
+  <textarea class="error-msg" *ngIf="errMsg">{{ errMsg }}</textarea>
+
   <button mat-raised-button class="submit-button" (click)="onSubmitFile()">
     <span *ngIf="!isLoading">Submit Code</span>
     <mat-spinner

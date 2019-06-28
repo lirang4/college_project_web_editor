@@ -13,6 +13,8 @@ export class EditorComponent implements OnInit {
   isUploader: boolean;
   isLoading: boolean;
 
+  errMsg: string;
+
   constructor(private fb: FormBuilder, private http: HttpClient, private userService: UserService) { }
 
   ngOnInit() {
@@ -25,11 +27,21 @@ export class EditorComponent implements OnInit {
     }
 
     this.isLoading = true;
+    this.errMsg = undefined;
+
     this.http.post(
       '/codes',
       { userName: this.userService.User.userName, content: code },
       { responseType: 'text' }
     )
-      .subscribe((res) => this.isLoading = false);
+      .subscribe(
+        (res) => {
+          this.isLoading = false;
+        },
+        (err) => {
+          this.errMsg = err.error;
+          this.isLoading = false;
+        }
+      );
   }
 }

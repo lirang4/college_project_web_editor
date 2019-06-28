@@ -32,11 +32,13 @@
 <app-code-editor-form
   *ngIf="isEditor"
   [isLoading]="isLoading"
+  [errMsg]="errMsg"
   (submit)="onSubmit($event)"
 ></app-code-editor-form>
 
 <app-code-uploader-form
   *ngIf="isUploader"
   [isLoading]="isLoading"
+  [errMsg]="errMsg"
   (submit)="onSubmit($event)"
 ></app-code-uploader-form>

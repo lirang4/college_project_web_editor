@@ -2,6 +2,8 @@
   <span class="editor-headline">Write your code here</span>
   <textarea #editor></textarea>
 
+  <textarea class="error-msg" *ngIf="errMsg">{{ errMsg }}</textarea>
+
   <button mat-raised-button class="submit-button" (click)="onSubmitCode()">
     <span *ngIf="!isLoading">Submit Code</span>
     <mat-spinner

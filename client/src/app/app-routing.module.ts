@@ -6,29 +6,29 @@ import { AuthGuard } from '@core/auth/auth.guard';
 const routes: Routes = [
   {
     path: 'home',
-    loadChildren: './features/home/home.module#HomeModule'
+    loadChildren: () => import('./features/home/home.module').then(m => m.HomeModule)
   },
   {
     path: 'login',
-    loadChildren: './features/login/login.module#LoginModule'
+    loadChildren: () => import('./features/login/login.module').then(m => m.LoginModule)
   },
   {
     path: 'registration',
-    loadChildren: './features/registration/registration.module#RegistrationModule'
+    loadChildren: () => import('./features/registration/registration.module').then(m => m.RegistrationModule)
   },
   {
     path: 'editor',
-    loadChildren: './features/editor/editor.module#EditorModule',
+    loadChildren: () => import('./features/editor/editor.module').then(m => m.EditorModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'analyze',
-    loadChildren: './features/analyze/analyze.module#AnalyzeModule',
+    loadChildren: () => import('./features/analyze/analyze.module').then(m => m.AnalyzeModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'profile',
-    loadChildren: './features/profile/profile.module#ProfileModule',
+    loadChildren: () => import('./features/profile/profile.module').then(m => m.ProfileModule),
     canActivate: [AuthGuard]
   },
   {
@@ -38,7 +38,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    loadChildren: './features/page-not-found/page-not-found.module#PageNotFoundModule',
+    loadChildren: () => import('./features/page-not-found/page-not-found.module').then(m => m.PageNotFoundModule),
   },
 ];
 

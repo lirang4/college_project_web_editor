@@ -11,8 +11,9 @@ import 'codemirror/mode/clike/clike';
 })
 export class CodeUploaderFormComponent implements AfterViewInit {
     @Input() isLoading: boolean;
+    @Input() errMsg: string;
     @Output() submit = new EventEmitter<string>();
-    @ViewChild('editor') editor: any;
+    @ViewChild('editor', { static: true }) editor: any;
 
     editorCode: any;
     uploader: FileUploader;

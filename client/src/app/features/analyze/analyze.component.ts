@@ -14,7 +14,7 @@ import { User } from '@shared/models/User';
   styleUrls: ['./analyze.component.scss']
 })
 export class AnalyzeComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('editor') editor: any;
+  @ViewChild('editor', { static: true }) editor: any;
 
   private readonly POLLING_INTERVAL = 3000;
 
@@ -81,7 +81,7 @@ export class AnalyzeComponent implements OnInit, AfterViewInit, OnDestroy {
       type: 'line',
       data: {
         datasets: [{
-          label: '',
+          label: 'Line Coverage',
           data: this.currentCode.report.bestResults.map(run => run.lineCoveragePresentage),
         }],
         labels: this.currentCode.report.bestResults.map(run => run.parameterValue)

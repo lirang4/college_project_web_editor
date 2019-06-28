@@ -23,12 +23,16 @@
 
   <div class="analyze-view">
     <div class="report-wrapper" *ngIf="currentCode && currentCode.report">
-      <span class="report-title">Best Coverage</span>
+      <span class="report-title">Code Report</span>
+      <img class="report-icon" src="assets/report.png" />
+      <div class="divider"></div>
+
+      <span class="report-title">Best Average Coverage</span>
       <span class="report">{{ currentCode.report.bestAverageCodeCover }}%</span>
 
       <div class="divider"></div>
 
-      <span class="report-title">Worst Coverage</span>
+      <span class="report-title">Worst Average Coverage</span>
       <span class="report">
         {{ currentCode.report.worstAverageCodeCover }}%
       </span>
@@ -72,7 +76,7 @@
 
       <div class="divider"></div>
 
-      <span class="report-title">Line Coverage</span>
+      <img class="report-icon" src="assets/graph.png" />
       <canvas id="lineCoverageGraph" width="50" height="50"></canvas>
     </div>
   </div>
