@@ -82,7 +82,13 @@ export class AnalyzeComponent implements OnInit, AfterViewInit, OnDestroy {
       data: {
         datasets: [{
           label: 'Line Coverage',
-          data: this.currentCode.report.bestResults.map(run => run.lineCoveragePresentage),
+          fill: false,
+          pointBackgroundColor: '#FFFFFF',
+          pointBorderColor: '#FFFFFF',
+          pointHoverBackgroundColor: '#FFFFFF',
+          pointHoverBorderColor: '#FFFFFF',
+          data: [...this.currentCode.report.bestResults, ...this.currentCode.report.worstResults]
+            .map(run => run.lineCoveragePresentage),
         }],
         labels: this.currentCode.report.bestResults.map(run => run.parameterValue)
       },
