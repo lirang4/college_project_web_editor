@@ -11,6 +11,8 @@ import analyzer.webDataStractures.WebReportFromGraphResult;
 import io.jenetics.DoubleGene;
 import io.jenetics.Phenotype;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +67,7 @@ public class GeneticResultToWebResult
         WebReportFromGraphResult webReport = new WebReportFromGraphResult();
 
         webReport.setLineNumber(ConvertCodeLineToLineNumber(graphResult.getCodeLines()));
-        webReport.setParameterValue(parameters);
+        webReport.setParameterValue(Round(parameters));
         webReport.setRowCount(graphResult.getRowsCount());
         webReport.setRowCover(graphResult.getRowsCover());
 
@@ -75,6 +77,17 @@ public class GeneticResultToWebResult
             webReport.setUnusedVars(ConvertToVariablesNames(unUsedVars));
         }
         return webReport;
+    }
+
+    private List<Double> Round(List<Double> parameters)
+    {
+        List<Double> results = new ArrayList<>();
+        parameters.forEach((item)->
+        {
+            BigDecimal bd = new BigDecimal(item).setScale(2, RoundingMode.HALF_UP);
+            results.add(bd.doubleValue());
+        });
+        return results;
     }
 
     private List<String> ConvertToVariablesNames(List<VariableItem> unUsedVars) {
