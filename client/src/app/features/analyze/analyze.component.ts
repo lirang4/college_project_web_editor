@@ -37,8 +37,8 @@ export class AnalyzeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.codes = this.userService.Codes;
 
     this.isInfinteLoop = false;
-    this.showInfinteLoop = false;
     this.isUnusedParams = false;
+    this.showInfinteLoop = false;
     this.showUnusedParams = false;
 
     this.initiateListPolling();
@@ -63,10 +63,12 @@ export class AnalyzeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.currentCode = code;
     this.editorCode.setValue(this.currentCode.content);
 
+    this.showInfinteLoop = false;
+    this.showUnusedParams = false;
+
+    this.isUnusedParams = Object.values(this.currentCode.report.toatlUnusedVars).length > 0;
     this.isInfinteLoop = [...this.currentCode.report.bestResults, ...this.currentCode.report.worstResults]
       .find(r => r.rowCover === -1) !== undefined;
-    this.isUnusedParams = Object.values(this.currentCode.report.toatlUnusedVars)
-      .find(r => r === 100) !== undefined;
 
     setTimeout(() => this.initiateGraphs(), 0);
   }
@@ -81,14 +83,26 @@ export class AnalyzeComponent implements OnInit, AfterViewInit, OnDestroy {
       type: 'line',
       data: {
         datasets: [{
-          label: 'Line Coverage',
+          label: 'Best Line Coverage',
           fill: false,
-          pointBackgroundColor: '#FFFFFF',
-          pointBorderColor: '#FFFFFF',
-          pointHoverBackgroundColor: '#FFFFFF',
-          pointHoverBorderColor: '#FFFFFF',
-          data: [...this.currentCode.report.bestResults, ...this.currentCode.report.worstResults]
-            .map(run => run.lineCoveragePresentage),
+          borderColor: '#ffffff',
+          backgroundColor: '#ffffff',
+          pointBackgroundColor: '#ffffff',
+          pointBorderColor: '#ffffff',
+          pointHoverBackgroundColor: '#ffffff',
+          pointHoverBorderColor: '#ffffff',
+          data: this.currentCode.report.bestResults.map(run => run.lineCoveragePresentage),
+        },
+        {
+          label: 'Wrost Line Coverage',
+          fill: false,
+          borderColor: '#FF0000',
+          backgroundColor: '#FF0000',
+          pointBackgroundColor: '#FF0000',
+          pointBorderColor: '#FF0000',
+          pointHoverBackgroundColor: '#FF0000',
+          pointHoverBorderColor: '#FF0000',
+          data: this.currentCode.report.worstResults.map(run => run.lineCoveragePresentage),
         }],
         labels: this.currentCode.report.bestResults.map(run => run.parameterValue)
       },
