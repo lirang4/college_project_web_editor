@@ -149,6 +149,7 @@ public class ForItem extends BaseItem
             internalCounter++;
             condition.UpdateParameters(parameters, Vars);
         }
+        result.AddInternalCodeLine(this.Line);
         return result;
     }
 

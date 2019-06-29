@@ -88,22 +88,19 @@ public class GeneticAlgo {
 
     public List<GeneticResult> BestFitness()
     {
-        List<GeneticResult> results = new ArrayList<>();
-        this.bests.forEach((phenotype)->{
-            List<Double> values = new ArrayList<>();
-            phenotype.getGenotype().forEach((r)->{
-                    values.add(r.getGene().doubleValue());
-                });
-            results.add(new GeneticResult(phenotype.getFitness(), values));
-        });
-
-        return results;
+        return getFitnessFromResult(this.bests);
     }
 
+    //TODO: reuse and rename - same as above
     public List<GeneticResult> WorstFitness()
     {
+       return getFitnessFromResult(this.worst);
+    }
+
+    private List<GeneticResult> getFitnessFromResult(List<Phenotype<DoubleGene,Double>> result)
+    {
         List<GeneticResult> results = new ArrayList<>();
-        this.worst.forEach((phenotype)->
+        result.forEach((phenotype)->
         {
             List<Double> values = new ArrayList<>();
             phenotype.getGenotype().forEach((r)->{

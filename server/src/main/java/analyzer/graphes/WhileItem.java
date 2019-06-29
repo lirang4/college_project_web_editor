@@ -58,6 +58,8 @@ public class WhileItem extends  BaseItem {
 
             condition.UpdateParameters(parameters, Vars);
         }
+        result.AddInternalCodeLine(this.Line);
+
         return result;
     }
 
